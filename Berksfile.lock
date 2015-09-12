@@ -1,0 +1,60 @@
+DEPENDENCIES
+  apache2
+  app
+    path: cookbooks/app
+  apt
+  aws
+  build-essential
+  chef-sugar
+  database (~> 2.3.1)
+  git
+  openssl
+  postgresql
+  python
+  vim
+  xfs
+  yum
+
+GRAPH
+  apache2 (3.1.0)
+  app (0.0.1)
+  apt (2.8.2)
+  aws (2.7.2)
+  build-essential (2.2.3)
+  chef-sugar (3.1.1)
+  chef_handler (1.2.0)
+  database (2.3.1)
+    aws (>= 0.0.0)
+    mysql (~> 5.0)
+    mysql-chef_gem (~> 0.0)
+    postgresql (>= 1.0.0)
+    xfs (>= 0.0.0)
+  dmg (2.2.2)
+  git (4.3.4)
+    build-essential (>= 0.0.0)
+    dmg (>= 0.0.0)
+    windows (>= 0.0.0)
+    yum-epel (>= 0.0.0)
+  mysql (5.6.3)
+    yum-mysql-community (>= 0.0.0)
+  mysql-chef_gem (0.0.5)
+    build-essential (>= 0.0.0)
+    mysql (>= 0.0.0)
+  openssl (4.4.0)
+    chef-sugar (>= 3.1.1)
+  postgresql (3.4.16)
+    apt (>= 1.9.0)
+    build-essential (>= 0.0.0)
+    openssl (>= 0.0.0)
+  python (1.4.6)
+    build-essential (>= 0.0.0)
+    yum-epel (>= 0.0.0)
+  vim (1.1.2)
+  windows (1.38.1)
+    chef_handler (>= 0.0.0)
+  xfs (1.1.0)
+  yum (3.7.1)
+  yum-epel (0.6.2)
+    yum (~> 3.2)
+  yum-mysql-community (0.1.17)
+    yum (>= 3.0)
