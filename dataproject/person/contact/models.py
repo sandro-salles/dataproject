@@ -41,7 +41,7 @@ class ContactEndpoint(PolymorphicModel, DatableModel):
         verbose_name_plural = _("Contato")
 
     def __unicode__(self):
-        return self.name
+        return self.person.name
 
 
 class Phone(ContactEndpoint):

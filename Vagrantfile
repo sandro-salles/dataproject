@@ -55,6 +55,12 @@ Vagrant.configure("2") do |config|
     dataproject_config.vm.provision :shell, :inline => 'apt-get install python-software-properties --yes'
     dataproject_config.vm.provision :shell, :inline => 'apt-add-repository ppa:chris-lea/node.js --yes'
     dataproject_config.vm.provision :shell, :inline => 'apt-add-repository ppa:mc3man/trusty-media --yes'
+    dataproject_config.vm.provision :shell, :inline => 'add-apt-repository -y ppa:webupd8team/java --yes'
+    dataproject_config.vm.provision :shell, :inline => 'apt-get install oracle-java8-installer --yes'
+    dataproject_config.vm.provision :shell, :inline => 'wget -O - http://packages.elasticsearch.org/GPG-KEY-elasticsearch | sudo apt-key add -'    
+    dataproject_config.vm.provision :shell, :inline => "echo 'deb http://packages.elasticsearch.org/elasticsearch/1.4/debian stable main' | sudo tee /etc/apt/sources.list.d/elasticsearch.list"    
+    dataproject_config.vm.provision :shell, :inline => 'apt-get update --yes'
+    dataproject_config.vm.provision :shell, :inline => 'apt-get install elasticsearch=1.4.4 --yes'
     dataproject_config.vm.provision :shell, :inline => 'apt-get install build-essential cmake checkinstall zip unzip ruby1.9.1-dev --no-upgrade --yes'
     dataproject_config.vm.provision :shell, :inline => 'apt-get install libgtk2.0-dev pkg-config libav-tools libavcodec-dev libavformat-dev libswscale-dev --yes' 
     dataproject_config.vm.provision :shell, :inline => 'apt-get install libpq-dev python-dev python-numpy libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libjasper-dev libdc1394-22-dev --yes' 

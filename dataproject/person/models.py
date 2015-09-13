@@ -18,17 +18,6 @@ class Person(PolymorphicModel, DatableModel):
         return self.name
 
 
-class Person(PolymorphicModel, DatableModel):
-    name = models.CharField(_('Nome'), max_length=300)
-
-    class Meta:
-        verbose_name        = _("Pessoa")
-        verbose_name_plural = _("Pessoas")
-
-    def __unicode__(self):
-        return self.name
-
-
 class PhysicalPerson(Person):
 
     class Meta:

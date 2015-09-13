@@ -14,13 +14,14 @@ class Migration(migrations.Migration):
             name='Corporation',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('name', models.CharField(max_length=200, verbose_name='Name')),
-                ('slug', models.SlugField(null=True, max_length=200, blank=True, unique=True, verbose_name='Slug')),
-                ('description', models.CharField(max_length=400, null=True, verbose_name='Description', blank=True)),
+                ('name', models.CharField(max_length=200, verbose_name='Nome')),
+                ('slug', models.SlugField(null=True, max_length=200, blank=True, unique=True, verbose_name='Identificador')),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('updated_at', models.DateTimeField(auto_now=True)),
             ],
             options={
-                'verbose_name': 'Corporation',
-                'verbose_name_plural': 'Corporations',
+                'verbose_name': 'Empresa',
+                'verbose_name_plural': 'Empresas',
             },
         ),
     ]
