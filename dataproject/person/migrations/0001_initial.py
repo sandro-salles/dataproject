@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
+import django_hstore.fields
 
 
 class Migration(migrations.Migration):
@@ -18,6 +19,7 @@ class Migration(migrations.Migration):
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
                 ('name', models.CharField(max_length=300, verbose_name='Nome')),
+                ('json', django_hstore.fields.DictionaryField(null=True, editable=False)),
             ],
             options={
                 'verbose_name': 'Pessoa',

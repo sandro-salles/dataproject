@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
+import django_hstore.fields
 
 
 class Migration(migrations.Migration):
@@ -12,18 +13,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='City',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('name', models.CharField(max_length=600, verbose_name='Nome')),
-            ],
-            options={
-                'verbose_name': 'Cidade',
-                'verbose_name_plural': 'Cidades',
-            },
-        ),
-        migrations.CreateModel(
-            name='ContactEndpoint',
+            name='Contact',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
@@ -35,24 +25,13 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name='Neighborhood',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('name', models.CharField(max_length=600, verbose_name='Nome')),
-                ('city', models.ForeignKey(to='contact.City')),
-            ],
-            options={
-                'verbose_name': 'Bairro',
-                'verbose_name_plural': 'Bairro',
-            },
-        ),
-        migrations.CreateModel(
             name='PhoneOperator',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(max_length=200, verbose_name='Nome')),
+                ('slug', models.SlugField(null=True, max_length=200, blank=True, unique=True, verbose_name='Identificador')),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('name', models.CharField(max_length=300, verbose_name='Nome')),
             ],
             options={
                 'verbose_name': 'Operadora de Telefonia',
@@ -60,29 +39,18 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name='State',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('name', models.CharField(max_length=300, verbose_name='Nome')),
-                ('abbreviation', models.CharField(max_length=2, verbose_name='Abrevia\xe7\xe3o')),
-            ],
-            options={
-                'verbose_name': 'Estado',
-                'verbose_name_plural': 'Estados',
-            },
-        ),
-        migrations.CreateModel(
             name='Email',
             fields=[
-                ('contactendpoint_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='contact.ContactEndpoint')),
+                ('contact_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='contact.Contact')),
                 ('address', models.EmailField(max_length=254, verbose_name='E-mail')),
-                ('use_type', models.CharField(blank=True, max_length=50, null=True, verbose_name='Tipo de Uso', choices=[(b'pes', 'Pessoal'), (b'cor', 'Corporativo')])),
+                ('use_type', models.CharField(choices=[(b'pes', 'Pessoal'), (b'cor', 'Corporativo')], max_length=50, blank=True, null=True, verbose_name='Tipo de Uso', db_index=True)),
+                ('json', django_hstore.fields.DictionaryField(null=True, editable=False)),
             ],
             options={
                 'verbose_name': 'Endere\xe7o Eletr\xf4nico',
                 'verbose_name_plural': 'Endere\xe7os Eletr\xf4nicos',
             },
-            bases=('contact.contactendpoint',),
+            bases=('contact.contact',),
         ),
         migrations.CreateModel(
             name='MobileOperator',
@@ -98,31 +66,34 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Phone',
             fields=[
-                ('contactendpoint_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='contact.ContactEndpoint')),
+                ('contact_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='contact.Contact')),
                 ('country_code', models.CharField(default=b'+55', max_length=3, verbose_name='DDI')),
-                ('area_code', models.CharField(max_length=2, verbose_name='DDD')),
+                ('area_code', models.CharField(max_length=2, verbose_name='DDD', db_index=True)),
+                ('number', models.CharField(max_length=9, verbose_name='N\xfamero', db_index=True)),
+                ('json', django_hstore.fields.DictionaryField(null=True, editable=False)),
             ],
             options={
                 'verbose_name': 'Telefone',
                 'verbose_name_plural': 'Telefones',
             },
-            bases=('contact.contactendpoint',),
+            bases=('contact.contact',),
         ),
         migrations.CreateModel(
             name='PhysicalAddress',
             fields=[
-                ('contactendpoint_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='contact.ContactEndpoint')),
-                ('address', models.CharField(max_length=600, verbose_name='Logradouro')),
-                ('postal_code', models.CharField(max_length=8, verbose_name='CEP')),
-                ('latitude', models.FloatField(null=True, verbose_name='Latitude', blank=True)),
-                ('longitude', models.FloatField(null=True, verbose_name='Longitude', blank=True)),
-                ('use_type', models.CharField(blank=True, max_length=50, null=True, verbose_name='Tipo de Uso', choices=[(b'res', 'Residencial'), (b'com', 'Comercial')])),
+                ('contact_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='contact.Contact')),
+                ('address', models.TextField(max_length=800, verbose_name='Logradouro')),
+                ('zipcode', models.CharField(max_length=8, verbose_name='CEP')),
+                ('latitude', models.FloatField(db_index=True, null=True, verbose_name='Latitude', blank=True)),
+                ('longitude', models.FloatField(db_index=True, null=True, verbose_name='Longitude', blank=True)),
+                ('use_type', models.CharField(choices=[(b'res', 'Residencial'), (b'com', 'Comercial')], max_length=50, blank=True, null=True, verbose_name='Tipo de Uso', db_index=True)),
+                ('json', django_hstore.fields.DictionaryField(null=True, editable=False)),
             ],
             options={
                 'verbose_name': 'Endere\xe7o F\xedsico',
                 'verbose_name_plural': 'Endere\xe7os F\xedsicos',
             },
-            bases=('contact.contactendpoint',),
+            bases=('contact.contact',),
         ),
         migrations.CreateModel(
             name='TelephoneOperator',

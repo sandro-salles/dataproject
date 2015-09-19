@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('number', models.CharField(max_length=20, verbose_name='N\xfamero')),
+                ('number', models.CharField(max_length=20, verbose_name='N\xfamero', db_index=True)),
             ],
             options={
                 'verbose_name': 'Documento Pessoal',

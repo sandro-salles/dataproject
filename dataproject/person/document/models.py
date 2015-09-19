@@ -4,11 +4,14 @@ from django.db import models
 from django.utils.translation import ugettext as _
 from django.conf import settings
 from polymorphic import PolymorphicModel
-from core.models import DatableModel
+from core.models import DatableModel, HashableModel
 from person.models import PhysicalPerson, LegalPerson
 
+import reversion
+
+
 class PersonDocument(PolymorphicModel, DatableModel):
-    number = models.CharField(_(u'Número'), max_length=20)
+    number = models.CharField(_(u'Número'), max_length=20, db_index=True)
 
     class Meta:
         verbose_name        = _("Documento Pessoal")
@@ -17,8 +20,10 @@ class PersonDocument(PolymorphicModel, DatableModel):
     def __unicode__(self):
         return self.id
 
+
 class PhysicalPersonDocument(PersonDocument):
     person = models.ForeignKey(PhysicalPerson)
+    unique_together = ('number', 'person')
 
     class Meta:
         verbose_name        = _(u"Documento de Pessoa Física")
@@ -27,12 +32,14 @@ class PhysicalPersonDocument(PersonDocument):
 
 class LegalPersonDocument(PersonDocument):
     person = models.ForeignKey(LegalPerson)
+    unique_together = ('number', 'person')
 
     class Meta:
         verbose_name        = _(u"Documento de Pessoa Jurídica")
         verbose_name_plural = _(u"Documentos de Pessoa Jurídica")
 
 
+@reversion.register
 class CPF(PhysicalPersonDocument):
 
     class Meta:
@@ -42,7 +49,7 @@ class CPF(PhysicalPersonDocument):
     def __unicode__(self):
         return self.number
 
-
+@reversion.register
 class RG(PhysicalPersonDocument):    
     issuer = models.CharField(_(u'Órgão Emissor'), max_length=300)
 
@@ -53,7 +60,7 @@ class RG(PhysicalPersonDocument):
     def __unicode__(self):
         return self.number
 
-
+@reversion.register
 class CNPJ(LegalPersonDocument):
 
     class Meta:

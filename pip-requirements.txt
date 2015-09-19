@@ -76,3 +76,4 @@ zope.interface==4.0.5
 psycopg2
 unipath
 django-polymorphic
+mmh3

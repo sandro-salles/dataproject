@@ -71,7 +71,7 @@ Vagrant.configure("2") do |config|
     dataproject_config.vm.provision :shell, :inline => 'apt-get install redis-server --yes'
     dataproject_config.vm.provision :shell, :inline => 'apt-get install git --yes'
     dataproject_config.vm.provision :shell, :inline => 'apt-get install python-pip --yes'
-    dataproject_config.vm.provision :shell, :inline => 'apt-get install postgresql postgresql-contrib --yes'
+    dataproject_config.vm.provision :shell, :inline => 'apt-get install postgresql postgresql-contrib --yes'    
     dataproject_config.vm.provision :shell, :inline => 'apt-get autoremove --yes'
 
     dataproject_config.vm.provision :chef_solo do |chef|

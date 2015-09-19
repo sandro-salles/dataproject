@@ -9,31 +9,26 @@ class Migration(migrations.Migration):
     dependencies = [
         ('contact', '0001_initial'),
         ('contenttypes', '0002_remove_content_type_name'),
+        ('geo', '0001_initial'),
         ('person', '0001_initial'),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='contactendpoint',
-            name='person',
-            field=models.ForeignKey(to='person.Person'),
+            model_name='contact',
+            name='persons',
+            field=models.ManyToManyField(to='person.Person'),
         ),
         migrations.AddField(
-            model_name='contactendpoint',
+            model_name='contact',
             name='polymorphic_ctype',
-            field=models.ForeignKey(related_name='polymorphic_contact.contactendpoint_set+', editable=False, to='contenttypes.ContentType', null=True),
-        ),
-        migrations.AddField(
-            model_name='city',
-            name='state',
-            field=models.ForeignKey(to='contact.State'),
+            field=models.ForeignKey(related_name='polymorphic_contact.contact_set+', editable=False, to='contenttypes.ContentType', null=True),
         ),
         migrations.CreateModel(
             name='Cellphone',
             fields=[
                 ('phone_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='contact.Phone')),
-                ('number', models.CharField(max_length=9, verbose_name='N\xfamero')),
-                ('use_type', models.CharField(blank=True, max_length=50, null=True, verbose_name='Tipo de Uso', choices=[(b'pes', 'Pessoal'), (b'cor', 'Corporativo')])),
+                ('use_type', models.CharField(choices=[(b'pes', 'Pessoal'), (b'cor', 'Corporativo')], max_length=50, blank=True, null=True, verbose_name='Tipo de Uso', db_index=True)),
                 ('operator', models.ForeignKey(to='contact.MobileOperator')),
             ],
             options={
@@ -46,8 +41,7 @@ class Migration(migrations.Migration):
             name='Telephone',
             fields=[
                 ('phone_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='contact.Phone')),
-                ('number', models.CharField(max_length=8, verbose_name='N\xfamero')),
-                ('use_type', models.CharField(blank=True, max_length=50, null=True, verbose_name='Tipo de Uso', choices=[(b'res', 'Residencial'), (b'com', 'Comercial'), (b'rec', 'Recados')])),
+                ('use_type', models.CharField(choices=[(b'res', 'Residencial'), (b'com', 'Comercial'), (b'rec', 'Recados')], max_length=50, blank=True, null=True, verbose_name='Tipo de Uso', db_index=True)),
                 ('operator', models.ForeignKey(to='contact.TelephoneOperator')),
             ],
             options={
@@ -59,16 +53,20 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='physicaladdress',
             name='city',
-            field=models.ForeignKey(to='contact.City'),
+            field=models.ForeignKey(to='geo.City'),
         ),
         migrations.AddField(
             model_name='physicaladdress',
             name='neighborhood',
-            field=models.ForeignKey(to='contact.Neighborhood'),
+            field=models.ForeignKey(to='geo.Neighborhood'),
         ),
         migrations.AddField(
             model_name='physicaladdress',
             name='state',
-            field=models.ForeignKey(to='contact.State'),
+            field=models.ForeignKey(to='geo.State'),
+        ),
+        migrations.AlterUniqueTogether(
+            name='phone',
+            unique_together=set([('area_code', 'number'), ('country_code', 'area_code', 'number')]),
         ),
     ]
