@@ -36,6 +36,12 @@ class HashableModel(models.Model):
     class Meta:
         abstract = True
 
+class DirtyModel(models.Model):
+    is_dirty = models.BooleanField(_('Inconsistente'), default=False)
+    
+    class Meta:
+        abstract = True
+    
 
 class Corporation(SlugModel, DatableModel):
 

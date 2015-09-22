@@ -2,15 +2,14 @@
 
 from django.db import models
 from django.utils.translation import ugettext as _
-from django.conf import settings
 from polymorphic import PolymorphicModel
-from core.models import DatableModel, HashableModel
+from core.models import DatableModel, DirtyModel
 from person.models import PhysicalPerson, LegalPerson
 
 import reversion
 
 
-class PersonDocument(PolymorphicModel, DatableModel):
+class PersonDocument(PolymorphicModel, DatableModel, DirtyModel):
     number = models.CharField(_(u'Número'), max_length=20, db_index=True)
 
     class Meta:

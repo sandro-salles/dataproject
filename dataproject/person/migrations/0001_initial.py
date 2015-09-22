@@ -19,6 +19,7 @@ class Migration(migrations.Migration):
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
                 ('name', models.CharField(max_length=300, verbose_name='Nome')),
+                ('normal_name', models.CharField(verbose_name='Nome Normalizado', max_length=300, editable=False, db_index=True)),
                 ('json', django_hstore.fields.DictionaryField(null=True, editable=False)),
             ],
             options={

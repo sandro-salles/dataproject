@@ -4,11 +4,11 @@ from django.db import models
 from django.utils.translation import ugettext as _
 from django.conf import settings
 from polymorphic import PolymorphicModel
-from core.models import DatableModel, SlugModel
+from core.models import DatableModel, SlugModel, DirtyModel
 from person.models import Person
-from geo.models import State, City, Neighborhood
+from geo.models import Street
 from django_hstore import hstore
-from core.util import sanitize_text
+from person.contact.util import normalize_address
 
 import reversion
 
@@ -37,7 +37,7 @@ class MobileOperator(PhoneOperator):
         verbose_name_plural = _("Operadoras de Telefonia Celular")
 
 
-class Contact(PolymorphicModel, DatableModel):
+class Contact(PolymorphicModel, DatableModel, DirtyModel):
     persons = models.ManyToManyField(Person)
 
     class Meta:
@@ -45,12 +45,14 @@ class Contact(PolymorphicModel, DatableModel):
         verbose_name_plural = _("Contato")
 
     def __unicode__(self):
-        return self.person.name
+        return self.pk or ''
 
 
 class Phone(Contact):
 
-    country_code = models.CharField(_('DDI'), max_length=3, default='+55')
+    COUNTRY_CODE_CHOICES_BRAZIL = '+55'
+
+    country_code = models.CharField(_('DDI'), max_length=3, default=COUNTRY_CODE_CHOICES_BRAZIL, db_index=True)
     area_code = models.CharField(_('DDD'), max_length=2, db_index=True)
     number = models.CharField(_(u'Número'), max_length=9, db_index=True)
 
@@ -107,7 +109,10 @@ class Phone(Contact):
 
     def save(self, *args, **kwargs):
         self.json = {'j_country_code': self.country_code, 'j_area_code': self.area_code, 'j_number': self.number, }
-        super(Telephone, self).save(*args, **kwargs)
+        super(Phone, self).save(*args, **kwargs)
+
+    def __unicode__(self):
+        return '%s %s %s' % (self.country_code, self.area_code, self.number)
 
 @reversion.register
 class Telephone(Phone):
@@ -158,12 +163,10 @@ class PhysicalAddress(Contact):
 
     USE_TYPE_CHOICES            = (USE_TYPE_CHOICES_HOME, USE_TYPE_CHOICES_COMMERCIAL)
 
-    state = models.ForeignKey(State)
-    city = models.ForeignKey(City)
-    neighborhood = models.ForeignKey(Neighborhood)
-
-    address = models.TextField(_('Logradouro'), max_length=800)
-    zipcode = models.CharField(_('CEP'), max_length=8)
+    street = models.ForeignKey(Street)
+    number = models.CharField(_(u'Número'), max_length=20, blank=True, null=True)
+    complement = models.CharField(_(u'Complemento'), max_length=50, blank=True, null=True)
+    
     latitude = models.FloatField(_('Latitude'), db_index=True, blank=True, null=True)
     longitude = models.FloatField(_('Longitude'), db_index=True, blank=True, null=True)
 
@@ -171,7 +174,7 @@ class PhysicalAddress(Contact):
 
     json = hstore.DictionaryField(schema=[
         {
-            'name': 'j_state_name',
+            'name': 'j_street_name',
             'class': 'CharField',
             'kwargs': {
                 'blank': False,
@@ -203,11 +206,19 @@ class PhysicalAddress(Contact):
             }
         },
         {
-            'name': 'j_address',
-            'class': 'TextField',
+            'name': 'j_number',
+            'class': 'CharField',
             'kwargs': {
                 'blank': False,
-                'max_length': 800,
+                'max_length': 20,
+            }
+        },
+        {
+            'name': 'j_complement',
+            'class': 'CharField',
+            'kwargs': {
+                'blank': False,
+                'max_length': 50,
             }
         },
         {
@@ -250,15 +261,14 @@ class PhysicalAddress(Contact):
 
     def save(self, *args, **kwargs):
 
-        self.address = sanitize_text(self.address)
-
         self.json = {
-            'j_state_name': self.state.name, 
-            'j_state_abbreviation': self.state.abbreviation, 
-            'j_city_name': self.city.name, 
-            'j_neighborhood_name': self.neighborhood.name, 
-            'j_address': self.address,
-            'j_zipcode': self.postal_code,
+            'j_state_name': self.street.neighborhood.city.state.name, 
+            'j_state_abbreviation': self.street.neighborhood.city.state.pk, 
+            'j_city_name': self.street.neighborhood.city.name, 
+            'j_neighborhood_name': self.street.neighborhood.name, 
+            'j_number': self.number,
+            'j_complement': self.complement,
+            'j_zipcode': self.street.zipcode,
             'j_latitude': self.latitude,
             'j_longitude': self.longitude,
             'j_use_type': self.use_type,
@@ -266,6 +276,8 @@ class PhysicalAddress(Contact):
 
         super(PhysicalAddress, self).save(*args, **kwargs)
 
+    def __unicode__(self):
+        return '%s (%s %s)' % (unicode(self.street), self.number or "", self.complement or "")
 
 @reversion.register
 class Email(Contact):

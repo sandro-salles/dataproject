@@ -67,7 +67,7 @@ class Migration(migrations.Migration):
             name='Phone',
             fields=[
                 ('contact_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='contact.Contact')),
-                ('country_code', models.CharField(default=b'+55', max_length=3, verbose_name='DDI')),
+                ('country_code', models.CharField(default=b'+55', max_length=3, verbose_name='DDI', db_index=True)),
                 ('area_code', models.CharField(max_length=2, verbose_name='DDD', db_index=True)),
                 ('number', models.CharField(max_length=9, verbose_name='N\xfamero', db_index=True)),
                 ('json', django_hstore.fields.DictionaryField(null=True, editable=False)),
@@ -82,8 +82,8 @@ class Migration(migrations.Migration):
             name='PhysicalAddress',
             fields=[
                 ('contact_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='contact.Contact')),
-                ('address', models.TextField(max_length=800, verbose_name='Logradouro')),
-                ('zipcode', models.CharField(max_length=8, verbose_name='CEP')),
+                ('number', models.CharField(max_length=20, null=True, verbose_name='N\xfamero', blank=True)),
+                ('complement', models.CharField(max_length=50, null=True, verbose_name='Complemento', blank=True)),
                 ('latitude', models.FloatField(db_index=True, null=True, verbose_name='Latitude', blank=True)),
                 ('longitude', models.FloatField(db_index=True, null=True, verbose_name='Longitude', blank=True)),
                 ('use_type', models.CharField(choices=[(b'res', 'Residencial'), (b'com', 'Comercial')], max_length=50, blank=True, null=True, verbose_name='Tipo de Uso', db_index=True)),

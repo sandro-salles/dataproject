@@ -11,12 +11,12 @@ class PersonFactory:
     def get_or_instantiate_for_document(document):
                   
         if document.person_id:
-            return dict_to_struct({'person': document.person, 'document': document, 'assigned': True })
+            return dict_to_struct({'instance': document.person, 'exists': True })
         else:
             person = document._meta.get_field('person').rel.to()
-            return dict_to_struct({'person': person, 'document': document, 'assigned': False })
+            return dict_to_struct({'instance': person, 'exists': False })
 
     @staticmethod
     def get_or_instantiate_for_document_number(number):
         
-        return PersonFactory.get_or_instantiate_for_document(DocumentFactory.get_or_instantiate_for_number(number))
+        return PersonFactory.get_or_instantiate_for_document(DocumentFactory.get_or_instantiate_for_number(number).instance)
