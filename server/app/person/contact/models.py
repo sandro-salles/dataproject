@@ -21,13 +21,13 @@ class Carrier(SlugModel, DatableModel):
 
 
 class Contact(DatableModel, DirtyModel):
-    persons = models.ManyToManyField(Person, through='PersonContact')
+    persons = models.ManyToManyField(Person, through='PersonContactDetail')
         
     class Meta:
         abstract = True
 
 
-class PersonContact(models.Model):
+class PersonContactDetail(models.Model):
     person = models.ForeignKey(Person)
     contact = models.ForeignKey(Contact)
 
@@ -40,6 +40,14 @@ class PersonContact(models.Model):
     USE_TYPE_CHOICES            = (USE_TYPE_CHOICES_HOME, USE_TYPE_CHOICES_COMMERCIAL, USE_TYPE_CHOICES_MESSAGES, USE_TYPE_CHOICES_PERSONAL, USE_TYPE_CHOICES_CORPORATE)
 
     use_type = models.CharField(_('Tipo de Uso'), db_index=True, max_length=50, choices=USE_TYPE_CHOICES, blank=True, null=True)
+
+    class Meta:
+        verbose_name        = _("Detalhes de Contato")
+        verbose_name_plural = _("Detalhes de Contatos")
+
+    def __unicode__(self):
+        return self.person
+
 
 
 class Phone(Contact):

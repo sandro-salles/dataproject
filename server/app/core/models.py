@@ -44,11 +44,3 @@ class DirtyModel(models.Model):
     
 
 
-class Corporation(SlugModel, DatableModel):
-
-    class Meta:
-        verbose_name = _('Empresa')
-        verbose_name_plural = _('Empresas')
-
-    def __unicode__(self):
-        return self.name
