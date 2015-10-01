@@ -1,0 +1,14 @@
+{
+  "name": "jquery-jvectormap-1.2.2.min",
+  "_cacheHeaders": {
+    "ETag": "\"54412152-180ea\"",
+    "Last-Modified": "Fri, 17 Oct 2014 14:01:54 GMT",
+    "Content-Length": "98538",
+    "Content-Type": "application/x-javascript"
+  },
+  "_release": "e-tag:54412152-",
+  "main": "index.js",
+  "_source": "http://jvectormap.com/js/jquery-jvectormap-1.2.2.min.js",
+  "_target": "*",
+  "_originalSource": "http://jvectormap.com/js/jquery-jvectormap-1.2.2.min.js"
+}

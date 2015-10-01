@@ -1,0 +1,37 @@
+{
+  "name": "angular-summernote",
+  "version": "0.2.4",
+  "main": [
+    "./dist/angular-summernote.min.js"
+  ],
+  "ignore": [
+    "node_modules",
+    "examples/",
+    "test/",
+    "Gruntfile.js",
+    "karma.conf.js",
+    "package.json",
+    ".jshintrc",
+    ".gitignore",
+    ".editorconfig",
+    ".bowerrc"
+  ],
+  "dependencies": {
+    "summernote": "~0.5.0",
+    "angular": "~1.2.8"
+  },
+  "devDependencies": {
+    "chai": "~1.8.1",
+    "angular-mocks": "~1.2.8"
+  },
+  "homepage": "https://github.com/summernote/angular-summernote",
+  "_release": "0.2.4",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.2.4",
+    "commit": "7619aed56e123766d419a8cb61860453d0d24109"
+  },
+  "_source": "git://github.com/summernote/angular-summernote.git",
+  "_target": "~0.2.3",
+  "_originalSource": "angular-summernote"
+}
