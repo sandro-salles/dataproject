@@ -14,6 +14,7 @@ class Account(SlugModel, DatableModel):
     def __unicode__(self):
         return self.name
 
+
 class Corporation(SlugModel, DatableModel):
     account = models.ForeignKey(Account)
 

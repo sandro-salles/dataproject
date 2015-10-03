@@ -11,41 +11,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Email',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('is_dirty', models.BooleanField(default=False, verbose_name='Inconsistente')),
-                ('use_type', models.CharField(choices=[(b'res', 'Residencial'), (b'com', 'Comercial'), (b'rec', 'Recados'), (b'pes', 'Pessoal'), (b'cor', 'Corporativo')], max_length=50, blank=True, null=True, verbose_name='Tipo de Uso', db_index=True)),
-                ('address', models.EmailField(max_length=254, verbose_name='E-mail')),
-            ],
-            options={
-                'verbose_name': 'Endere\xe7o Eletr\xf4nico',
-                'verbose_name_plural': 'Endere\xe7os Eletr\xf4nicos',
-            },
-        ),
-        migrations.CreateModel(
-            name='Phone',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('is_dirty', models.BooleanField(default=False, verbose_name='Inconsistente')),
-                ('use_type', models.CharField(choices=[(b'res', 'Residencial'), (b'com', 'Comercial'), (b'rec', 'Recados'), (b'pes', 'Pessoal'), (b'cor', 'Corporativo')], max_length=50, blank=True, null=True, verbose_name='Tipo de Uso', db_index=True)),
-                ('country_code', models.CharField(default=b'+55', max_length=3, verbose_name='DDI', db_index=True, choices=[(b'+55', 'Brasil')])),
-                ('type', models.CharField(db_index=True, max_length=3, verbose_name='Tipo do Apareho', choices=[(b'cel', 'Celular'), (b'tel', 'Telefone Fixo')])),
-                ('area_code', models.CharField(max_length=2, verbose_name='DDD', db_index=True)),
-                ('number', models.CharField(max_length=9, verbose_name='N\xfamero', db_index=True)),
-                ('hash', models.IntegerField(verbose_name='Hash', unique=True, editable=False, db_index=True)),
-            ],
-            options={
-                'verbose_name': 'Telefone',
-                'verbose_name_plural': 'Telefones',
-            },
-        ),
-        migrations.CreateModel(
-            name='PhoneOperator',
+            name='Carrier',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=200, verbose_name='Nome', db_index=True)),
@@ -59,22 +25,57 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name='PhysicalAddress',
+            name='Contact',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
                 ('is_dirty', models.BooleanField(default=False, verbose_name='Inconsistente')),
-                ('use_type', models.CharField(choices=[(b'res', 'Residencial'), (b'com', 'Comercial'), (b'rec', 'Recados'), (b'pes', 'Pessoal'), (b'cor', 'Corporativo')], max_length=50, blank=True, null=True, verbose_name='Tipo de Uso', db_index=True)),
-                ('number', models.CharField(db_index=True, max_length=20, null=True, verbose_name='N\xfamero', blank=True)),
-                ('complement', models.CharField(db_index=True, max_length=50, null=True, verbose_name='Complemento', blank=True)),
-                ('latitude', models.FloatField(db_index=True, null=True, verbose_name='Latitude', blank=True)),
-                ('longitude', models.FloatField(db_index=True, null=True, verbose_name='Longitude', blank=True)),
+            ],
+            options={
+                'abstract': False,
+            },
+        ),
+        migrations.CreateModel(
+            name='Email',
+            fields=[
+                ('contact_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='contact.Contact')),
+                ('address', models.EmailField(max_length=254, verbose_name='E-mail')),
+            ],
+            options={
+                'verbose_name': 'Endere\xe7o Eletr\xf4nico',
+                'verbose_name_plural': 'Endere\xe7os Eletr\xf4nicos',
+            },
+            bases=('contact.contact',),
+        ),
+        migrations.CreateModel(
+            name='Phone',
+            fields=[
+                ('contact_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='contact.Contact')),
+                ('country_code', models.CharField(default=b'+55', max_length=3, verbose_name='DDI', choices=[(b'+55', 'Brasil')])),
+                ('type', models.CharField(max_length=3, verbose_name='Tipo do Aparelho', choices=[(b'cel', 'Celular'), (b'tel', 'Telefone Fixo')])),
+                ('area_code', models.CharField(max_length=2, verbose_name='DDD')),
+                ('number', models.CharField(max_length=9, verbose_name='N\xfamero')),
+                ('hash', models.IntegerField(verbose_name='Hash', unique=True, editable=False, db_index=True)),
+            ],
+            options={
+                'verbose_name': 'Telefone',
+                'verbose_name_plural': 'Telefones',
+            },
+            bases=('contact.contact',),
+        ),
+        migrations.CreateModel(
+            name='PhysicalAddress',
+            fields=[
+                ('contact_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='contact.Contact')),
+                ('number', models.CharField(max_length=20, null=True, verbose_name='N\xfamero', blank=True)),
+                ('complement', models.CharField(max_length=50, null=True, verbose_name='Complemento', blank=True)),
                 ('hash', models.IntegerField(verbose_name='Hash', unique=True, editable=False, db_index=True)),
             ],
             options={
                 'verbose_name': 'Endere\xe7o F\xedsico',
                 'verbose_name_plural': 'Endere\xe7os F\xedsicos',
             },
+            bases=('contact.contact',),
         ),
     ]

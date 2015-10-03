@@ -20,8 +20,8 @@ class DataCollection(Product):
     collection = models.ForeignKey(Collection)
 
     class Meta:
-        verbose_name = _('Coleção de Dados')
-        verbose_name_plural = _('Coleção de Dados')
+        verbose_name = _(u'Coleção de Dados')
+        verbose_name_plural = _(u'Coleção de Dados')
 
     def __unicode__(self):
         return self.id

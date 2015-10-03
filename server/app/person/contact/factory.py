@@ -34,7 +34,7 @@ class PhoneFactory:
                             instance = None
 
                             try: 
-                                instance = Phone.objects.only('id', 'operator_id').get(hash=hash)
+                                instance = Phone.objects.only('id', 'carrier_id').get(hash=hash)
                                 return dict_to_struct({'instance': instance, 'exists': True })
                             except Phone.DoesNotExist:
                                 instance = Phone(hash=hash, type=type, country_code=country_code, area_code=code.number, number=phone.number)
@@ -47,7 +47,7 @@ class PhoneFactory:
                             instance = None
 
                             try: 
-                                instance = Phone.objects.only('id', 'operator_id').get(hash=hash)                            
+                                instance = Phone.objects.only('id', 'carrier_id').get(hash=hash)                            
                                 return dict_to_struct({'instance': instance, 'exists': True })
                             except Phone.DoesNotExist:
                                 instance = Phone(hash=hash, type=type, country_code=country_code, area_code=code.number, number=phone.number)
@@ -80,7 +80,7 @@ class PhysicalAddressFactory:
                 except PhysicalAddress.DoesNotExist:
                     try:
                         street = Street.objects.only('id').get(zipcode=code.number)
-                        instance = PhysicalAddress(hash=hash, street=street, number=number, complement=complement)
+                        instance = PhysicalAddress(hash=hash, street=street, number=number, complement=complement, neighborhood=street.neighborhood, city=street.neighborhood.city, state=street.neighborhood.city.state, )
                         return dict_to_struct({'instance': instance, 'exists': False })
                     except Street.DoesNotExist:
                         raise ZipCodeNotFoundException(_(u'O CEP informado (%s) não existe na base de DNE' % zipcode))

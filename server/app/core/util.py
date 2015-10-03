@@ -17,3 +17,6 @@ def remove_spaces_and_similar(text):
 
 def normalize_text(text):
     return remove_spaces_and_similar(replace_diacritics(text)).upper()
+
+def as_digits(text):
+    return ''.join(c for c in text if c.isdigit())

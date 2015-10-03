@@ -6,9 +6,11 @@ from django.conf import settings
 from polymorphic import PolymorphicModel
 from core.models import SlugModel, DatableModel, DirtyModel
 from core.util import normalize_text, remove_spaces_and_similar
+import reversion
 from reversion.models import Revision
 
 
+@reversion.register
 class Person(PolymorphicModel, DatableModel, DirtyModel):
     name = models.CharField(_('Nome'), db_index=True, max_length=300)
 
@@ -39,7 +41,7 @@ class LegalPerson(Person):
 
 
 class Collection(DatableModel):
-    name = models.CharField(_('Nome'), max_length=200, db_index=True, null=False, blank=False)
+    name = models.CharField(_('Nome'), max_length=200, null=False, blank=False)
     persons = models.ManyToManyField(Person, through='CollectionItem')
 
     class Meta:

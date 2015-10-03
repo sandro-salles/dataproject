@@ -43,8 +43,10 @@ INSTALLED_APPS = (
     'django_hstore',
     'reversion',
     'polymorphic',
-    'core',
     'geo',
+    'core',
+    'account',
+    'commerce',    
     'person',
     'person.contact',
     'person.document',
@@ -88,7 +90,7 @@ WSGI_APPLICATION = 'app.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'app',
+        'NAME': 'dataproject',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
         'HOST': 'localhost',

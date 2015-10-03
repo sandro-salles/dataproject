@@ -1,10 +1,10 @@
 from django.core.management.base import BaseCommand, CommandError
 from person.factory import PersonFactory
 from person.document.factory import CPFFactory, CNPJFactory
-from person.contact.models import PhoneOperator, Phone
+from person.contact.models import Carrier, Phone, PhysicalAddress
 from person.contact.factory import PhoneFactory, PhysicalAddressFactory
 from django.db import transaction
-from core.util import remove_spaces_and_similar
+from core.util import remove_spaces_and_similar, as_digits
 
 import reversion
 import csv
@@ -27,7 +27,7 @@ class Command(BaseCommand):
     help = 'Imports person entries from csv files'
 
     import_errors = []
-    max_lines = 1000
+    max_lines = 1
     skip_lines = rowscount = counter = new_person_counter = new_document_counter = new_phone_counter = new_address_counter = 0
 
     def add_arguments(self, parser):
@@ -70,11 +70,13 @@ class Command(BaseCommand):
         delimiter = options['delimiter']
         quotechar = options['quotechar']
 
+        country_code = Phone.COUNTRY_CODE_CHOICES_BRAZIL[0]   
+
         self.skip_lines = int(options['skip'])
 
-        GVT, created = PhoneOperator.objects.get_or_create(name='GVT')
+        GVT, created = Carrier.objects.get_or_create(name='GVT')
 
-        phone_type = Phone.TYPE_CHOICES_TELEPHONE[0]
+        phone__type = Phone.TYPE_CHOICES_TELEPHONE[0]
 
         import_errors_file = open('./GVT-failed_imports.csv','w')
 
@@ -96,22 +98,22 @@ class Command(BaseCommand):
                 try:
                     with transaction.atomic():
 
-                        telephone__area_code                    = row[0]
-                        telephone__number                       = row[1]
-                        person__name                            = row[2]
-                        physicaladdress__address                = row[3]
-                        physicaladdress__number                 = row[4]
-                        physicaladdress__complement             = row[5]
-                        physicaladdress__neighborhood__name     = row[6]
-                        physicaladdress__zipcode                = row[7]
-                        physicaladdress__city__name             = row[8]
-                        physicaladdress__state__abbreviation    = row[9]
-                        person__nature                          = row[10]
-                        document__number                        = row[11]
-                        unknown__info                           = row[12]
+                        phone__area_code                = as_digits(row[0])
+                        phone__number                   = as_digits(row[1])
+                        person__name                    = row[2]
+                        address__address                = row[3]
+                        address__number                 = remove_spaces_and_similar(row[4])
+                        address__complement             = remove_spaces_and_similar(row[5])
+                        address__neighborhood__name     = row[6]
+                        address__zipcode                = as_digits(row[7])
+                        address__city__name             = row[8]
+                        address__state__abbreviation    = row[9]
+                        person__nature                  = remove_spaces_and_similar(row[10])
+                        document__number                = as_digits(row[11])
+                        unknown__info                   = row[12]
 
-                        address = PhysicalAddressFactory.get_or_instantiate_for_zipcode(physicaladdress__zipcode, physicaladdress__number, physicaladdress__complement)
-                        phone = PhoneFactory.get_or_instantiate_for_type(phone_type, telephone__area_code, telephone__number)
+                        address = PhysicalAddressFactory.get_or_instantiate_for_zipcode(address__zipcode, address__number, address__complement)
+                        phone = PhoneFactory.get_or_instantiate_for_type(phone__type, phone__area_code, phone__number)
 
                         if remove_spaces_and_similar(person__nature) == 'F':
                             document__number = document__number[-11:]
@@ -140,12 +142,12 @@ class Command(BaseCommand):
                             document.instance.save(update_fields=['person_id', 'is_dirty', 'updated_at'])
 
                         if not phone.exists:
-                            phone.instance.operator_id = GVT.id
+                            phone.instance.carrier_id = GVT.id
                             phone.instance.save()
                             phone.instance.persons.add(person.instance)
-                        elif phone.instance.operator_id != GVT.id:
-                            phone.instance.operator_id = GVT.id
-                            phone.instance.save(update_fields=['hash', 'operator_id', 'updated_at'])
+                        elif phone.instance.carrier_id != GVT.id:
+                            phone.instance.carrier_id = GVT.id
+                            phone.instance.save(update_fields=['hash', 'carrier_id', 'updated_at'])
                         
                         if not person.exists or not phone.instance.persons.filter(id=person.instance.id).exists():
                             phone.instance.persons.add(person.instance)                      
@@ -170,7 +172,7 @@ class Command(BaseCommand):
 
 
                 except Exception as e:   
-                    #traceback.print_exc(file=sys.stdout)
+                    traceback.print_exc(file=sys.stdout)
                     self.import_errors.append({'index': self.counter, 'type': type(e).__name__, 'message': e.args, 'row': row})
                 
                 self.counter += 1
