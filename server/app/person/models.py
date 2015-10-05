@@ -8,10 +8,17 @@ from core.models import SlugModel, DatableModel, DirtyModel
 from core.util import normalize_text, remove_spaces_and_similar
 import reversion
 from reversion.models import Revision
+from memoize import memoize
 
 
 @reversion.register
-class Person(PolymorphicModel, DatableModel, DirtyModel):
+class Person(DatableModel, DirtyModel):
+
+    NATURE_CHOICES_PHYSICAL  = ('P', _(u'Física'))
+    NATURE_CHOICES_LEGAL  = ('L', _(u'Jurídica'))
+    NATURE_CHOICES = (NATURE_CHOICES_PHYSICAL, NATURE_CHOICES_LEGAL)
+
+    nature = models.CharField(_('Natureza da Pessoa'), max_length=3, choices=NATURE_CHOICES)
     name = models.CharField(_('Nome'), db_index=True, max_length=300)
 
     class Meta:
@@ -19,24 +26,11 @@ class Person(PolymorphicModel, DatableModel, DirtyModel):
         verbose_name_plural = _("Pessoas")
 
     def save(self, *args, **kwargs):
-        self.name = remove_spaces_and_similar(self.name)
+        self.name = normalize_text(self.name)
         super(Person, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return self.name
-
-class PhysicalPerson(Person):
-
-    class Meta:
-        verbose_name        = _(u"Pessoa Física")
-        verbose_name_plural = _(u"Pessoas Físicas")
-
-
-class LegalPerson(Person):
-
-    class Meta:
-        verbose_name        = _(u"Pessoa Jurídica")
-        verbose_name_plural = _(u"Pessoas Jurídicas")
 
 
 

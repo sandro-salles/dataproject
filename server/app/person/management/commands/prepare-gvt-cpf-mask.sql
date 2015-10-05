@@ -7,7 +7,6 @@ WITH
       contact_phone phone
     WHERE 
       phone.hash = {phone__hash} 
-    LIMIT 1
   ),
   cte_address as (
     SELECT 
@@ -53,7 +52,6 @@ WITH
       WHERE 
         NOT EXISTS (SELECT 1 FROM contact_address address WHERE address.hash = {address__hash}) 
         AND street.cep = '{address__zipcode}'
-      LIMIT 1
   )
 SELECT 
   person.id as person_id,
@@ -69,7 +67,7 @@ SELECT
   (SELECT state_id FROM cte_address LIMIT 1) as state_id,  
   (CASE WHEN caddressp.id IS NULL THEN true ELSE false END) as address_relation_is_new
 FROM 
-  document_document doc 
+  document_cpf doc 
 INNER JOIN 
   person_person person 
     ON (person.id = doc.person_id)
@@ -87,7 +85,7 @@ LEFT OUTER JOIN
       AND caddressp.contact_id IN (SELECT address_id FROM cte_address LIMIT 1)
       AND (SELECT address_id FROM cte_address LIMIT 1) IS NOT NULL   )
 WHERE 
-  doc.hash = {document__hash}
+  doc.number = '{document__number}'
 UNION ALL
   SELECT 
     NULL,
@@ -103,5 +101,4 @@ UNION ALL
     (SELECT state_id FROM cte_address LIMIT 1) as state_id,
     TRUE
   WHERE 
-    NOT EXISTS (SELECT 1 FROM document_document doc WHERE doc.hash = {document__hash})
-  LIMIT 1;
+    NOT EXISTS (SELECT 1 FROM document_cpf doc WHERE doc.number = '{document__number}');

@@ -167,7 +167,7 @@ class ContactPhysicaladdress(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'contact_physicaladdress'
+        db_table = 'contact_address'
 
 
 class ContactTelephone(models.Model):

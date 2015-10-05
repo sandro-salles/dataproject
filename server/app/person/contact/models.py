@@ -9,6 +9,7 @@ from geo.models import Street, Neighborhood, City, State
 from core.util import remove_spaces_and_similar
 import mmh3
 import reversion
+from memoize import memoize
 
 
 class Carrier(SlugModel, DatableModel):
@@ -21,12 +22,13 @@ class Carrier(SlugModel, DatableModel):
         return self.name
 
 
-class Contact(PolymorphicModel, DatableModel, DirtyModel):
-    persons = models.ManyToManyField(Person)
+
 
 
 @reversion.register
-class Phone(Contact):
+class Phone(DatableModel):
+
+    persons = models.ManyToManyField(Person, through="PersonPhone")
 
     TYPE_CHOICES_CELLPHONE  = ('cel', _('Celular'))
     TYPE_CHOICES_TELEPHONE  = ('tel', _('Telefone Fixo'))
@@ -37,14 +39,16 @@ class Phone(Contact):
     area_code = models.CharField(_('DDD'), max_length=2)
     number = models.CharField(_(u'Número'), max_length=9)
     carrier = models.ForeignKey(Carrier)
-    hash = models.IntegerField(_('Hash'), unique=True, db_index=True, editable=False)
+    hash = models.IntegerField(_('Hash'), unique=True, editable=False)
 
     class Meta:
         verbose_name        = _(u"Telefone")
         verbose_name_plural = _(u"Telefones")        
         unique_together     = ('type', 'area_code', 'number')
 
+    
     @staticmethod
+    @memoize()
     def make_hash(type, area_code, number):
         return mmh3.hash('%s%s%s' % (type, area_code, number))
 
@@ -56,8 +60,15 @@ class Phone(Contact):
         return '%s %s (%s)' % (self.area_code, self.number, self.type)
 
 
-@reversion.register
-class PhysicalAddress(Contact):
+class PersonPhone(DatableModel):
+    person = models.ForeignKey(Person)
+    phone = models.ForeignKey(Phone)
+
+
+
+class Address(DatableModel):
+
+    persons = models.ManyToManyField(Person, through="PersonAddress")
 
     state = models.ForeignKey(State)
     city = models.ForeignKey(City)
@@ -66,14 +77,16 @@ class PhysicalAddress(Contact):
     number = models.CharField(_(u'Número'), max_length=20, blank=True, null=True)
     complement = models.CharField(_(u'Complemento'), max_length=50, blank=True, null=True)
     
-    hash = models.IntegerField(_('Hash'), unique=True, db_index=True, editable=False)
+    hash = models.IntegerField(_('Hash'), unique=True, editable=False)
 
     class Meta:
         verbose_name        = _(u"Endereço Físico")
         verbose_name_plural = _(u"Endereços Físicos")
         unique_together     = ('street', 'number', 'complement')
 
+    
     @staticmethod
+    @memoize()
     def make_hash(zipcode, number, complement):
         return mmh3.hash('%s%s%s' % (zipcode, number, complement))
 
@@ -81,17 +94,28 @@ class PhysicalAddress(Contact):
         self.number = remove_spaces_and_similar(self.number)
         self.complement = remove_spaces_and_similar(self.complement)
         self.hash = Phone.make_hash(self.street.zipcode, self.number, self.complement)
-        super(PhysicalAddress, self).save(*args, **kwargs)
+        super(Address, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return '%s (%s %s)' % (unicode(self.street), self.number or "", self.complement or "")
 
+class PersonAddress(DatableModel):
+    person = models.ForeignKey(Person)
+    address = models.ForeignKey(Address)
+
+    
 @reversion.register
-class Email(Contact):
+class Email(DatableModel):
+
+    persons = models.ManyToManyField(Person, through="PersonEmail")
 
     address = models.EmailField(_('E-mail'))
 
     class Meta:
         verbose_name        = _(u"Endereço Eletrônico")
         verbose_name_plural = _(u"Endereços Eletrônicos")
+
+class PersonEmail(DatableModel):
+    person = models.ForeignKey(Person)
+    email = models.ForeignKey(Email)
     

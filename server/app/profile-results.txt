@@ -1,0 +1,484 @@
+         4535 function calls (4405 primitive calls) in 0.072 seconds
+
+   Ordered by: cumulative time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.001    0.001    0.072    0.072 import-gvt-procedure.py:103(_handle)
+        1    0.000    0.000    0.033    0.033 manager.py:126(manager_method)
+        1    0.000    0.000    0.033    0.033 query.py:396(get_or_create)
+        1    0.000    0.000    0.033    0.033 query.py:320(get)
+   150/53    0.000    0.000    0.031    0.001 {len}
+        1    0.000    0.000    0.031    0.031 query.py:143(__len__)
+        1    0.000    0.000    0.031    0.031 query.py:963(_fetch_all)
+        2    0.000    0.000    0.031    0.016 query.py:229(iterator)
+        1    0.000    0.000    0.026    0.026 compiler.py:813(execute_sql)
+        4    0.000    0.000    0.021    0.005 base.py:156(cursor)
+        4    0.000    0.000    0.021    0.005 base.py:134(_cursor)
+     11/9    0.000    0.000    0.021    0.002 base.py:124(ensure_connection)
+        1    0.000    0.000    0.021    0.021 base.py:106(connect)
+        1    0.001    0.001    0.018    0.018 base.py:175(get_new_connection)
+        1    0.000    0.000    0.017    0.017 __init__.py:102(connect)
+        1    0.017    0.017    0.017    0.017 {psycopg2._psycopg._connect}
+        3    0.000    0.000    0.014    0.005 __init__.py:332(decorated_function)
+        1    0.000    0.000    0.010    0.010 utils.py:50(callproc)
+        1    0.010    0.010    0.010    0.010 {method 'callproc' of 'psycopg2.extensions.cursor' objects}
+        3    0.000    0.000    0.008    0.003 __init__.py:187(make_cache_key)
+        3    0.000    0.000    0.007    0.002 __init__.py:139(_memoize_version)
+        5    0.007    0.001    0.007    0.001 {method 'execute' of 'psycopg2.extensions.cursor' objects}
+        6    0.000    0.000    0.006    0.001 locmem.py:45(get)
+        3    0.000    0.000    0.005    0.002 utils.py:76(execute)
+        3    0.000    0.000    0.005    0.002 utils.py:58(execute)
+        1    0.000    0.000    0.005    0.005 query.py:233(get_compiler)
+        3    0.000    0.000    0.005    0.002 __init__.py:117(get_many)
+       11    0.002    0.000    0.004    0.000 base.py:209(validate_key)
+        2    0.000    0.000    0.004    0.002 __init__.py:20(import_module)
+      4/3    0.003    0.001    0.004    0.001 {__import__}
+        5    0.000    0.000    0.003    0.001 locmem.py:72(set)
+        3    0.000    0.000    0.003    0.001 __init__.py:93(get)
+        2    0.003    0.002    0.003    0.002 {open}
+        6    0.001    0.000    0.003    0.001 base.py:388(__init__)
+       16    0.000    0.000    0.003    0.000 contextlib.py:15(__enter__)
+        3    0.000    0.000    0.003    0.001 base.py:135(get_many)
+        1    0.000    0.000    0.002    0.002 import-gvt-procedure.py:72(fetch_namedtuple_columns)
+        1    0.001    0.001    0.002    0.002 collections.py:288(namedtuple)
+        1    0.000    0.000    0.002    0.002 operations.py:302(compiler)
+       13    0.000    0.000    0.002    0.000 dispatcher.py:178(send)
+        1    0.000    0.000    0.002    0.002 compiler.py:21(__init__)
+        1    0.000    0.000    0.002    0.002 re.py:188(compile)
+        1    0.000    0.000    0.002    0.002 re.py:226(_compile)
+        1    0.000    0.000    0.002    0.002 sre_compile.py:493(compile)
+      817    0.002    0.000    0.002    0.000 {ord}
+       20    0.000    0.000    0.002    0.000 synch.py:84(writer)
+        3    0.000    0.000    0.002    0.001 __init__.py:97(set)
+       11    0.000    0.000    0.002    0.000 __init__.py:130(__getattr__)
+       12    0.000    0.000    0.002    0.000 synch.py:52(reader)
+       11    0.000    0.000    0.002    0.000 __init__.py:100(__getitem__)
+       28    0.000    0.000    0.002    0.000 {method 'join' of 'str' objects}
+        1    0.000    0.000    0.002    0.002 apps.py:51(__call__)
+        1    0.000    0.000    0.002    0.002 __init__.py:65(_create_cache)
+        1    0.000    0.000    0.002    0.002 apps.py:73(register_hstore_handler)
+        2    0.000    0.000    0.002    0.001 transaction.py:143(__enter__)
+        1    0.000    0.000    0.002    0.002 extras.py:740(register_hstore)
+        1    0.000    0.000    0.002    0.002 compiler.py:362(as_sql)
+        1    0.000    0.000    0.002    0.002 extras.py:708(get_oids)
+        2    0.000    0.000    0.002    0.001 __init__.py:129(set_many)
+        1    0.000    0.000    0.001    0.001 base.py:226(savepoint)
+        2    0.000    0.000    0.001    0.001 base.py:184(set_many)
+        6    0.000    0.000    0.001    0.000 synch.py:35(reader_enters)
+        1    0.000    0.000    0.001    0.001 base.py:208(_savepoint)
+        1    0.000    0.000    0.001    0.001 module_loading.py:15(import_string)
+       14    0.000    0.000    0.001    0.000 {all}
+        2    0.000    0.000    0.001    0.001 transaction.py:196(__exit__)
+       10    0.000    0.000    0.001    0.000 synch.py:60(writer_enters)
+       16    0.000    0.000    0.001    0.000 contextlib.py:21(__exit__)
+        1    0.000    0.000    0.001    0.001 query.py:674(filter)
+        1    0.000    0.000    0.001    0.001 query.py:688(_filter_or_exclude)
+        1    0.000    0.000    0.001    0.001 sre_compile.py:478(_code)
+        1    0.000    0.000    0.001    0.001 sre_parse.py:675(parse)
+       16    0.000    0.000    0.001    0.000 threading.py:478(release)
+      4/1    0.000    0.000    0.001    0.001 sre_parse.py:301(_parse_sub)
+        1    0.000    0.000    0.001    0.001 util.py:7(is_valid_cpf_number)
+      5/1    0.000    0.000    0.001    0.001 sre_parse.py:379(_parse)
+      180    0.001    0.000    0.001    0.000 collections.py:329(<genexpr>)
+       32    0.000    0.000    0.001    0.000 threading.py:214(__exit__)
+        1    0.000    0.000    0.001    0.001 base.py:195(init_connection_state)
+     10/8    0.000    0.000    0.001    0.000 compiler.py:352(compile)
+        1    0.000    0.000    0.001    0.001 compiler.py:42(pre_sql_setup)
+        1    0.000    0.000    0.001    0.001 locmem.py:1(<module>)
+        1    0.000    0.000    0.001    0.001 compiler.py:36(setup_query)
+        1    0.000    0.000    0.001    0.001 query.py:1290(add_q)
+        1    0.000    0.000    0.001    0.001 compiler.py:158(get_select)
+    22/17    0.000    0.000    0.001    0.000 functional.py:57(__get__)
+        1    0.000    0.000    0.001    0.001 query.py:1316(_add_q)
+        1    0.000    0.000    0.001    0.001 util.py:18(normalize_text)
+       32    0.001    0.000    0.001    0.000 threading.py:186(release)
+        1    0.000    0.000    0.001    0.001 base.py:256(savepoint_commit)
+        1    0.000    0.000    0.001    0.001 util.py:5(replace_diacritics)
+        1    0.000    0.000    0.001    0.001 base.py:216(_savepoint_commit)
+        1    0.000    0.000    0.001    0.001 query.py:1119(build_filter)
+       10    0.000    0.000    0.001    0.000 synch.py:69(writer_leaves)
+        6    0.000    0.000    0.001    0.000 util.py:22(as_digits)
+       16    0.000    0.000    0.001    0.000 threading.py:439(acquire)
+        6    0.000    0.000    0.001    0.000 inspect.py:804(getargspec)
+      8/1    0.000    0.000    0.001    0.001 sre_compile.py:32(_compile)
+        2    0.000    0.000    0.001    0.000 __init__.py:136(_memoize_make_version_hash)
+       32    0.000    0.000    0.001    0.000 threading.py:146(acquire)
+       81    0.000    0.000    0.001    0.000 util.py:11(<genexpr>)
+      130    0.000    0.000    0.001    0.000 {isinstance}
+        3    0.000    0.000    0.001    0.000 __init__.py:223(_memoize_kwargs_to_args)
+        6    0.000    0.000    0.001    0.000 options.py:404(concrete_fields)
+       39    0.000    0.000    0.000    0.000 __init__.py:788(get_default)
+        2    0.000    0.000    0.000    0.000 query.py:939(_clone)
+        3    0.000    0.000    0.000    0.000 __init__.py:34(function_namespace)
+       57    0.000    0.000    0.000    0.000 util.py:23(<genexpr>)
+        2    0.000    0.000    0.000    0.000 where.py:83(as_sql)
+        1    0.000    0.000    0.000    0.000 base.py:167(commit)
+        6    0.000    0.000    0.000    0.000 options.py:82(make_immutable_fields_list)
+        1    0.000    0.000    0.000    0.000 sre_compile.py:359(_compile_info)
+        1    0.000    0.000    0.000    0.000 forms.py:121(clean)
+       41    0.000    0.000    0.000    0.000 {built-in method __new__ of type object at 0x919120}
+        1    0.000    0.000    0.000    0.000 base.py:139(_commit)
+        2    0.000    0.000    0.000    0.000 query.py:248(clone)
+        2    0.000    0.000    0.000    0.000 compiler.py:788(results_iter)
+        7    0.000    0.000    0.000    0.000 dispatcher.py:257(_live_receivers)
+        1    0.000    0.000    0.000    0.000 {method 'commit' of 'psycopg2.extensions.connection' objects}
+        6    0.000    0.000    0.000    0.000 datastructures.py:486(__new__)
+        3    0.000    0.000    0.000    0.000 contextlib.py:54(contextmanager)
+        1    0.000    0.000    0.000    0.000 synch.py:7(<module>)
+       16    0.000    0.000    0.000    0.000 threading.py:372(notify)
+        1    0.000    0.000    0.000    0.000 forms.py:118(__init__)
+     10/3    0.000    0.000    0.000    0.000 sre_parse.py:140(getwidth)
+        1    0.000    0.000    0.000    0.000 fields.py:212(__init__)
+      167    0.000    0.000    0.000    0.000 {method 'isalnum' of 'str' objects}
+      140    0.000    0.000    0.000    0.000 {method 'append' of 'list' objects}
+        2    0.000    0.000    0.000    0.000 uuid.py:546(uuid4)
+        1    0.000    0.000    0.000    0.000 compiler.py:483(get_default_columns)
+        6    0.000    0.000    0.000    0.000 synch.py:44(reader_leaves)
+        3    0.000    0.000    0.000    0.000 functools.py:17(update_wrapper)
+        1    0.000    0.000    0.000    0.000 synch.py:13(RWLock)
+       20    0.000    0.000    0.000    0.000 sre_parse.py:201(get)
+       90    0.000    0.000    0.000    0.000 {getattr}
+       32    0.000    0.000    0.000    0.000 threading.py:287(__exit__)
+       26    0.000    0.000    0.000    0.000 sre_parse.py:182(__next)
+        6    0.000    0.000    0.000    0.000 inspect.py:744(getargs)
+       31    0.000    0.000    0.000    0.000 sre_parse.py:130(__getitem__)
+        4    0.000    0.000    0.000    0.000 __init__.py:85(_param_escape)
+      112    0.000    0.000    0.000    0.000 threading.py:63(_note)
+        1    0.000    0.000    0.000    0.000 query.py:805(order_by)
+        1    0.000    0.000    0.000    0.000 lookups.py:209(as_sql)
+        1    0.000    0.000    0.000    0.000 locmem.py:29(__init__)
+       32    0.000    0.000    0.000    0.000 threading.py:284(__enter__)
+        1    0.000    0.000    0.000    0.000 fields.py:155(clean)
+        2    0.000    0.000    0.000    0.000 compiler.py:1145(cursor_iter)
+        9    0.000    0.000    0.000    0.000 {method 'decode' of 'str' objects}
+        6    0.000    0.000    0.000    0.000 expressions.py:609(as_sql)
+       12    0.000    0.000    0.000    0.000 weakref.py:342(get)
+        4    0.000    0.000    0.000    0.000 {method 'sub' of '_sre.SRE_Pattern' objects}
+       16    0.000    0.000    0.000    0.000 contextlib.py:82(helper)
+       51    0.000    0.000    0.000    0.000 {method 'get' of 'dict' objects}
+        1    0.000    0.000    0.000    0.000 fields.py:71(__init__)
+       48    0.000    0.000    0.000    0.000 {hasattr}
+        1    0.000    0.000    0.000    0.000 compiler.py:1(<module>)
+       56    0.000    0.000    0.000    0.000 {setattr}
+        1    0.000    0.000    0.000    0.000 compiler.py:769(get_converters)
+        8    0.000    0.000    0.000    0.000 related.py:1939(get_default)
+        6    0.000    0.000    0.000    0.000 __init__.py:336(get_col)
+        2    0.000    0.000    0.000    0.000 uuid.py:202(get_bytes)
+       80    0.000    0.000    0.000    0.000 {unicodedata.category}
+       11    0.000    0.000    0.000    0.000 base.py:91(make_key)
+        1    0.000    0.000    0.000    0.000 base.py:484(from_db)
+        1    0.000    0.000    0.000    0.000 lookups.py:199(process_lhs)
+        2    0.000    0.000    0.000    0.000 compiler.py:1151(<lambda>)
+        4    0.000    0.000    0.000    0.000 re.py:271(_subx)
+        4    0.000    0.000    0.000    0.000 base.py:211(create_cursor)
+        1    0.000    0.000    0.000    0.000 abc.py:128(__instancecheck__)
+       72    0.000    0.000    0.000    0.000 {thread.get_ident}
+       17    0.000    0.000    0.000    0.000 {method 'update' of 'dict' objects}
+       28    0.000    0.000    0.000    0.000 {method 'format' of 'str' objects}
+       67    0.000    0.000    0.000    0.000 {method 'isdigit' of 'str' objects}
+       16    0.000    0.000    0.000    0.000 threading.py:299(_is_owned)
+       50    0.000    0.000    0.000    0.000 options.py:414(<genexpr>)
+       12    0.000    0.000    0.000    0.000 utf_8.py:15(decode)
+        3    0.000    0.000    0.000    0.000 utils.py:102(inner)
+        8    0.000    0.000    0.000    0.000 util.py:14(remove_spaces_and_similar)
+        4    0.000    0.000    0.000    0.000 re.py:251(_compile_repl)
+        1    0.000    0.000    0.000    0.000 synch.py:26(__init__)
+       10    0.000    0.000    0.000    0.000 utils.py:233(__getitem__)
+        1    0.000    0.000    0.000    0.000 __init__.py:71(search_function)
+       39    0.000    0.000    0.000    0.000 {method 'get' of 'dictproxy' objects}
+        5    0.000    0.000    0.000    0.000 expressions.py:619(get_db_converters)
+        1    0.000    0.000    0.000    0.000 abc.py:148(__subclasscheck__)
+       13    0.000    0.000    0.000    0.000 compiler.py:335(quote_name_unless_alias)
+        1    0.000    0.000    0.000    0.000 fields.py:141(run_validators)
+        1    0.000    0.000    0.000    0.000 query.py:1078(build_lookup)
+        3    0.000    0.000    0.000    0.000 operations.py:214(last_executed_query)
+        7    0.000    0.000    0.000    0.000 dispatcher.py:13(_make_id)
+       48    0.000    0.000    0.000    0.000 {method 'acquire' of 'thread.lock' objects}
+       13    0.000    0.000    0.000    0.000 collections.py:355(<genexpr>)
+       39    0.000    0.000    0.000    0.000 __init__.py:782(has_default)
+        3    0.000    0.000    0.000    0.000 base.py:289(set_autocommit)
+        6    0.000    0.000    0.000    0.000 {method 'cursor' of 'psycopg2.extensions.connection' objects}
+        5    0.000    0.000    0.000    0.000 __init__.py:345(cached_col)
+        6    0.000    0.000    0.000    0.000 locmem.py:105(_has_expired)
+        8    0.000    0.000    0.000    0.000 utils.py:23(__getattr__)
+        5    0.000    0.000    0.000    0.000 locmem.py:66(_set)
+        4    0.000    0.000    0.000    0.000 where.py:296(clone)
+        4    0.000    0.000    0.000    0.000 __init__.py:35(__getattr__)
+       11    0.000    0.000    0.000    0.000 base.py:27(default_key_func)
+        2    0.000    0.000    0.000    0.000 uuid.py:101(__init__)
+        1    0.000    0.000    0.000    0.000 sre_parse.py:703(parse_template)
+       12    0.000    0.000    0.000    0.000 {method 'copy' of 'dict' objects}
+       14    0.000    0.000    0.000    0.000 sre_parse.py:138(append)
+        2    0.000    0.000    0.000    0.000 threading.py:411(Semaphore)
+        1    0.000    0.000    0.000    0.000 util.py:4(is_valid_brazilian_zipcode)
+       16    0.000    0.000    0.000    0.000 sre_parse.py:195(match)
+       13    0.000    0.000    0.000    0.000 sre_parse.py:126(__len__)
+        4    0.000    0.000    0.000    0.000 transaction.py:14(get_connection)
+       10    0.000    0.000    0.000    0.000 __init__.py:46(__getattr__)
+       18    0.000    0.000    0.000    0.000 {time.time}
+        2    0.000    0.000    0.000    0.000 __init__.py:52(create_string_buffer)
+        1    0.000    0.000    0.000    0.000 query.py:449(_extract_model_params)
+       13    0.000    0.000    0.000    0.000 collections.py:353(<genexpr>)
+        2    0.000    0.000    0.000    0.000 threading.py:432(__init__)
+        1    0.000    0.000    0.000    0.000 manager.py:214(get_queryset)
+        3    0.000    0.000    0.000    0.000 query.py:53(__init__)
+        4    0.000    0.000    0.000    0.000 base.py:74(queries_logged)
+        8    0.000    0.000    0.000    0.000 operations.py:92(quote_name)
+       32    0.000    0.000    0.000    0.000 {method '__exit__' of 'thread.lock' objects}
+       32    0.000    0.000    0.000    0.000 {method '__enter__' of 'thread.lock' objects}
+       32    0.000    0.000    0.000    0.000 {method 'release' of 'thread.lock' objects}
+        1    0.000    0.000    0.000    0.000 query.py:1026(solve_lookup_type)
+        1    0.000    0.000    0.000    0.000 lookups.py:99(__init__)
+       12    0.000    0.000    0.000    0.000 {_codecs.utf_8_decode}
+       33    0.000    0.000    0.000    0.000 {chr}
+        1    0.000    0.000    0.000    0.000 fields.py:220(to_python)
+        5    0.000    0.000    0.000    0.000 expressions.py:216(output_field)
+      4/2    0.000    0.000    0.000    0.000 deconstruct.py:19(__new__)
+        6    0.000    0.000    0.000    0.000 inspect.py:67(ismethod)
+        3    0.000    0.000    0.000    0.000 tree.py:91(add)
+        2    0.000    0.000    0.000    0.000 {method 'fetchmany' of 'psycopg2.extensions.cursor' objects}
+        1    0.000    0.000    0.000    0.000 <string>:1(<module>)
+        1    0.000    0.000    0.000    0.000 base.py:53(__init__)
+        7    0.000    0.000    0.000    0.000 base.py:408(validate_thread_sharing)
+        3    0.000    0.000    0.000    0.000 __init__.py:1130(debug)
+        3    0.000    0.000    0.000    0.000 base.py:216(_set_autocommit)
+        2    0.000    0.000    0.000    0.000 query.py:875(get_initial_alias)
+        1    0.000    0.000    0.000    0.000 __init__.py:592(db_type)
+        1    0.000    0.000    0.000    0.000 six.py:89(__get__)
+        2    0.000    0.000    0.000    0.000 validators.py:280(__call__)
+        1    0.000    0.000    0.000    0.000 lookups.py:146(process_lhs)
+        1    0.000    0.000    0.000    0.000 lookups.py:150(process_rhs)
+        5    0.000    0.000    0.000    0.000 base64.py:42(b64encode)
+        5    0.000    0.000    0.000    0.000 base.py:79(get_backend_timeout)
+        4    0.000    0.000    0.000    0.000 tree.py:30(_new_instance)
+       21    0.000    0.000    0.000    0.000 {method 'startswith' of 'str' objects}
+        2    0.000    0.000    0.000    0.000 query.py:1344(names_to_path)
+        1    0.000    0.000    0.000    0.000 encoding.py:46(smart_text)
+        6    0.000    0.000    0.000    0.000 inspect.py:142(isfunction)
+        1    0.000    0.000    0.000    0.000 compiler.py:595(get_from_clause)
+        1    0.000    0.000    0.000    0.000 lookups.py:138(get_prep_lookup)
+        1    0.000    0.000    0.000    0.000 related.py:621(__set__)
+        1    0.000    0.000    0.000    0.000 query.py:112(__init__)
+        1    0.000    0.000    0.000    0.000 query.py:986(prepare_lookup_value)
+        2    0.000    0.000    0.000    0.000 threading.py:241(Condition)
+        1    0.000    0.000    0.000    0.000 _weakrefset.py:58(__iter__)
+        6    0.000    0.000    0.000    0.000 <string>:8(__new__)
+       16    0.000    0.000    0.000    0.000 contextlib.py:12(__init__)
+        1    0.000    0.000    0.000    0.000 __init__.py:712(get_prep_lookup)
+        4    0.000    0.000    0.000    0.000 base.py:440(make_debug_cursor)
+        6    0.000    0.000    0.000    0.000 inspect.py:209(iscode)
+        2    0.000    0.000    0.000    0.000 utils.py:38(__exit__)
+        5    0.000    0.000    0.000    0.000 expressions.py:599(__init__)
+        1    0.000    0.000    0.000    0.000 expressions.py:283(get_lookup)
+        5    0.000    0.000    0.000    0.000 {cPickle.dumps}
+       16    0.000    0.000    0.000    0.000 utils.py:75(__exit__)
+        5    0.000    0.000    0.000    0.000 __init__.py:638(get_db_converters)
+        1    0.000    0.000    0.000    0.000 query_utils.py:53(__init__)
+       18    0.000    0.000    0.000    0.000 {min}
+        9    0.000    0.000    0.000    0.000 tree.py:19(__init__)
+       13    0.000    0.000    0.000    0.000 {range}
+        5    0.000    0.000    0.000    0.000 __init__.py:455(__eq__)
+        2    0.000    0.000    0.000    0.000 sre_compile.py:354(_simple)
+        1    0.000    0.000    0.000    0.000 encoding.py:72(force_text)
+        2    0.000    0.000    0.000    0.000 sre_parse.py:178(__init__)
+       16    0.000    0.000    0.000    0.000 utils.py:72(__enter__)
+        9    0.000    0.000    0.000    0.000 {method 'items' of 'dict' objects}
+        4    0.000    0.000    0.000    0.000 base.py:282(get_autocommit)
+        2    0.000    0.000    0.000    0.000 transaction.py:287(atomic)
+        3    0.000    0.000    0.000    0.000 __init__.py:1345(isEnabledFor)
+        1    0.000    0.000    0.000    0.000 __init__.py:49(normalize_encoding)
+        1    0.000    0.000    0.000    0.000 lookups.py:141(get_db_prep_lookup)
+        1    0.000    0.000    0.000    0.000 query.py:2115(update_join_types)
+        1    0.000    0.000    0.000    0.000 _abcoll.py:83(__subclasshook__)
+        2    0.000    0.000    0.000    0.000 copy.py:66(copy)
+        2    0.000    0.000    0.000    0.000 threading.py:259(__init__)
+       13    0.000    0.000    0.000    0.000 {callable}
+       14    0.000    0.000    0.000    0.000 {method 'extend' of 'list' objects}
+        1    0.000    0.000    0.000    0.000 query.py:1443(setup_joins)
+        1    0.000    0.000    0.000    0.000 base.py:152(get_connection_params)
+        2    0.000    0.000    0.000    0.000 base.py:220(_savepoint_allowed)
+        1    0.000    0.000    0.000    0.000 operations.py:336(savepoint_create_sql)
+        4    0.000    0.000    0.000    0.000 {method 'translate' of 'str' objects}
+       15    0.000    0.000    0.000    0.000 {method 'add' of 'set' objects}
+        1    0.000    0.000    0.000    0.000 _abcoll.py:24(_hasattr)
+        1    0.000    0.000    0.000    0.000 __init__.py:738(get_db_prep_lookup)
+        1    0.000    0.000    0.000    0.000 __init__.py:1123(get_prep_value)
+        1    0.000    0.000    0.000    0.000 extras.py:589(_solve_conn_curs)
+        1    0.000    0.000    0.000    0.000 six.py:112(_resolve)
+        1    0.000    0.000    0.000    0.000 query.py:895(join)
+        1    0.000    0.000    0.000    0.000 utf_8.py:33(getregentry)
+        6    0.000    0.000    0.000    0.000 weakref.py:320(__setitem__)
+       13    0.000    0.000    0.000    0.000 {method '__contains__' of 'frozenset' objects}
+        1    0.000    0.000    0.000    0.000 sre_compile.py:178(_compile_charset)
+        1    0.000    0.000    0.000    0.000 threading.py:113(RLock)
+        9    0.000    0.000    0.000    0.000 {method 'split' of 'str' objects}
+        2    0.000    0.000    0.000    0.000 {method 'copy' of 'set' objects}
+        3    0.000    0.000    0.000    0.000 {method 'encode' of 'str' objects}
+        1    0.000    0.000    0.000    0.000 {method 'fetchone' of 'psycopg2.extensions.cursor' objects}
+        3    0.000    0.000    0.000    0.000 {map}
+        6    0.000    0.000    0.000    0.000 base.py:377(__init__)
+        1    0.000    0.000    0.000    0.000 query.py:772(reset_refcounts)
+        3    0.000    0.000    0.000    0.000 sre_parse.py:83(closegroup)
+        8    0.000    0.000    0.000    0.000 sre_parse.py:90(__init__)
+        1    0.000    0.000    0.000    0.000 {cPickle.loads}
+        3    0.000    0.000    0.000    0.000 where.py:50(_prepare_data)
+        8    0.000    0.000    0.000    0.000 {iter}
+        1    0.000    0.000    0.000    0.000 {built-in method now}
+        1    0.000    0.000    0.000    0.000 locmem.py:28(LocMemCache)
+        1    0.000    0.000    0.000    0.000 {any}
+        1    0.000    0.000    0.000    0.000 datastructures.py:532(__getitem__)
+        3    0.000    0.000    0.000    0.000 sre_parse.py:72(opengroup)
+        1    0.000    0.000    0.000    0.000 operations.py:344(savepoint_commit_sql)
+        1    0.000    0.000    0.000    0.000 compiler.py:222(get_order_by)
+        7    0.000    0.000    0.000    0.000 dispatcher.py:246(_clear_dead_receivers)
+        5    0.000    0.000    0.000    0.000 {binascii.b2a_base64}
+        1    0.000    0.000    0.000    0.000 threading.py:131(__init__)
+        1    0.000    0.000    0.000    0.000 fields.py:226(widget_attrs)
+        1    0.000    0.000    0.000    0.000 models.py:89(make_hash)
+        3    0.000    0.000    0.000    0.000 {_hashlib.openssl_md5}
+        1    0.000    0.000    0.000    0.000 <string>:1(Result)
+        7    0.000    0.000    0.000    0.000 query.py:1950(extra_select)
+        1    0.000    0.000    0.000    0.000 lookups.py:28(get_lookup)
+        3    0.000    0.000    0.000    0.000 functools.py:39(wraps)
+        1    0.000    0.000    0.000    0.000 six.py:575(iteritems)
+        3    0.000    0.000    0.000    0.000 {method 'setdefault' of 'dict' objects}
+        3    0.000    0.000    0.000    0.000 __init__.py:1331(getEffectiveLevel)
+        1    0.000    0.000    0.000    0.000 six.py:78(_import_module)
+        7    0.000    0.000    0.000    0.000 {method 'strip' of 'str' objects}
+        4    0.000    0.000    0.000    0.000 six.py:180(find_module)
+        1    0.000    0.000    0.000    0.000 models.py:50(make_hash)
+        1    0.000    0.000    0.000    0.000 query.py:899(db)
+        7    0.000    0.000    0.000    0.000 {id}
+        1    0.000    0.000    0.000    0.000 {unicodedata.normalize}
+        2    0.000    0.000    0.000    0.000 utils.py:287(_route_db)
+        1    0.000    0.000    0.000    0.000 query.py:683(table_alias)
+        1    0.000    0.000    0.000    0.000 _weakrefset.py:26(__exit__)
+        5    0.000    0.000    0.000    0.000 query.py:240(get_meta)
+        3    0.000    0.000    0.000    0.000 {mmh3.hash}
+        1    0.000    0.000    0.000    0.000 base.py:432(wrap_database_errors)
+        2    0.000    0.000    0.000    0.000 sre_compile.py:472(isstring)
+        5    0.000    0.000    0.000    0.000 expressions.py:129(__init__)
+        3    0.000    0.000    0.000    0.000 {method 'digest' of '_hashlib.HASH' objects}
+        2    0.000    0.000    0.000    0.000 query.py:753(demote_joins)
+        1    0.000    0.000    0.000    0.000 codecs.py:77(__new__)
+        1    0.000    0.000    0.000    0.000 {_csv.reader}
+        3    0.000    0.000    0.000    0.000 {method 'update' of '_hashlib.HASH' objects}
+        3    0.000    0.000    0.000    0.000 {method 'replace' of 'str' objects}
+        5    0.000    0.000    0.000    0.000 {method 'close' of 'psycopg2.extensions.cursor' objects}
+        4    0.000    0.000    0.000    0.000 utils.py:17(__init__)
+        1    0.000    0.000    0.000    0.000 datastructures.py:135(as_sql)
+        5    0.000    0.000    0.000    0.000 threading.py:58(__init__)
+        5    0.000    0.000    0.000    0.000 expressions.py:225(_output_field_or_none)
+        1    0.000    0.000    0.000    0.000 compiler.py:528(get_distinct)
+        4    0.000    0.000    0.000    0.000 _weakrefset.py:70(__contains__)
+        1    0.000    0.000    0.000    0.000 datastructures.py:527(__init__)
+        4    0.000    0.000    0.000    0.000 base.py:324(validate_no_broken_transaction)
+        1    0.000    0.000    0.000    0.000 models.py:27(make_hash)
+        1    0.000    0.000    0.000    0.000 widgets.py:263(__init__)
+        5    0.000    0.000    0.000    0.000 query.py:937(join_parent_model)
+        1    0.000    0.000    0.000    0.000 {_sre.compile}
+        1    0.000    0.000    0.000    0.000 {repr}
+        5    0.000    0.000    0.000    0.000 operations.py:514(get_db_converters)
+        4    0.000    0.000    0.000    0.000 _abcoll.py:26(<genexpr>)
+        5    0.000    0.000    0.000    0.000 __init__.py:350(select_format)
+        3    0.000    0.000    0.000    0.000 __init__.py:133(_memvname)
+        1    0.000    0.000    0.000    0.000 _weakrefset.py:20(__enter__)
+        4    0.000    0.000    0.000    0.000 {method 'pop' of 'dict' objects}
+        4    0.000    0.000    0.000    0.000 base.py:316(validate_no_atomic_block)
+        1    0.000    0.000    0.000    0.000 query.py:1764(get_related_populators)
+        4    0.000    0.000    0.000    0.000 {method 'search' of '_sre.SRE_Pattern' objects}
+        3    0.000    0.000    0.000    0.000 {method 'append' of 'collections.deque' objects}
+        3    0.000    0.000    0.000    0.000 utils.py:99(__call__)
+        3    0.000    0.000    0.000    0.000 query.py:1643(can_filter)
+        3    0.000    0.000    0.000    0.000 {thread.allocate_lock}
+        3    0.000    0.000    0.000    0.000 {method 'update' of 'set' objects}
+        2    0.000    0.000    0.000    0.000 transaction.py:139(__init__)
+        1    0.000    0.000    0.000    0.000 related.py:1616(related_fields)
+        1    0.000    0.000    0.000    0.000 compiler.py:20(SQLCompiler)
+        1    0.000    0.000    0.000    0.000 __init__.py:1118(to_python)
+        1    0.000    0.000    0.000    0.000 validators.py:323(<lambda>)
+        1    0.000    0.000    0.000    0.000 compiler.py:759(deferred_to_columns)
+        1    0.000    0.000    0.000    0.000 sre_parse.py:257(_escape)
+        1    0.000    0.000    0.000    0.000 validators.py:312(<lambda>)
+        1    0.000    0.000    0.000    0.000 __init__.py:686(get_prep_value)
+        3    0.000    0.000    0.000    0.000 {method 'remove' of 'list' objects}
+        1    0.000    0.000    0.000    0.000 _weakrefset.py:83(add)
+        1    0.000    0.000    0.000    0.000 query.py:2107(add_votes)
+        2    0.000    0.000    0.000    0.000 {zip}
+        1    0.000    0.000    0.000    0.000 encoding.py:126(force_bytes)
+        2    0.000    0.000    0.000    0.000 {method 'pop' of 'list' objects}
+        1    0.000    0.000    0.000    0.000 fields.py:137(validate)
+        2    0.000    0.000    0.000    0.000 options.py:505(get_field)
+        1    0.000    0.000    0.000    0.000 sre_compile.py:207(_optimize_charset)
+        2    0.000    0.000    0.000    0.000 {method 'count' of 'list' objects}
+        2    0.000    0.000    0.000    0.000 copy.py:113(_copy_with_constructor)
+        2    0.000    0.000    0.000    0.000 sre_parse.py:134(__setitem__)
+        1    0.000    0.000    0.000    0.000 operations.py:62(lookup_cast)
+        2    0.000    0.000    0.000    0.000 {psycopg2._psycopg.register_type}
+        1    0.000    0.000    0.000    0.000 manager.py:253(__get__)
+        2    0.000    0.000    0.000    0.000 {method 'iteritems' of 'dict' objects}
+        2    0.000    0.000    0.000    0.000 utils.py:4(utc_tzinfo_factory)
+        2    0.000    0.000    0.000    0.000 {method 'startswith' of 'unicode' objects}
+        1    0.000    0.000    0.000    0.000 sre_parse.py:710(literal)
+        2    0.000    0.000    0.000    0.000 validators.py:275(__init__)
+        2    0.000    0.000    0.000    0.000 forms.py:98(DV_maker)
+        1    0.000    0.000    0.000    0.000 {delattr}
+        1    0.000    0.000    0.000    0.000 query.py:460(<dictcomp>)
+        2    0.000    0.000    0.000    0.000 compiler.py:37(<genexpr>)
+        1    0.000    0.000    0.000    0.000 compiler.py:314(get_extra_select)
+        2    0.000    0.000    0.000    0.000 __init__.py:1115(get_internal_type)
+        2    0.000    0.000    0.000    0.000 {sum}
+        1    0.000    0.000    0.000    0.000 query.py:1490(trim_joins)
+        1    0.000    0.000    0.000    0.000 query.py:2091(__init__)
+        1    0.000    0.000    0.000    0.000 {method 'split' of 'unicode' objects}
+        1    0.000    0.000    0.000    0.000 {method 'set_client_encoding' of 'psycopg2.extensions.connection' objects}
+        1    0.000    0.000    0.000    0.000 compiler.py:54(get_group_by)
+        1    0.000    0.000    0.000    0.000 extensions.py:111(register_adapter)
+        2    0.000    0.000    0.000    0.000 {max}
+        1    0.000    0.000    0.000    0.000 compiler.py:999(SQLUpdateCompiler)
+        2    0.000    0.000    0.000    0.000 utils.py:35(__enter__)
+        1    0.000    0.000    0.000    0.000 {method 'count' of 'unicode' objects}
+        1    0.000    0.000    0.000    0.000 query.py:1923(annotation_select)
+        1    0.000    0.000    0.000    0.000 compiler.py:894(SQLInsertCompiler)
+        1    0.000    0.000    0.000    0.000 widgets.py:177(__init__)
+        1    0.000    0.000    0.000    0.000 query.py:717(promote_joins)
+        1    0.000    0.000    0.000    0.000 {psycopg2._psycopg.new_type}
+        1    0.000    0.000    0.000    0.000 _weakrefset.py:16(__init__)
+        1    0.000    0.000    0.000    0.000 utils.py:64(__init__)
+        1    0.000    0.000    0.000    0.000 base.py:38(get_key_func)
+        1    0.000    0.000    0.000    0.000 compiler.py:983(SQLDeleteCompiler)
+        1    0.000    0.000    0.000    0.000 {method 'isdigit' of 'unicode' objects}
+        1    0.000    0.000    0.000    0.000 {method 'upper' of 'unicode' objects}
+        1    0.000    0.000    0.000    0.000 {method 'rsplit' of 'str' objects}
+        1    0.000    0.000    0.000    0.000 fields.py:178(widget_attrs)
+        1    0.000    0.000    0.000    0.000 query.py:1059(check_related_objects)
+        1    0.000    0.000    0.000    0.000 sre_parse.py:67(__init__)
+        1    0.000    0.000    0.000    0.000 lookups.py:13(_get_lookup)
+        1    0.000    0.000    0.000    0.000 query.py:713(unref_alias)
+        1    0.000    0.000    0.000    0.000 _weakrefset.py:52(_commit_removals)
+        1    0.000    0.000    0.000    0.000 lookups.py:216(get_rhs_op)
+        1    0.000    0.000    0.000    0.000 {issubclass}
+        1    0.000    0.000    0.000    0.000 {method 'strip' of 'unicode' objects}
+        1    0.000    0.000    0.000    0.000 {sys._getframe}
+        1    0.000    0.000    0.000    0.000 query.py:1714(add_ordering)
+        1    0.000    0.000    0.000    0.000 datastructures.py:131(__init__)
+        1    0.000    0.000    0.000    0.000 compiler.py:1120(SQLAggregateCompiler)
+        1    0.000    0.000    0.000    0.000 query.py:709(ref_alias)
+        1    0.000    0.000    0.000    0.000 {method 'get_parameter_status' of 'psycopg2.extensions.connection' objects}
+        1    0.000    0.000    0.000    0.000 validators.py:322(<lambda>)
+        1    0.000    0.000    0.000    0.000 query.py:597(deferred_to_data)
+        1    0.000    0.000    0.000    0.000 operations.py:97(set_time_zone_sql)
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+        1    0.000    0.000    0.000    0.000 query.py:1308(<genexpr>)
+        1    0.000    0.000    0.000    0.000 query.py:1734(clear_ordering)
+        1    0.000    0.000    0.000    0.000 validators.py:311(<lambda>)
+        1    0.000    0.000    0.000    0.000 __init__.py:694(get_db_prep_value)
+        1    0.000    0.000    0.000    0.000 operations.py:157(field_cast_sql)
+        1    0.000    0.000    0.000    0.000 {method '__subclasses__' of 'type' objects}
+        1    0.000    0.000    0.000    0.000 {method 'union' of 'set' objects}
+        1    0.000    0.000    0.000    0.000 {psycopg2._psycopg.new_array_type}
+        1    0.000    0.000    0.000    0.000 {method 'remove' of 'set' objects}
+        1    0.000    0.000    0.000    0.000 query.py:1248(need_having)
+        1    0.000    0.000    0.000    0.000 {function __getitem__ at 0x7fcc159418c0}
+
+

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.utils.translation import ugettext as _
 from person.contact.util import is_valid_brazilian_area_code, is_valid_brazilian_telephone_number, is_valid_brazilian_cellphone_number, is_valid_brazilian_zipcode
-from person.contact.models import Phone, PhysicalAddress
+from person.contact.models import Phone, Address
 from person.contact.util import normalize_address
 from core.util import dict_to_struct, remove_spaces_and_similar
 from geo.models import Street
@@ -59,7 +59,7 @@ class PhoneFactory:
 
     
 
-class PhysicalAddressFactory:
+class AddressFactory:
 
     @staticmethod
     def get_or_instantiate_for_zipcode(zipcode, number, complement):
@@ -68,19 +68,19 @@ class PhysicalAddressFactory:
 
         with is_valid_brazilian_zipcode(zipcode) as code:
              if code.is_valid:
-                hash = PhysicalAddress.make_hash(code.number, remove_spaces_and_similar(number), remove_spaces_and_similar(complement))
+                hash = Address.make_hash(code.number, remove_spaces_and_similar(number), remove_spaces_and_similar(complement))
                 
                 instance = None
                 number = remove_spaces_and_similar(number) or None
                 complement = remove_spaces_and_similar(complement) or None
 
                 try: 
-                    instance = PhysicalAddress.objects.only('id').get(hash=hash)                    
+                    instance = Address.objects.only('id').get(hash=hash)                    
                     return dict_to_struct({'instance': instance, 'exists': True })
-                except PhysicalAddress.DoesNotExist:
+                except Address.DoesNotExist:
                     try:
                         street = Street.objects.only('id').get(zipcode=code.number)
-                        instance = PhysicalAddress(hash=hash, street=street, number=number, complement=complement, neighborhood=street.neighborhood, city=street.neighborhood.city, state=street.neighborhood.city.state, )
+                        instance = Address(hash=hash, street=street, number=number, complement=complement, neighborhood=street.neighborhood, city=street.neighborhood.city, state=street.neighborhood.city.state, )
                         return dict_to_struct({'instance': instance, 'exists': False })
                     except Street.DoesNotExist:
                         raise ZipCodeNotFoundException(_(u'O CEP informado (%s) não existe na base de DNE' % zipcode))

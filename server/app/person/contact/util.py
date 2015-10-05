@@ -1,25 +1,28 @@
-from contextlib import contextmanager
-from core.util import dict_to_struct, normalize_text, as_digits
+# -*- coding: utf-8 -*-
 
-@contextmanager
+from core.util import normalize_text, as_digits
+from memoize import memoize
+
+
 def is_valid_brazilian_area_code(number):
     number = as_digits(number)
-    yield dict_to_struct({'is_valid': (len(number) == 2), 'number': number})
+    return ((len(number) == 2), number)
 
-@contextmanager
+
 def is_valid_brazilian_telephone_number(number):
     number = as_digits(number)
-    yield dict_to_struct({'is_valid': (len(number) == 8), 'number': number})
+    return ((len(number) == 8), number)
 
-@contextmanager
+
 def is_valid_brazilian_cellphone_number(number):
     number = as_digits(number)
-    yield dict_to_struct({'is_valid': (len(number) == 8 or len(number) == 9), 'number': number})
+    return ((len(number) == 8 or len(number) == 9), number)
 
-@contextmanager
+
 def is_valid_brazilian_zipcode(number):
     number = as_digits(number)
-    yield dict_to_struct({'is_valid': (len(number) == 8), 'number': number})
+    return ((len(number) == 8), number)
+
 
 def normalize_address(address):
     return normalize_text(address)
