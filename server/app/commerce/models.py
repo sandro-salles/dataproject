@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django.utils.translation import ugettext as _
-from core.models import DatableModel, SlugModel
+from core.models import DatableModel
 from account.models import Account
 from person.models import Collection
 from polymorphic import PolymorphicModel
 
 
 class Product(PolymorphicModel, DatableModel):
+
     class Meta:
         verbose_name = _('Produto')
         verbose_name_plural = _('Produtos')

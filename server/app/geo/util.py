@@ -1,6 +1,10 @@
 from core.util import as_digits
-from memoize import memoize
+from geo.exceptions import ZipCodeValidationError
 
-def is_valid_brazilian_zipcode(number):
+
+def validate_zipcode(number):
     number = as_digits(number)
-    return ((len(number) == 8), number)
+    if (len(number) == 8):
+        return number
+    else:
+        raise ZipCodeValidationError()

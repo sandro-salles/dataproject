@@ -6,10 +6,11 @@ from core.util import replace_diacritics
 from django.utils.text import slugify
 
 
-
 class SlugModel(models.Model):
-    name = models.CharField(_('Nome'), max_length=200, db_index=True, null=False, blank=False)
-    slug = models.SlugField(_('Identificador'), db_index=True, max_length=200, unique=True, null=True, blank=True)
+    name = models.CharField(_('Nome'), max_length=200,
+                            db_index=True, null=False, blank=False)
+    slug = models.SlugField(_('Identificador'), db_index=True,
+                            max_length=200, unique=True, null=True, blank=True)
 
     class Meta:
         abstract = True
@@ -38,9 +39,6 @@ class HashableModel(models.Model):
 
 class DirtyModel(models.Model):
     is_dirty = models.BooleanField(_('Inconsistente'), default=False)
-    
+
     class Meta:
         abstract = True
-    
-
-

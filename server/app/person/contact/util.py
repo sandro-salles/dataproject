@@ -1,28 +1,23 @@
 # -*- coding: utf-8 -*-
+from person.contact.exceptions import AreaCodeValidationError, PhoneValidationError
+from person.contact.models import Phone
+from core.util import as_digits
 
-from core.util import normalize_text, as_digits
-from memoize import memoize
+AREA_CODES = [choice[0] for choice in Phone.AREACODE_CHOICES]
 
 
-def is_valid_brazilian_area_code(number):
+def validate_areacode(number):
     number = as_digits(number)
-    return ((len(number) == 2), number)
+    if (int(number) in AREA_CODES):
+        return number
+    else:
+        raise AreaCodeValidationError()
 
 
-def is_valid_brazilian_telephone_number(number):
+def validate_phone_number(number):
     number = as_digits(number)
-    return ((len(number) == 8), number)
-
-
-def is_valid_brazilian_cellphone_number(number):
-    number = as_digits(number)
-    return ((len(number) == 8 or len(number) == 9), number)
-
-
-def is_valid_brazilian_zipcode(number):
-    number = as_digits(number)
-    return ((len(number) == 8), number)
-
-
-def normalize_address(address):
-    return normalize_text(address)
+    length = len(number)
+    if (length == 8 or length == 9):
+        return number
+    else:
+        raise PhoneValidationError()

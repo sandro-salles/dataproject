@@ -16,8 +16,10 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('number', models.CharField(max_length=20, null=True, verbose_name='N\xfamero', blank=True)),
-                ('complement', models.CharField(max_length=50, null=True, verbose_name='Complemento', blank=True)),
+                ('city', models.CharField(max_length=200, verbose_name='Cidade')),
+                ('neighborhood', models.CharField(max_length=200, verbose_name='Bairro')),
+                ('location', models.TextField(verbose_name='Endere\xe7o')),
+                ('zipcode', models.CharField(max_length=8, verbose_name='CEP')),
                 ('hash', models.IntegerField(verbose_name='Hash', unique=True, editable=False)),
             ],
             options={
@@ -35,8 +37,7 @@ class Migration(migrations.Migration):
                 ('updated_at', models.DateTimeField(auto_now=True)),
             ],
             options={
-                'verbose_name': 'Operadora de Telefonia',
-                'verbose_name_plural': 'Operadoras de Telefonia',
+                'abstract': False,
             },
         ),
         migrations.CreateModel(
@@ -78,12 +79,7 @@ class Migration(migrations.Migration):
             name='PersonPhone',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
             ],
-            options={
-                'abstract': False,
-            },
         ),
         migrations.CreateModel(
             name='Phone',

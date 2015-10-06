@@ -2,6 +2,7 @@
 
 import unicodedata
 
+
 def replace_diacritics(text):
     try:
         text = unicode(text or "", 'utf-8')
@@ -20,4 +21,4 @@ def normalize_text(text):
 
 
 def as_digits(text):
-    return ''.join(c for c in text if c.isdigit())
+    return ''.join(c for c in str(text) if c.isdigit())

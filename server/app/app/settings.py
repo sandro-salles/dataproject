@@ -41,16 +41,14 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'memoize',
     'localflavor',
-    'django_hstore',
     'reversion',
     'polymorphic',
     'geo',
     'core',
     'account',
-    'commerce',    
+    'commerce',
     'person',
     'person.contact',
-    'person.document',
 )
 
 MIDDLEWARE_CLASSES = (

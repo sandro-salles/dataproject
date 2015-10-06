@@ -55,16 +55,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='address',
-            name='city',
-            field=models.ForeignKey(to='geo.City'),
-        ),
-        migrations.AddField(
-            model_name='address',
-            name='neighborhood',
-            field=models.ForeignKey(to='geo.Neighborhood'),
-        ),
-        migrations.AddField(
-            model_name='address',
             name='persons',
             field=models.ManyToManyField(to='person.Person', through='contact.PersonAddress'),
         ),
@@ -73,17 +63,8 @@ class Migration(migrations.Migration):
             name='state',
             field=models.ForeignKey(to='geo.State'),
         ),
-        migrations.AddField(
-            model_name='address',
-            name='street',
-            field=models.ForeignKey(to='geo.Street'),
-        ),
         migrations.AlterUniqueTogether(
             name='phone',
             unique_together=set([('type', 'area_code', 'number')]),
-        ),
-        migrations.AlterUniqueTogether(
-            name='address',
-            unique_together=set([('street', 'number', 'complement')]),
         ),
     ]

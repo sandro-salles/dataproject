@@ -1,5 +1,5 @@
-class ZipCodeInvalidException(Exception):
-    pass
+from django.core.exceptions import ValidationError
 
-class ZipCodeNotFoundException(Exception):
+
+class ZipCodeValidationError(ValidationError):
     pass
