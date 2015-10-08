@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.db import models, migrations
+from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
         ('contact', '0001_initial'),
-        ('geo', '0001_initial'),
         ('person', '0001_initial'),
     ]
 
@@ -58,13 +57,8 @@ class Migration(migrations.Migration):
             name='persons',
             field=models.ManyToManyField(to='person.Person', through='contact.PersonAddress'),
         ),
-        migrations.AddField(
-            model_name='address',
-            name='state',
-            field=models.ForeignKey(to='geo.State'),
-        ),
         migrations.AlterUniqueTogether(
             name='phone',
-            unique_together=set([('type', 'area_code', 'number')]),
+            unique_together=set([('type', 'areacode', 'number')]),
         ),
     ]

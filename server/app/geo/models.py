@@ -39,23 +39,6 @@ class City(models.Model):
         return '%s - %s' % (self.name, self.state.id)
 
 
-class CityZipRange(models.Model):
-    city = models.ForeignKey(
-        City, db_column='loc_nu_sequencial', primary_key=True)
-    loc_rad1_ini = models.CharField(max_length=5)
-    loc_suf1_ini = models.CharField(max_length=3)
-    loc_rad1_fim = models.CharField(max_length=5)
-    loc_suf1_fim = models.CharField(max_length=3)
-    loc_rad2_ini = models.CharField(max_length=5, blank=True, null=True)
-    loc_suf2_ini = models.CharField(max_length=3, blank=True, null=True)
-    loc_rad2_fim = models.CharField(max_length=5, blank=True, null=True)
-    loc_suf2_fim = models.CharField(max_length=3, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'log_faixa_localidade'
-
-
 class Neighborhood(models.Model):
     id = models.IntegerField(primary_key=True, db_column='bai_nu_sequencial')
     city = models.ForeignKey(City, db_column='loc_nu_sequencial')
@@ -69,21 +52,6 @@ class Neighborhood(models.Model):
 
     def __unicode__(self):
         return '%s - %s' % (self.name, self.city)
-
-
-class NeighborhoodZipRange(models.Model):
-    neighborhood = models.ForeignKey(
-        Neighborhood, db_column='bai_nu_sequencial')
-    fcb_nu_ordem = models.IntegerField()
-    fcb_rad_ini = models.CharField(max_length=5)
-    fcb_suf_ini = models.CharField(max_length=3)
-    fcb_rad_fim = models.CharField(max_length=5)
-    fcb_suf_fim = models.CharField(max_length=3)
-
-    class Meta:
-        managed = False
-        db_table = 'log_faixa_bairro'
-        unique_together = (('neighborhood', 'fcb_nu_ordem'),)
 
 
 class Street(models.Model):

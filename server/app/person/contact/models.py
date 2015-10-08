@@ -5,10 +5,10 @@ from django.utils.translation import ugettext as _
 from core.models import DatableModel, SlugModel
 from core.util import normalize_text
 from person.models import Person
-from geo.models import State
 import mmh3
 import reversion
 from memoize import memoize
+from localflavor.br.br_states import STATE_CHOICES
 
 
 class Carrier(SlugModel, DatableModel):
@@ -48,7 +48,7 @@ class Phone(DatableModel):
                         (98, 98), (99, 99),)
 
     areacode = models.IntegerField(
-        _(u' Código DDD'), max_length=2, choices=AREACODE_CHOICES)
+        _(u' Código DDD'), choices=AREACODE_CHOICES)
     number = models.CharField(_(u'Número'), max_length=9)
     carrier = models.ForeignKey(Carrier)
     hash = models.IntegerField(_('Hash'), unique=True, editable=False)
@@ -56,19 +56,19 @@ class Phone(DatableModel):
     class Meta:
         verbose_name = _(u"Telefone")
         verbose_name_plural = _(u"Telefones")
-        unique_together = ('type', 'area_code', 'number')
+        unique_together = ('type', 'areacode', 'number')
 
     @staticmethod
     @memoize()
-    def make_hash(type, area_code, number):
-        return mmh3.hash('%s%s%s' % (type, area_code, number))
+    def make_hash(type, areacode, number):
+        return mmh3.hash('%s%s%s' % (type, areacode, number))
 
     def save(self, *args, **kwargs):
-        self.hash = Phone.make_hash(self.type, self.area_code, self.number)
+        self.hash = Phone.make_hash(self.type, self.areacode, self.number)
         super(Phone, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return '%s %s (%s)' % (self.area_code, self.number, self.type)
+        return '%s %s (%s)' % (self.areacode, self.number, self.type)
 
 
 class PersonPhone(models.Model):
@@ -79,7 +79,7 @@ class PersonPhone(models.Model):
 class Address(DatableModel):
 
     persons = models.ManyToManyField(Person, through="PersonAddress")
-    state = models.ForeignKey(State)
+    state = models.CharField(_(u'State'), max_length=2, db_index=True, choices=STATE_CHOICES)
     city = models.CharField(_(u'Cidade'), max_length=200)
     neighborhood = models.CharField(_(u'Bairro'), max_length=200)
     location = models.TextField(_(u'Endereço'))

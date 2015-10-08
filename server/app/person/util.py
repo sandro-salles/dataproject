@@ -14,8 +14,8 @@ def validate_cpf(number):
     try:
         field.clean(number)
         return number
-    except ValidationError as e:
-        raise CPFValidationError(e)
+    except ValidationError:
+        raise CPFValidationError('Numero de CPF invalido - (%s)' % number)
 
 
 def validate_cnpj(number):
@@ -25,5 +25,5 @@ def validate_cnpj(number):
     try:
         field.clean(number)
         return number
-    except ValidationError as e:
-        raise CNPJValidationError(e)
+    except ValidationError:
+        raise CNPJValidationError('Numero de CNPJ invalido - (%s)' % number)

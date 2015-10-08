@@ -3,11 +3,10 @@
 from django.db import models
 from django.utils.translation import ugettext as _
 from core.models import DatableModel, DirtyModel
-from core.util import normalize_text
+from core.util import normalize_text, as_digits
 import reversion
 from reversion.models import Revision
-from memoize import memoize
-import mmh3
+from db.models.manager import UpsertManager
 
 
 @reversion.register
@@ -20,20 +19,16 @@ class Person(DatableModel, DirtyModel):
     name = models.CharField(_('Nome'), db_index=True, max_length=300)
     nature = models.CharField(
         _('Natureza'), db_index=True, max_length=3, choices=NATURE_CHOICES)
-    document = models.CharField(_(u'Documento'), max_length=30, unique=True)
-    hash = models.IntegerField(_('Hash'), unique=True, editable=False)
+    document = models.CharField(_(u'Documento'), max_length=14, unique=True)
+
+    objects = UpsertManager()
 
     class Meta:
         verbose_name = _("Pessoa")
         verbose_name_plural = _("Pessoas")
 
-    @staticmethod
-    @memoize()
-    def make_hash(document):
-        return mmh3.hash('%s' % (document))
-
     def save(self, *args, **kwargs):
-        self.hash = Person.make_hash(self.document)
+        self.document = as_digits(self.document)
         self.name = normalize_text(self.name)
         super(Person, self).save(*args, **kwargs)
 

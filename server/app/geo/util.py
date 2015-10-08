@@ -7,4 +7,4 @@ def validate_zipcode(number):
     if (len(number) == 8):
         return number
     else:
-        raise ZipCodeValidationError()
+        raise ZipCodeValidationError('CEP invalido - (%s)' % number)

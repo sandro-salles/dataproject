@@ -1,0 +1,12 @@
+ON CONFLICT (slug) 
+	DO UPDATE 
+		SET name=excluded.name, updated_at=now()
+RETURNING *, 
+	CASE WHEN updated_at IS NULL THEN 'created' ELSE 'updated' END;
+
+
+from person.models import Person
+person1 = Person(name='Sandro')
+person2 = Person(name='Elen')
+
+persons = Person.objects.bulk_upsert([person1, person2])

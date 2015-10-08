@@ -11,7 +11,7 @@ def validate_areacode(number):
     if (int(number) in AREA_CODES):
         return number
     else:
-        raise AreaCodeValidationError()
+        raise AreaCodeValidationError('Codigo DDD invalido - (%s)' % number)
 
 
 def validate_phone_number(number):
@@ -20,4 +20,5 @@ def validate_phone_number(number):
     if (length == 8 or length == 9):
         return number
     else:
-        raise PhoneValidationError()
+        raise PhoneValidationError(
+            'Numero de telefone invalido - (%s)' % number)

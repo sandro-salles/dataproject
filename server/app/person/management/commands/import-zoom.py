@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
 
 
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from person.models import Person
 from person.contact.models import Carrier, Phone
 from person.exceptions import CNPJValidationError, CPFValidationError
 from geo.exceptions import ZipCodeValidationError
 from person.contact.util import validate_areacode
-from person.contact.exceptions import AreaCodeValidationError
+from person.contact.exceptions import AreaCodeValidationError, PhoneValidationError
 from django.db import connection
 from collections import namedtuple
-from argparse import ArgumentError
 from person.management.reader import ZoomRecord
 
 import datetime
@@ -24,14 +23,11 @@ except ImportError:
     import csv
 
 
-l = logging.getLogger('django.db.backends')
-l.setLevel(logging.DEBUG)
-l.addHandler(logging.StreamHandler())
+logger = logging.getLogger('django.db.backends')
+logger.addHandler(logging.StreamHandler())
 
 
 phone__type = Phone.TYPE_CHOICES_TELEPHONE[0]
-person__nature_physical = Person.NATURE_CHOICES_PHYSICAL[0]
-person__nature_legal = Person.NATURE_CHOICES_LEGAL[0]
 
 
 """
@@ -55,7 +51,8 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('path', type=str)
         parser.add_argument('areacode', type=int)
-        parser.add_argument('carrier_slug', type=str)
+        parser.add_argument('carrier', type=str, choices=[
+                            carrier.slug for carrier in Carrier.objects.all()])
 
         parser.add_argument('-s', '--skip',
                             dest='skip',
@@ -114,13 +111,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         path = options['path']
-
-        try:
-            areacode = validate_areacode(options['areacode'])
-        except AreaCodeValidationError as e:
-            raise self.parser.error(e.message)
-
-        carrier_slug = options['carrier_slug']
+        areacode = options['areacode']
+        carrier_slug = options['carrier']
 
         skip = options['skip']
         delimiter = options['delimiter']
@@ -128,21 +120,32 @@ class Command(BaseCommand):
         verbosity = options['verbosity']
 
         if verbosity > 2:
+            logger.setLevel(logging.DEBUG)
             connection.force_debug_cursor = True
 
         # import pdb; pdb.set_trace()
 
-        carrier = Carrier.objects.get(slug=carrier_slug)
+        try:
+            areacode = validate_areacode(areacode)
+            carrier = Carrier.objects.get(slug=carrier_slug)
+        except AreaCodeValidationError as e:
+            raise self.parser.error(e.message)
+        except Carrier.DoesNotExist:
+            raise self.parser.error('')
 
         for row in self.read(path, skip, delimiter, quotechar):
             try:
 
-                print row
                 if row.exception:
                     raise row.exception
+
+                print row
 
             except (CNPJValidationError, CPFValidationError) as e:
                 print e
 
             except ZipCodeValidationError as e:
+                print e
+
+            except PhoneValidationError as e:
                 print e
