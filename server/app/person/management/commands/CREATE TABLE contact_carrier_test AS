@@ -42,3 +42,9 @@ RETURNING *;
 
 
 select pg_backend_pid();
+
+
+from person.models import Person
+p1 = Person(name='Sandro Salles', document='26610217874')
+p2 = Person(name='Sandro Sales', document='26610215874')
+pessoas = Person.objects.bulk_upsert([p1,p2], unique_field='document', update_fields=['name','updated_at'])

@@ -1,5 +1,9 @@
 from django.db.models.sql.compiler import SQLCompiler
 from django.core.exceptions import FieldError
+from django.db.models.sql.constants import (
+    CURSOR, GET_ITERATOR_CHUNK_SIZE, MULTI, NO_RESULTS, ORDER_DIR, SINGLE,
+)
+from django.db.models.sql.datastructures import EmptyResultSet
 
 
 class SQLUpsertCompiler(SQLCompiler):
@@ -107,68 +111,120 @@ class SQLUpsertCompiler(SQLCompiler):
         return placeholder_rows, param_rows
 
     def _do_update_fields_as_sql(self):
-        return ", ".join(['{column}=excluded.column'.format(column=f.column) for f in self.query.update_fields])
+        return ", ".join(['{column}=excluded.{column}'.format(column=f.column) for f in self.query.update_fields])
 
     def as_sql(self):
 
-        
-        """
-        UPSERT_SQL=remove_spaces_and_similar(
-
-            
-            ON CONFLICT (document)
-                DO UPDATE
-                    SET name=excluded.name, updated_at=%s
-                RETURNING *,
-                    CASE WHEN updated_at IS NULL THEN FALSE ELSE TRUE END
-            
-        )
-        """
+        self.pre_sql_setup()
 
         # We don't need quote_name_unless_alias() here, since these are all
         # going to be column names (so we can avoid the extra overhead).
-        qn=self.connection.ops.quote_name
-        opts=self.query.get_meta()
-        result=['INSERT INTO %s' % qn(opts.db_table)]
+        qn = self.connection.ops.quote_name
+        opts = self.query.get_meta()
+        result = ['INSERT INTO %s' % qn(opts.db_table)]
 
-        has_fields=bool(self.query.fields)
-        fields=self.query.fields if has_fields else [opts.pk]
+        has_fields = bool(self.query.fields)
+        fields = self.query.fields if has_fields else [opts.pk]
         result.append('(%s)' % ', '.join(qn(f.column) for f in fields))
 
         if has_fields:
-            value_rows=[
-                [self.prepare_value(field, self.pre_save_val(field, obj))
-                 for field in fields]
+            params = values = [
+                [
+                    f.get_db_prep_save(
+                        getattr(obj, f.attname) if self.query.raw else f.pre_save(
+                            obj, True),
+                        connection=self.connection
+                    ) for f in fields
+                ]
                 for obj in self.query.objs
             ]
         else:
-            # An empty object.
-            value_rows=[[self.connection.ops.pk_default_value()]
-                          for _ in self.query.objs]
-            fields=[None]
+            values = [[self.connection.ops.pk_default_value()]
+                      for obj in self.query.objs]
+            params = [[]]
+            fields = [None]
 
         # Currently the backends just accept values when generating bulk
         # queries and generate their own placeholders. Doing that isn't
         # necessary and it should be possible to use placeholders and
         # expressions in bulk inserts too.
-        can_bulk=self.connection.features.has_bulk_insert
-
-        placeholder_rows, param_rows=self.assemble_as_sql(fields, value_rows)
+        can_bulk = self.connection.features.has_bulk_insert
 
         if can_bulk:
+            placeholders = [["%s"] * len(fields)]
+
             result.append(self.connection.ops.bulk_insert_sql(
-                fields, placeholder_rows))
+                fields, len(values)))
 
-            if self.query.unique_field:
-                result.append('ON CONFLICT (%s) ' % self.unique_field.column)
+            result.append('ON CONFLICT (%s) ' %
+                          self.query.unique_field.column)
 
-                if self.query.update_fields:
-                    result.append('DO UPDATE SET %s' %
-                                  self._do_update_fields_as_sql())
-                    import pdb; pdb.set_trace()
-            return [(" ".join(result), tuple(p for ps in param_rows for p in ps))]
+            result.append('DO UPDATE SET %s' %
+                          self._do_update_fields_as_sql())
+
+            if self.connection.features.can_return_id_from_insert:
+                params = params[0]
+                col = "%s.%s" % (qn(opts.db_table), qn(opts.pk.column))
+                r_fmt, r_params = self.connection.ops.return_insert_id()
+                # Skip empty r_fmt to allow subclasses to customize behavior for
+                # 3rd party backends. Refs #19096.
+                if r_fmt:
+                    result.append(r_fmt % col)
+                    params += r_params
+
+            return [" ".join(result), tuple(v for val in values for v in val)]
         else:
             return [
                 (" ".join(result + ["VALUES (%s)" % ", ".join(p)]), vals)
-                for p, vals in zip(placeholder_rows, param_rows)
+                for p, vals in zip(placeholders, params)
             ]
+
+    def execute_sql(self, result_type=MULTI):
+        """
+        Run the query against the database and returns the result(s). The
+        return value is a single data item if result_type is SINGLE, or an
+        iterator over the results if the result_type is MULTI.
+        result_type is either MULTI (use fetchmany() to retrieve all rows),
+        SINGLE (only retrieve a single row), or None. In this last case, the
+        cursor is returned if any query is executed, since it's used by
+        subclasses such as InsertQuery). It's possible, however, that no query
+        is needed, as the filters describe an empty set. In that case, None is
+        returned, to avoid any unnecessary database interaction.
+        """
+        if not result_type:
+            result_type = NO_RESULTS
+        try:
+            sql, params = self.as_sql()
+            if not sql:
+                raise EmptyResultSet
+        except EmptyResultSet:
+            if result_type == MULTI:
+                return iter([])
+            else:
+                return
+
+        cursor = self.connection.cursor()
+        try:
+            cursor.execute(sql, params)
+        except Exception:
+            cursor.close()
+            raise
+
+        if result_type == CURSOR:
+            # Caller didn't specify a result_type, so just give them back the
+            # cursor to process (and close).
+            return cursor
+        if result_type == SINGLE:
+            try:
+                val = cursor.fetchone()
+                if val:
+                    return val[0:self.col_count]
+                return val
+            finally:
+                # done with the cursor
+                cursor.close()
+        if result_type == NO_RESULTS:
+            cursor.close()
+            return
+
+        return [item[0] for item in cursor.fetchall()]
