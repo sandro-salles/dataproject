@@ -56,6 +56,7 @@ class CollectionItem(models.Model):
     class Meta:
         verbose_name = _(u"Item de Coleção de Pessoas")
         verbose_name_plural = _(u"Itens de Coleção de Pessoas")
+        unique_together = ('person', 'collection', 'revision')
 
     def __unicode__(self):
         return self.person

@@ -1,6 +1,5 @@
 from django.db import models
 from django.db.models.fields import AutoField
-from core.util import disable_auto_now, enable_auto_now
 from django.db import (
     DJANGO_VERSION_PICKLE_KEY, IntegrityError, connections, router,
     transaction,
@@ -21,7 +20,7 @@ class UpsertManager(models.Manager):
             if obj.pk is None:
                 obj.pk = obj._meta.pk.get_pk_value_on_save(obj)
 
-    def _upsert(self, objs, fields, raw=False, using=None, unique_field, update_fields):
+    def _upsert(self, objs, fields, unique_constraint=None, update_fields=None, return_ids=True, raw=False, using=None):
         """
         Upserts a new record for the given model. This provides an interface to
         the UpsertQuery class.
@@ -33,10 +32,16 @@ class UpsertManager(models.Manager):
 
         query = sql.UpsertQuery(self.model)
         query.upsert_values(
-            fields, objs, raw=raw, unique_field=unique_field, update_fields=update_fields)
-        return query.get_compiler(using=using).execute_sql(MULTI)
+            fields, objs, raw=raw, unique_constraint=unique_constraint, update_fields=update_fields, return_ids=return_ids)
 
-    def _batched_upsert(self, objs, fields, unique_field, update_fields, batch_size):
+        result_type = MULTI
+
+        if not return_ids:
+            result_type = NO_RESULTS
+
+        return query.get_compiler(using=using).execute_sql(result_type)
+
+    def _batched_upsert(self, objs, fields, unique_constraint=None, update_fields=None, return_ids=True, batch_size=None):
         """
         A little helper method for bulk_upsert to insert/update the bulk one batch
         at a time. Inserts recursively a batch from the front of the bulk and
@@ -49,15 +54,21 @@ class UpsertManager(models.Manager):
         ret = []
         for batch in [objs[i:i + batch_size]
                       for i in range(0, len(objs), batch_size)]:
-            ret.extend(self._upsert(batch, fields=fields,
-                                    using=self.db, unique_field=unique_field, update_fields=update_fields))
+
+            upserts = self._upsert(batch, fields=fields, unique_constraint=unique_constraint, update_fields=update_fields,
+                                   return_ids=return_ids, using=self.db)
+            if return_ids:
+                ret.extend(upserts)
 
         return ret
 
-    def bulk_upsert(self, objs, unique_field, update_fields, batch_size=None):
+    def bulk_upsert(self, objs, unique_constraint=None, update_fields=None, return_ids=True, batch_size=None):
 
         assert batch_size is None or batch_size > 0
-        assert unique_field and update_fields
+        assert (not return_ids) or (unique_constraint and update_fields)
+        assert (not update_fields) or (unique_constraint and update_fields)
+        assert (not unique_constraint) or (isinstance(
+            unique_constraint, str) or (isinstance(unique_constraint, tuple)))
 
         for parent in self.model._meta.get_parent_list():
             if parent._meta.concrete_model is not self.model._meta.concrete_model:
@@ -71,27 +82,46 @@ class UpsertManager(models.Manager):
 
         fields = self.model._meta.concrete_fields
 
-        unique_field = self.model._meta.get_field_by_name(unique_field)[0]
+        if unique_constraint:
 
-        if not unique_field.unique:
-            raise ValueError(
-                "The unique_field argument must be the name of a unique=True field")
+            if isinstance(unique_constraint, str):
+                unique_constraint = self.model._meta.get_field_by_name(unique_constraint)[
+                    0]
 
-        if isinstance(unique_field, AutoField):
-            raise ValueError(
-                "The unique_field argument cannot be an AutoField instance")
+                if not unique_constraint.unique:
+                    raise ValueError(
+                        "The unique_constraint argument must be the name of a unique=True field or a tuple of field names declared as unique_together")
 
-        _up_fields = list()
+                if isinstance(unique_constraint, AutoField):
+                    raise ValueError(
+                        "The unique_constraint argument cannot be an AutoField instance")
 
-        for upf in update_fields:
-            upf = self.model._meta.get_field_by_name(upf)[0]
-            if upf.unique:
-                raise ValueError(
-                    "The update_fields argument must be a list of non unique/AutoField field names")
+            else:
+                if not self.model._meta.unique_together:
+                    raise ValueError(
+                        "The model hasn't declared any unique_together index")
+                else:
+                    unique_constraint = [uc for uc in self.model._meta.unique_together if uc == unique_constraint]
 
-            _up_fields.append(upf)
+                    if not unique_constraint:
+                        raise ValueError(
+                            "The unique_constraint tuple must be an exact match of an existing unique_together index")
+                    else:
+                        unique_constraint = unique_constraint[0]
 
-        update_fields = _up_fields
+
+        if update_fields:
+            _up_fields = list()
+
+            for upf in update_fields:
+                upf = self.model._meta.get_field_by_name(upf)[0]
+                if upf.unique:
+                    raise ValueError(
+                        "The update_fields argument must be a list of non unique/AutoField field names")
+
+                _up_fields.append(upf)
+
+            update_fields = _up_fields
 
         objs = list(objs)
         self._populate_pk_values(objs)
@@ -105,12 +135,16 @@ class UpsertManager(models.Manager):
 
                 fields = [
                     f for f in fields if not isinstance(f, AutoField)]
-                ids = self._batched_upsert(objs_without_pk, fields,
-                                           unique_field=unique_field, update_fields=update_fields, batch_size)
 
-                assert len(ids) == len(objs_without_pk)
+                ids = self._batched_upsert(objs_without_pk, fields, unique_constraint=unique_constraint,
+                                           update_fields=update_fields, batch_size=batch_size)
 
-                for i in range(len(ids)):
-                    objs_without_pk[i].pk = ids[i]
+                if return_ids:
+                    assert len(ids) == len(objs_without_pk)
+
+                    for i, id in enumerate(ids):
+                        objs_without_pk[i].pk = id
+
+                    del ids
 
         return objs

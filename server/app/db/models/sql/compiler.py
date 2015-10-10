@@ -1,4 +1,5 @@
 from django.db.models.sql.compiler import SQLCompiler
+from django.db.models.fields import Field
 from django.core.exceptions import FieldError
 from django.db.models.sql.constants import (
     CURSOR, GET_ITERATOR_CHUNK_SIZE, MULTI, NO_RESULTS, ORDER_DIR, SINGLE,
@@ -113,6 +114,10 @@ class SQLUpsertCompiler(SQLCompiler):
     def _do_update_fields_as_sql(self):
         return ", ".join(['{column}=excluded.{column}'.format(column=f.column) for f in self.query.update_fields])
 
+    def _unique_constraint_as_string(self):
+        schema_editor = self.connection.schema_editor()
+        return schema_editor._constraint_names(self.query.model, column_names=self.query.unique_constraint, unique=True)[0]
+
     def as_sql(self):
 
         self.pre_sql_setup()
@@ -156,13 +161,24 @@ class SQLUpsertCompiler(SQLCompiler):
             result.append(self.connection.ops.bulk_insert_sql(
                 fields, len(values)))
 
-            result.append('ON CONFLICT (%s) ' %
-                          self.query.unique_field.column)
+            if self.query.unique_constraint:
+                if isinstance(self.query.unique_constraint, Field):
+                    result.append('ON CONFLICT (%s) ' %
+                                  self.query.unique_constraint.column)
+                elif isinstance(self.query.unique_constraint, tuple):
+                    result.append('ON CONFLICT ON CONSTRAINT %s ' %
+                                  self._unique_constraint_as_string())
 
-            result.append('DO UPDATE SET %s' %
-                          self._do_update_fields_as_sql())
+                if self.query.update_fields:
+                    result.append('DO UPDATE SET %s' %
+                                  self._do_update_fields_as_sql())
 
-            if self.connection.features.can_return_id_from_insert:
+                else:
+                    result.append('DO NOTHING')
+            else:
+                result.append('ON CONFLICT DO NOTHING')
+
+            if self.query.return_ids and self.connection.features.can_return_id_from_insert:
                 params = params[0]
                 col = "%s.%s" % (qn(opts.db_table), qn(opts.pk.column))
                 r_fmt, r_params = self.connection.ops.return_insert_id()
@@ -210,6 +226,8 @@ class SQLUpsertCompiler(SQLCompiler):
             cursor.close()
             raise
 
+        del sql
+
         if result_type == CURSOR:
             # Caller didn't specify a result_type, so just give them back the
             # cursor to process (and close).
@@ -227,4 +245,4 @@ class SQLUpsertCompiler(SQLCompiler):
             cursor.close()
             return
 
-        return [item[0] for item in cursor.fetchall()]
+        return (item[0] for item in cursor.fetchall())

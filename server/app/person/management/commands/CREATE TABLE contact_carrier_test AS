@@ -48,3 +48,5 @@ from person.models import Person
 p1 = Person(name='Sandro Salles', document='26610217874')
 p2 = Person(name='Sandro Sales', document='26610215874')
 pessoas = Person.objects.bulk_upsert([p1,p2], unique_field='document', update_fields=['name','updated_at'])
+
+ret.extend(self._upsert(batch, fields=fields, using=self.db, unique_field=unique_field, update_fields=update_fields))

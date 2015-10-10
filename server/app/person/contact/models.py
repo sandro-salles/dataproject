@@ -9,6 +9,7 @@ import mmh3
 import reversion
 from memoize import memoize
 from localflavor.br.br_states import STATE_CHOICES
+from db.models.manager import UpsertManager
 
 
 class Carrier(SlugModel, DatableModel):
@@ -20,8 +21,15 @@ class Carrier(SlugModel, DatableModel):
         return self.name
 
 
+class Contact(DatableModel):
+    objects = UpsertManager()
+
+    class Meta:
+        abstract = True
+
+
 @reversion.register
-class Phone(DatableModel):
+class Phone(Contact):
 
     persons = models.ManyToManyField(Person, through="PersonPhone")
 
@@ -75,11 +83,15 @@ class PersonPhone(models.Model):
     person = models.ForeignKey(Person)
     phone = models.ForeignKey(Phone)
 
+    class Meta:
+        unique_together = ('person', 'phone')
 
-class Address(DatableModel):
+
+class Address(Contact):
 
     persons = models.ManyToManyField(Person, through="PersonAddress")
-    state = models.CharField(_(u'State'), max_length=2, db_index=True, choices=STATE_CHOICES)
+    state = models.CharField(_(u'State'), max_length=2,
+                             db_index=True, choices=STATE_CHOICES)
     city = models.CharField(_(u'Cidade'), max_length=200)
     neighborhood = models.CharField(_(u'Bairro'), max_length=200)
     location = models.TextField(_(u'Endereço'))
@@ -108,11 +120,14 @@ class PersonAddress(DatableModel):
     person = models.ForeignKey(Person)
     address = models.ForeignKey(Address)
 
+    class Meta:
+        unique_together = ('person', 'address')
 
-class Email(DatableModel):
+
+class Email(Contact):
 
     persons = models.ManyToManyField(Person, through="PersonEmail")
-    address = models.EmailField(_('E-mail'))
+    address = models.EmailField(_('E-mail'), unique=True)
 
     class Meta:
         verbose_name = _(u"Endereço Eletrônico")
@@ -122,3 +137,6 @@ class Email(DatableModel):
 class PersonEmail(DatableModel):
     person = models.ForeignKey(Person)
     email = models.ForeignKey(Email)
+
+    class Meta:
+        unique_together = ('person', 'email')

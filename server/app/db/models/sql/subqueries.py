@@ -20,7 +20,7 @@ class UpsertQuery(Query):
         Compiler = getattr(module, self.compiler)
         return Compiler(self, connection, using)
 
-    def upsert_values(self, fields, objs, raw=False, unique_field=None, update_fields=None):
+    def upsert_values(self, fields, objs, raw=False, unique_constraint=None, update_fields=None, return_ids=True):
         """
         Set up the insert query from the 'insert_values' dictionary. The
         dictionary gives the model field names and their target values.
@@ -32,5 +32,6 @@ class UpsertQuery(Query):
         self.fields = fields
         self.objs = objs
         self.raw = raw
-        self.unique_field = unique_field
+        self.unique_constraint = unique_constraint
         self.update_fields = update_fields
+        self.return_ids = return_ids
