@@ -7,11 +7,14 @@ from core.util import normalize_text, as_digits
 import reversion
 from reversion.models import Revision
 from db.models.manager import UpsertManager
+from memoize import memoize
+import mmh3
 
 
 @reversion.register
 class Person(DatableModel, DirtyModel):
 
+    hash = None
     NATURE_CHOICES_PHYSICAL = ('P', _(u'Física'))
     NATURE_CHOICES_LEGAL = ('L', _(u'Jurídica'))
     NATURE_CHOICES = (NATURE_CHOICES_PHYSICAL, NATURE_CHOICES_LEGAL)
@@ -26,6 +29,11 @@ class Person(DatableModel, DirtyModel):
     class Meta:
         verbose_name = _("Pessoa")
         verbose_name_plural = _("Pessoas")
+
+    @staticmethod
+    @memoize()
+    def make_hash(name, document):
+        return mmh3.hash('%s%s' % (name, document))
 
     def save(self, *args, **kwargs):
         self.document = as_digits(self.document)

@@ -101,14 +101,14 @@ class UpsertManager(models.Manager):
                     raise ValueError(
                         "The model hasn't declared any unique_together index")
                 else:
-                    unique_constraint = [uc for uc in self.model._meta.unique_together if uc == unique_constraint]
+                    unique_constraint = [
+                        uc for uc in self.model._meta.unique_together if uc == unique_constraint]
 
                     if not unique_constraint:
                         raise ValueError(
                             "The unique_constraint tuple must be an exact match of an existing unique_together index")
                     else:
                         unique_constraint = unique_constraint[0]
-
 
         if update_fields:
             _up_fields = list()

@@ -66,4 +66,8 @@ class Migration(migrations.Migration):
             name='persons',
             field=models.ManyToManyField(to='person.Person', through='person.CollectionItem'),
         ),
+        migrations.AlterUniqueTogether(
+            name='collectionitem',
+            unique_together=set([('person', 'collection', 'revision')]),
+        ),
     ]

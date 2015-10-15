@@ -80,8 +80,16 @@ class Phone(Contact):
 
 
 class PersonPhone(models.Model):
+    hash = None
     person = models.ForeignKey(Person)
     phone = models.ForeignKey(Phone)
+
+    objects = UpsertManager()
+
+    @staticmethod
+    @memoize()
+    def make_hash(person_hash, phone_hash):
+        return mmh3.hash('%s%s' % (person_hash, phone_hash))
 
     class Meta:
         unique_together = ('person', 'phone')
@@ -117,8 +125,16 @@ class Address(Contact):
 
 
 class PersonAddress(DatableModel):
+    hash = None
     person = models.ForeignKey(Person)
     address = models.ForeignKey(Address)
+
+    objects = UpsertManager()
+
+    @staticmethod
+    @memoize()
+    def make_hash(person_hash, address_hash):
+        return mmh3.hash('%s%s' % (person_hash, address_hash))
 
     class Meta:
         unique_together = ('person', 'address')

@@ -116,7 +116,9 @@ class SQLUpsertCompiler(SQLCompiler):
 
     def _unique_constraint_as_string(self):
         schema_editor = self.connection.schema_editor()
-        return schema_editor._constraint_names(self.query.model, column_names=self.query.unique_constraint, unique=True)[0]
+        columns = [self.query.model._meta.get_field(
+            field).column for field in self.query.unique_constraint]
+        return schema_editor._constraint_names(self.query.model, column_names=columns, unique=True)[0]
 
     def as_sql(self):
 

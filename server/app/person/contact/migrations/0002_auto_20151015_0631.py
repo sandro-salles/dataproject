@@ -61,4 +61,16 @@ class Migration(migrations.Migration):
             name='phone',
             unique_together=set([('type', 'areacode', 'number')]),
         ),
+        migrations.AlterUniqueTogether(
+            name='personphone',
+            unique_together=set([('person', 'phone')]),
+        ),
+        migrations.AlterUniqueTogether(
+            name='personemail',
+            unique_together=set([('person', 'email')]),
+        ),
+        migrations.AlterUniqueTogether(
+            name='personaddress',
+            unique_together=set([('person', 'address')]),
+        ),
     ]

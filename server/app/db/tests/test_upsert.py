@@ -98,7 +98,7 @@ class UpsertTestCase(TestCase):
             people, return_ids=False)
 
         self.assertEqual(len(people), Person.objects.filter(
-            id__in=[p.id for p in people if p.id]).count())
+            document__in=documents).count())
 
         person = random.choice(people)
         db_person = Person.objects.get(document=person.document)
@@ -126,7 +126,7 @@ class UpsertTestCase(TestCase):
         documents = [p.document for p in people if p.document]
 
         self.assertEqual(len(people), Person.objects.filter(
-            id__in=[p.id for p in people if p.id]).count())
+            document__in=documents).count())
 
         person = random.choice(people)
         db_person = Person.objects.get(document=person.document)
