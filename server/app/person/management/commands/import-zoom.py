@@ -26,16 +26,16 @@ except ImportError:
 logger = logging.getLogger('django.db.backends')
 logger.addHandler(logging.StreamHandler())
 
-"""
-import logging
-from django.db import connection
-# Change to force_debug_cursor in django > 1.7
-connection.force_debug_cursor = True
-
-"""
 
 Carrier.objects.get_or_create(name='VIVO Fixo')
 
+"""
+    TODOs:
+    - Add revisions
+    - Add ImportModel
+    - Add revision relationship model to ImportModel
+    - Save errors to file and append to ImportModel
+"""
 
 class Command(BaseCommand):
     help = 'Imports person entries from csv files'
