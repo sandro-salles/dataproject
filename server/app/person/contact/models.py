@@ -117,7 +117,7 @@ class Address(Contact):
 
     def save(self, *args, **kwargs):
         self.location = normalize_text(self.location)
-        self.hash = Phone.make_hash(self.zipcode, self.location)
+        self.hash = Address.make_hash(self.zipcode, self.location)
         super(Address, self).save(*args, **kwargs)
 
     def __unicode__(self):

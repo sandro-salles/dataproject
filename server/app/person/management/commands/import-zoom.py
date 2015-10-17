@@ -13,6 +13,7 @@ from person.management.reader import ZoomRecord
 
 import datetime
 import logging
+import sys
 
 try:
     import unicodecsv as csv
@@ -38,20 +39,19 @@ Carrier.objects.get_or_create(name='VIVO Fixo')
 
 class Command(BaseCommand):
     help = 'Imports person entries from csv files'
+    progress_template = "\r%s of %s rows | %s errors | %s new people | %s new phones | %s new addresses | elapsed: %s"
+    finish_template = "\rFINISHED: %s errors | %s people (%s updated) | %s phones (%s updated) | %s addresses (%s updated) | time elapsed: %s\n"
 
     counter = Counter()
     people = dict()
-    deferred = list()
     addresses = dict()
     people_addresses = dict()
     phones = dict()
     people_phones = dict()
 
-    import_errors = []
-    zipcodesnotfound = set()
-    max_lines = None
-    rowscount = new_person_counter = new_document_counter = new_phone_counter = new_address_counter = 0
-    namedtuple_columns = None
+    last_inserted_person = None
+    last_inserted_phone = None
+    last_inserted_address = None
 
     def add_arguments(self, parser):
         parser.add_argument('path', type=str)
@@ -85,31 +85,32 @@ class Command(BaseCommand):
 
         parser.add_argument('-b', '--batchsize',
                             dest='batchsize',
-                            default=1000,
+                            default=50000,
                             type=int,
                             help=' -- HELP HERE')
 
         self.parser = parser
 
-    def elapsed_time(self):
-        elapsed = datetime.datetime.now() - self.start_time
+    def elapsed_time(self, start, now):
+        elapsed = now - start
         m, s = divmod(elapsed.total_seconds(), 60)
         h, m = divmod(m, 60)
         return "%d:%02d:%02d" % (h, m, s)
 
-    def eta(self):
-        now = datetime.datetime.now()
-        elapsed = now - self.start_time
-        avg_per_row = elapsed.total_seconds() / (self.counter + 1)
+    def eta(self, start, now):
+        elapsed = now - start
+        avg_per_row = elapsed.total_seconds() / (self.counter['record'] + 1)
         eta_secs = avg_per_row * \
-            ((self.max_lines or self.rowscount) - (self.counter + 1))
+            (self.rowscount - (self.counter['record'] + 1))
         m, s = divmod(eta_secs, 60)
         h, m = divmod(m, 60)
         return "%d:%02d:%02d" % (h, m, s)
 
     def read(self, path, skip, delimiter, quotechar, carrier, areacode, phone_type):
 
-        self.rowscount = self.max_lines or sum(1 for row in open(path, 'rb'))
+        self.rowscount = sum(1 for row in open(path, 'rb'))
+
+        print 'Processing %s rows, please wait...' % self.rowscount
 
         with open(path, 'rU') as data:
             if skip:
@@ -124,13 +125,23 @@ class Command(BaseCommand):
 
     def persist(self):
 
-        print 'persisting...'
-
         Person.objects.bulk_upsert(self.people.values(),
                                    unique_constraint='document', update_fields=['name', 'updated_at'])
 
+        for person in self.people.values():
+            if (self.last_inserted_person != None) and person.id <= self.last_inserted_person.id:
+                self.counter['updated_people'] += 1
+
         Address.objects.bulk_upsert(self.addresses.values(),
                                     unique_constraint='hash', update_fields=['neighborhood', 'city', 'state', 'updated_at'])
+
+        for address in self.addresses.values():
+            if (self.last_inserted_address != None) and address.id <= self.last_inserted_address.id:
+                self.counter['updated_addresses'] += 1
+
+        for person_address in self.people_addresses.values():
+            person_address.person_id = person_address.person.id
+            person_address.address_id = person_address.address.id
 
         PersonAddress.objects.bulk_upsert(self.people_addresses.values(),
                                           unique_constraint=('person', 'address'), return_ids=False)
@@ -138,36 +149,50 @@ class Command(BaseCommand):
         Phone.objects.bulk_upsert(self.phones.values(),
                                   unique_constraint='hash', update_fields=['carrier', 'updated_at'])
 
+        for phone in self.phones.values():
+            if (self.last_inserted_phone != None) and phone.id <= self.last_inserted_phone.id:
+                self.counter['updated_phones'] += 1
+
+        for person_phone in self.people_phones.values():
+            person_phone.person_id = person_phone.person.id
+            person_phone.phone_id = person_phone.phone.id
+
         PersonPhone.objects.bulk_upsert(self.people_phones.values(),
                                         unique_constraint=('person', 'phone'), return_ids=False)
 
+        self.people = dict()
+        self.addresses = dict()
+        self.people_addresses = dict()
+        self.phones = dict()
+        self.people_phones = dict()
+
     def handle_document_error(self, record):
+        self.counter['errors'] += 1
         self.counter['document_errors'] += 1
 
     def handle_zipcode_error(self, record):
+        self.counter['errors'] += 1
         self.counter['zipcode_errors'] += 1
 
     def handle_phone_error(self, record):
+        self.counter['errors'] += 1
         self.counter['phone_errors'] += 1
 
     def handle_valid(self, record):
 
         try:
             person = self.people[record.person.document]
-
-            if person.hash != record.person.hash:
-                self.deferred.append(record)
-                return
-
         except KeyError:
-            person = record.person
-            self.people[person.document] = person
+            self.counter['people'] += 1
+            self.people[record.person.document] = record.person
+            person = self.people[record.person.document]
 
         try:
             address = self.addresses[record.address.hash]
         except KeyError:
-            address = record.address
-            self.addresses[address.hash] = address
+            self.counter['addresses'] += 1
+            self.addresses[record.address.hash] = record.address
+            address = self.addresses[record.address.hash]
 
         person_address = PersonAddress()
         person_address.person = person
@@ -176,13 +201,14 @@ class Command(BaseCommand):
             person.hash, address.hash)
 
         try:
-            self.people_addresses[person_address.hash]
+            person_address = self.people_addresses[person_address.hash]
         except KeyError:
             self.people_addresses[person_address.hash] = person_address
 
         try:
             phone = self.phones[record.phone.hash]
         except KeyError:
+            self.counter['phones'] += 1
             phone = record.phone
             self.phones[phone.hash] = phone
 
@@ -192,9 +218,38 @@ class Command(BaseCommand):
         person_phone.hash = PersonPhone.make_hash(person.hash, phone.hash)
 
         try:
-            self.people_phones[person_phone.hash]
+            person_phone = self.people_phones[person_phone.hash]
         except KeyError:
             self.people_phones[person_phone.hash] = person_phone
+
+    def get_finish(self, start, now):
+
+        return (
+            self.finish_template % (
+                self.counter['errors'],
+                self.counter['people'],
+                self.counter['updated_people'],
+                self.counter['phones'],
+                self.counter['updated_phones'],
+                self.counter['addresses'],
+                self.counter['updated_addresses'],
+                self.elapsed_time(start, now)
+            )
+        )
+
+    def get_progress(self, start, now):
+
+        return (
+            self.progress_template % (
+                self.counter['record'] + 1,
+                self.rowscount,
+                self.counter['errors'],
+                self.counter['people'],
+                self.counter['phones'],
+                self.counter['addresses'],
+                ''
+            )
+        )
 
     def handle(self, *args, **options):
 
@@ -215,12 +270,29 @@ class Command(BaseCommand):
 
         carrier = Carrier.objects.get(slug=carrier_slug)
 
+        try:
+            self.last_inserted_person = Person.objects.latest('id')
+        except Person.DoesNotExist:
+            pass
+
+        try:
+            self.last_inserted_address = Address.objects.latest('id')
+        except Address.DoesNotExist:
+            pass
+
+        try:
+            self.last_inserted_phone = Phone.objects.latest('id')
+        except Phone.DoesNotExist:
+            pass
+
         record_handler = {
             CNPJValidationError: self.handle_document_error,
             CPFValidationError: self.handle_document_error,
             ZipCodeValidationError: self.handle_zipcode_error,
             PhoneValidationError: self.handle_phone_error
         }
+
+        start = datetime.datetime.now()
 
         for record in self.read(path, skip, delimiter, quotechar, carrier, areacode, phone_type):
             record_handler.get(type(record.exception),
@@ -235,3 +307,5 @@ class Command(BaseCommand):
             self.counter['record'] += 1
 
         self.persist()
+        sys.stdout.write(self.get_finish(start, datetime.datetime.now()))
+        sys.stdout.flush()
