@@ -62,3 +62,6 @@ target/
 
 ### CSV ###
 *.csv
+
+### Apple Specific ###
+.DS_Store
