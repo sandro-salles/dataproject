@@ -120,6 +120,12 @@ class SQLUpsertCompiler(SQLCompiler):
             field).column for field in self.query.unique_constraint]
         return schema_editor._constraint_names(self.query.model, column_names=columns, unique=True)[0]
 
+    def _force_field_values(self, obj, fields):
+        for f in fields:
+            obj.__setattr__(f.name, getattr(obj, f.name))
+
+        return obj
+
     def as_sql(self):
 
         self.pre_sql_setup()
@@ -138,8 +144,8 @@ class SQLUpsertCompiler(SQLCompiler):
             params = values = [
                 [
                     f.get_db_prep_save(
-                        getattr(obj, f.attname) if self.query.raw else f.pre_save(
-                            obj, True),
+                        getattr(self._force_field_values(obj, fields), f.attname) if self.query.raw else f.pre_save(
+                            self._force_field_values(obj, fields), True),
                         connection=self.connection
                     ) for f in fields
                 ]

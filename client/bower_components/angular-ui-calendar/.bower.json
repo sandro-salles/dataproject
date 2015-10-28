@@ -34,7 +34,7 @@
     "tag": "0.8.1",
     "commit": "9755f523ffea7fe25a0ff4510ca4c89a2b235f23"
   },
-  "_source": "https://github.com/angular-ui/ui-calendar.git",
+  "_source": "git://github.com/angular-ui/ui-calendar.git",
   "_target": "~0.8.1",
-  "_originalSource": "https://github.com/angular-ui/ui-calendar.git"
+  "_originalSource": "angular-ui-calendar"
 }

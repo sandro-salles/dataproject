@@ -117,22 +117,39 @@ angular.module('angular-rickshaw', [])
                         }
                     }
 
-                    scope.$watch('options', function(newValue, oldValue) {
+                    var optionsWatch = scope.$watch('options', function(newValue, oldValue) {
                         if (!angular.equals(newValue, oldValue)) {
                             update();
                         }
                     });
-                    scope.$watch('series', function(newValue, oldValue) {
+                    var seriesWatch = scope.$watch(function(scope) {
+						if (scope.features && scope.features.directive && scope.features.directive.watchAllSeries) {
+							var watches = {};
+							for (var i = 0; i < scope.series.length; i++) {
+								watches['series' + i] = scope.series[i].data;
+							}
+							return watches;
+						}
+						else {
+							return scope.series[0].data;
+						}
+                    }, function(newValue, oldValue) {
                         if (!angular.equals(newValue, oldValue)) {
                             update();
                         }
-                    });
-                    scope.$watch('features', function(newValue, oldValue) {
+                    }, true);
+                    var featuresWatch = scope.$watch('features', function(newValue, oldValue) {
                         if (!angular.equals(newValue, oldValue)) {
                             update();
                         }
                     });
 
+					scope.$on('$destroy', function() {
+						optionsWatch();
+						seriesWatch();
+						featuresWatch();
+					});
+					
                     update();
                 },
                 controller: function($scope, $element, $attrs) {

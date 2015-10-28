@@ -1,0 +1,19 @@
+from captcha_solver import CaptchaSolver
+from captcha_solver.contrib.grab.captcha import solve_captcha
+from grab import Grab
+
+
+g = Grab()
+solver = CaptchaSolver('browser')
+url = 'http://www.receita.fazenda.gov.br/pessoajuridica/cnpj/cnpjreva/captcha/gerarCaptcha.asp'
+print (solve_captcha(solver, g, url=url))
+
+
+from captcha_solver import CaptchaSolver
+import urllib, cStringIO
+
+solver = CaptchaSolver('browser')
+URL = 'http://www.receita.fazenda.gov.br/pessoajuridica/cnpj/cnpjreva/captcha/gerarCaptcha.asp'
+file = cStringIO.StringIO(urllib.urlopen(URL).read())
+raw_data = file.read()
+print(solver.solve_captcha(raw_data))

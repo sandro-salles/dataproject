@@ -1,0 +1,85 @@
+<div class="page">
+    <div class="pageheader">
+        <h2>{{page.title}} <span>// {{page.subtitle}}</span></h2>
+        <div class="page-bar">
+            <ul class="page-breadcrumb">
+                <li>
+                    <a ui-sref="app.explorer"><i class="fa fa-home"></i> {{main.title}}</a>
+                </li>
+                <li>
+                    <a ui-sref="app.explorer">{{page.title}}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="pagecontent">
+        <!-- row -->
+        <div class="row">
+            <!-- col -->
+            <div class="col-md-12">
+                <!-- tile -->
+                <section class="tile" fullscreen="isFullscreen07">
+                    <!-- tile body -->
+                    <div class="tile-body p-0">
+                        <div class="table-responsive">
+                            <table class="table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>Documento</th>
+                                        <th>Natureza</th>
+                                        <th>Endereço</th>
+                                        <th>Telefone</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="person in people">
+                                        <td>{{person.name}}</td>
+                                        <td>
+                                            <span ng-show="person.nature == 'P'">{{person.document | cpf }}</span>
+                                            <span ng-show="person.nature == 'L'">{{person.document | cnpj }}</span>
+                                        </td>
+                                        <td>
+                                            <span ng-show="person.nature == 'P'">Pessoa Física</span>
+                                            <span ng-show="person.nature == 'L'">Pessoa Jurídica</span>
+                                        </td>
+                                        <td>{{person.nature}}</td>
+                                        <td>{{person.nature}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- /tile body -->
+                    <!-- tile footer -->
+                    <div class="tile-footer dvd dvd-top">
+                        <div class="row">
+                            <div class="col-sm-5 hidden-xs">
+                                <select class="input-sm form-control w-sm inline">
+                                    <option value="0">Bulk action</option>
+                                    <option value="1">Delete selected</option>
+                                    <option value="2">Archive selected</option>
+                                    <option value="3">Copy selected</option>
+                                </select>
+                                <button class="btn btn-sm btn-default">Apply</button>
+                            </div>
+                            <div class="col-sm-3 text-center">
+                                <small class="text-muted">showing 20-30 of {{ count }} items</small>
+                            </div>
+                            <div class="col-sm-4 text-right">
+                                <ul class="pagination pagination-sm m-0">
+                                    <li><a href><i class="fa fa-chevron-left"></i></a></li>
+                                    <li><a href><i class="fa fa-chevron-right"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /tile footer -->
+                </section>
+                <!-- /tile -->
+            </div>
+            <!-- /col -->
+        </div>
+        <!-- /row -->
+    </div>
+</div>

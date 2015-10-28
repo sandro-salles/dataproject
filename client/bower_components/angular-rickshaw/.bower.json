@@ -1,6 +1,6 @@
 {
   "name": "angular-rickshaw",
-  "version": "0.3.0",
+  "version": "0.5.1",
   "main": "rickshaw.js",
   "authors": [
     "Nick Ng <ngyewch@gmail.com>"
@@ -28,13 +28,13 @@
   },
   "devDependencies": {},
   "homepage": "https://github.com/ngyewch/angular-rickshaw",
-  "_release": "0.3.0",
+  "_release": "0.5.1",
   "_resolution": {
     "type": "version",
-    "tag": "0.3.0",
-    "commit": "0b603460a9245084c2290a0c9899aa0652347831"
+    "tag": "0.5.1",
+    "commit": "95a9c05b38236b551b1085cf14b20ca001040071"
   },
   "_source": "git://github.com/ngyewch/angular-rickshaw.git",
-  "_target": "~0.3.0",
+  "_target": "~0.5.0",
   "_originalSource": "angular-rickshaw"
 }

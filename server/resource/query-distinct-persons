@@ -1,0 +1,288 @@
+###############
+select
+	distinct on (person.id)
+	person.id as person_id,
+	person.name,
+	person.document,
+	carrier.name,
+	phone.id as phone_id,
+	phone.areacode,
+	phone.number,
+	address.id as address_id,
+	address.state,
+	address.city,
+	address.neighborhood,
+	address.location,
+	address.zipcode
+from 
+	contact_phone as phone
+inner join
+	contact_personphone as p_phone
+		on (p_phone.phone_id = phone.id)
+inner join
+	contact_personaddress as p_address
+		on (p_address.person_id = p_phone.person_id)
+inner join
+	contact_address as address
+		on (address.id = p_address.address_id)
+inner join
+	person_person as person
+		on (person.id = p_phone.person_id)
+inner join contact_carrier as carrier
+	on (carrier.id = phone.carrier_id)
+where
+	phone.areacode = 11
+	and address.city IN ('OSASCO', 'SAO PAULO')
+	and carrier.id in (1,3)
+	and person.nature = 'L'
+order by person.id asc
+limit 10000
+
+##################
+
+select
+	distinct on (person.id)
+	person.id,
+	person.name,
+	person.document,
+	person.nature,
+	phone.id as phone_id,
+	phone.areacode,
+	phone.number,
+	phone.carrier_name,
+	address.id as address_id,
+	address.state,
+	address.city,
+	address.neighborhood,
+	address.location,
+	address.zipcode
+from 
+	person_person as person
+inner join lateral
+	(
+		select
+			_address.*
+		from
+			contact_address as _address
+		inner join
+			contact_personaddress as p_address
+				on (p_address.address_id = _address.id and p_address.person_id = person.id)
+		where
+			_address.city IN ('OSASCO', 'SAO PAULO')
+		limit 1			
+	) as address
+	on true
+inner join lateral
+	(
+		select
+			carrier.name as carrier_name,
+			_phone.*
+		from
+			contact_phone as _phone
+		inner join
+			contact_personphone as p_phone
+				on (p_phone.phone_id = _phone.id and p_phone.person_id = person.id)
+		inner join
+			contact_carrier as carrier
+				on (carrier.id = _phone.carrier_id)
+		where
+			_phone.areacode = 11
+			and _phone.carrier_id = 3
+		limit 1
+	) as phone
+	on true
+where
+	person.nature = 'L'
+order by
+	person.id asc	
+limit 10000
+;
+
+######################
+
+select
+	distinct on (person.id)
+	person.id,
+	person.name,
+	person.document,
+	person.nature,
+	phone.phone_id,
+	phone.phone_areacode,
+	phone.phone_number,
+	phone.carrier_name,
+	phone.address_id,
+	phone.address_state,
+	phone.address_city,
+	phone.address_neighborhood,
+	phone.address_location,
+	phone.address_zipcode
+from 
+	person_person as person
+inner join lateral
+	(
+		select
+			carrier.name as carrier_name,
+			_phone.id as phone_id,
+			_phone.areacode as phone_areacode,
+			_phone.number as phone_number,
+			_address.id as address_id,
+			_address.state as address_state,
+			_address.city as address_city,
+			_address.neighborhood as address_neighborhood,
+			_address.location as address_location,
+			_address.zipcode as address_zipcode
+		from
+			contact_phone as _phone
+		inner join
+			contact_personphone as p_phone
+				on (p_phone.phone_id = _phone.id and p_phone.person_id = person.id)
+		inner join
+			contact_address as _address
+				on (_address.id = _phone.address_id and _address.city IN ('OSASCO', 'SAO PAULO'))
+		inner join
+			contact_carrier as carrier
+				on (carrier.id = _phone.carrier_id)
+		where
+			_phone.areacode = 11
+			and _phone.carrier_id = 3
+		limit 1
+	) as phone
+	on true
+where
+	person.nature = 'L'
+order by
+	person.id asc	
+limit 10000;
+
+###################
+
+select
+	distinct on (person.id)
+	person.id,
+	person.name,
+	person.document,
+	person.nature,
+	phone.phone_id,
+	phone.phone_areacode,
+	phone.phone_number,
+	phone.carrier_name,
+	address.id as address_id,
+	address.state as address_state,
+	address.city as address_city,
+	address.neighborhood as address_neighborhood,
+	address.location as address_location,
+	address.zipcode as address_zipcode
+from 
+	person_person as person
+	inner join lateral
+		(
+			select
+				carrier.name as carrier_name,
+				_phone.id as phone_id,
+				_phone.areacode as phone_areacode,
+				_phone.number as phone_number,
+				_phone.address_id,
+				p_phone.person_id as person_id
+			from
+				contact_phone as _phone
+			inner join
+				contact_personphone as p_phone
+					on (p_phone.phone_id = _phone.id and p_phone.person_id = person.id)
+			inner join
+				contact_carrier as carrier
+					on (carrier.id = _phone.carrier_id)
+			where
+				_phone.areacode = 11
+				and _phone.carrier_id in (3)
+			limit 1
+		) as phone
+		on true
+	inner join lateral
+		(
+			select
+				id,
+				state,
+				city,
+				neighborhood,
+				location,
+				zipcode
+			from
+				contact_address
+			where
+				id = 	phone.address_id
+			limit 1	
+		) as address
+		on true
+where
+	person.nature = 'L'
+	and address.city in ('OSASCO', 'SAO PAULO')
+order by
+	person.id asc	
+limit 10000;
+
+
+###############
+
+select 
+	'DROP INDEX ' || indexname || ';',
+	indexdef
+from 
+	pg_catalog.pg_indexes 
+where 
+	indexdef
+		not like '%CREATE UNIQUE INDEX%'
+	and	
+	tablename 
+		in ('person_person', 'contact_phone', 'contact_personphone','contact_address', 'contact_personaddress');
+
+
+DROP INDEX contact_phone_type_16a2e0dd3c091155_uniq;	
+DROP INDEX contact_phone_areacode_2de97c4d7750c72f_uniq;	
+DROP INDEX contact_phone_ed09056b;	
+DROP INDEX contact_personphone_83a29540;	
+DROP INDEX contact_personphone_a8452ca7;	
+DROP INDEX person_person_document_fa6bb7e2d33bf0a_like;	
+DROP INDEX person_person_nature_428c821d3ba2a9ba_like;	
+DROP INDEX person_person_name_3cad37e55e9604a0_like;	
+DROP INDEX person_person_405aaff6;	
+DROP INDEX person_person_b068931c;	
+DROP INDEX contact_address_city_30a75e7b98ceb87e_uniq;	
+DROP INDEX contact_address_state_6582266833b19157_like;	
+DROP INDEX contact_address_9ed39e2e;	
+DROP INDEX contact_personaddress_a8452ca7;	
+DROP INDEX contact_personaddress_ea8e5d12;	
+
+
+CREATE INDEX contact_phone_type_16a2e0dd3c091155_uniq ON contact_phone USING btree (type);
+CREATE INDEX contact_phone_areacode_2de97c4d7750c72f_uniq ON contact_phone USING btree (areacode);
+CREATE INDEX contact_phone_ed09056b ON contact_phone USING btree (carrier_id);
+CREATE INDEX contact_personphone_83a29540 ON contact_personphone USING btree (phone_id);
+CREATE INDEX contact_personphone_a8452ca7 ON contact_personphone USING btree (person_id);
+CREATE INDEX person_person_document_fa6bb7e2d33bf0a_like ON person_person USING btree (document varchar_pattern_ops);
+CREATE INDEX person_person_nature_428c821d3ba2a9ba_like ON person_person USING btree (nature varchar_pattern_ops);
+CREATE INDEX person_person_name_3cad37e55e9604a0_like ON person_person USING btree (name varchar_pattern_ops);
+CREATE INDEX person_person_405aaff6 ON person_person USING btree (nature);
+CREATE INDEX person_person_b068931c ON person_person USING btree (name);
+CREATE INDEX contact_address_city_30a75e7b98ceb87e_uniq ON contact_address USING btree (city);
+CREATE INDEX contact_address_state_6582266833b19157_like ON contact_address USING btree (state varchar_pattern_ops);
+CREATE INDEX contact_address_9ed39e2e ON contact_address USING btree (state);
+CREATE INDEX contact_personaddress_a8452ca7 ON contact_personaddress USING btree (person_id);
+CREATE INDEX contact_personaddress_ea8e5d12 ON contact_personaddress USING btree (address_id);
+
+
+SELECT distinct on (person_person.id) person_person.id, person_person.created_at, person_person.updated_at, person_person.is_dirty, person_person.name, person_person.nature, person_person.document FROM person_person INNER JOIN contact_personphone ON ( person_person.id = contact_personphone.person_id ) INNER JOIN contact_phone ON ( contact_personphone.phone_id = contact_phone.id ) INNER JOIN contact_carrier ON ( contact_phone.carrier_id = contact_carrier.id ) WHERE (person_person.nature = 'L' AND contact_carrier.slug = 'vivo-fixo')
+
+
+vacuum full analyze person_person;
+analyze person_person;
+vacuum full analyze contact_address;
+analyze contact_address;
+vacuum full analyze contact_personaddress;
+analyze contact_personaddress;
+vacuum full analyze contact_phone;
+analyze contact_phone;
+vacuum full analyze contact_personphone;
+analyze contact_personphone;
+
+
+325	M & M COMERCIAL LTDA ME	03256471000153	L	20532	11	46241475	GVT Fixo	19628	SP	OSASCO	PRESIDENTE ALTINO	R REVERENDO JOAO EUCLIDES PEREIRA 720 	06216280

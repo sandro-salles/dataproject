@@ -6,7 +6,7 @@ from person.models import Person
 from person.contact.models import Carrier, Address, Phone, PersonAddress, PersonPhone
 from person.exceptions import CNPJValidationError, CPFValidationError
 from geo.exceptions import ZipCodeValidationError
-from person.contact.exceptions import PhoneValidationError
+from person.contact.exceptions import PhoneValidationError, AreaCodeValidationError
 from django.db import connection
 from collections import Counter
 from person.management.reader import ZoomRecord
@@ -14,6 +14,7 @@ from person.management.reader import ZoomRecord
 import datetime
 import logging
 import sys
+import os
 
 try:
     import unicodecsv as csv
@@ -27,8 +28,9 @@ logger = logging.getLogger('django.db.backends')
 logger.addHandler(logging.StreamHandler())
 
 
+Carrier.objects.get_or_create(name='GVT Fixo')
 Carrier.objects.get_or_create(name='VIVO Fixo')
-
+Carrier.objects.get_or_create(name='Embratel Fixo')
 """
     TODOs:
     - Add revisions
@@ -37,10 +39,11 @@ Carrier.objects.get_or_create(name='VIVO Fixo')
     - Save errors to file and append to ImportModel
 """
 
+
 class Command(BaseCommand):
     help = 'Imports person entries from csv files'
     progress_template = "\r%s of %s rows | %s errors | %s new people | %s new phones | %s new addresses | elapsed: %s"
-    finish_template = "\rFINISHED: %s errors | %s people (%s updated) | %s phones (%s updated) | %s addresses (%s updated) | time elapsed: %s\n"
+    finish_template = "\rFINISHED: %s errors | %s people (%s updated) (%s legal, %s physical) | %s phones (%s updated) | %s addresses (%s updated) | time elapsed: %s\n"
 
     counter = Counter()
     people = dict()
@@ -106,7 +109,7 @@ class Command(BaseCommand):
         h, m = divmod(m, 60)
         return "%d:%02d:%02d" % (h, m, s)
 
-    def read(self, path, skip, delimiter, quotechar, carrier, areacode, phone_type):
+    def read(self, path, skip, delimiter, quotechar):
 
         self.rowscount = sum(1 for row in open(path, 'rb'))
 
@@ -120,10 +123,12 @@ class Command(BaseCommand):
             # Create a regular tuple reader
             reader = csv.reader(data, delimiter=delimiter, quotechar=quotechar)
 
-            for row in map(lambda r: ZoomRecord.parse(r, carrier, areacode, phone_type), reader):
+            for row in reader:
                 yield row
 
-    def persist(self):
+    def persist(self, batchsize):
+
+        print ' | Persisting %s batch ...' % (batchsize + 1)
 
         Person.objects.bulk_upsert(self.people.values(),
                                    unique_constraint='document', update_fields=['name', 'updated_at'])
@@ -133,29 +138,21 @@ class Command(BaseCommand):
                 self.counter['updated_people'] += 1
 
         Address.objects.bulk_upsert(self.addresses.values(),
-                                    unique_constraint='hash', update_fields=['neighborhood', 'city', 'state', 'updated_at'])
+                                    unique_constraint=('zipcode', 'location'), update_fields=['neighborhood', 'city', 'state', 'updated_at'])
 
         for address in self.addresses.values():
             if (self.last_inserted_address != None) and address.id <= self.last_inserted_address.id:
                 self.counter['updated_addresses'] += 1
 
-        for person_address in self.people_addresses.values():
-            person_address.person_id = person_address.person.id
-            person_address.address_id = person_address.address.id
-
         PersonAddress.objects.bulk_upsert(self.people_addresses.values(),
                                           unique_constraint=('person', 'address'), return_ids=False)
 
         Phone.objects.bulk_upsert(self.phones.values(),
-                                  unique_constraint='hash', update_fields=['carrier', 'updated_at'])
+                                  unique_constraint=('type', 'areacode', 'number'), update_fields=['carrier', 'address', 'updated_at'])
 
         for phone in self.phones.values():
             if (self.last_inserted_phone != None) and phone.id <= self.last_inserted_phone.id:
                 self.counter['updated_phones'] += 1
-
-        for person_phone in self.people_phones.values():
-            person_phone.person_id = person_phone.person.id
-            person_phone.phone_id = person_phone.phone.id
 
         PersonPhone.objects.bulk_upsert(self.people_phones.values(),
                                         unique_constraint=('person', 'phone'), return_ids=False)
@@ -165,6 +162,8 @@ class Command(BaseCommand):
         self.people_addresses = dict()
         self.phones = dict()
         self.people_phones = dict()
+
+        os.system("sudo sync && echo 3 | sudo tee /proc/sys/vm/drop_caches")
 
     def handle_document_error(self, record):
         self.counter['errors'] += 1
@@ -181,46 +180,47 @@ class Command(BaseCommand):
     def handle_valid(self, record):
 
         try:
-            person = self.people[record.person.document]
+            person = self.people[record.person.unique_composition]
         except KeyError:
             self.counter['people'] += 1
-            self.people[record.person.document] = record.person
-            person = self.people[record.person.document]
+            self.counter['%s_people' % record.person.nature] += 1
+            person = record.person
+            self.people[record.person.unique_composition] = person
 
         try:
-            address = self.addresses[record.address.hash]
+            address = self.addresses[record.address.unique_composition]
         except KeyError:
             self.counter['addresses'] += 1
-            self.addresses[record.address.hash] = record.address
-            address = self.addresses[record.address.hash]
+            address = record.address
+            self.addresses[record.address.unique_composition] = address
 
         person_address = PersonAddress()
         person_address.person = person
         person_address.address = address
-        person_address.hash = PersonAddress.make_hash(
-            person.hash, address.hash)
 
         try:
-            person_address = self.people_addresses[person_address.hash]
+            person_address = self.people_addresses[
+                person_address.unique_composition]
         except KeyError:
-            self.people_addresses[person_address.hash] = person_address
+            self.people_addresses[
+                person_address.unique_composition] = person_address
 
         try:
-            phone = self.phones[record.phone.hash]
+            phone = self.phones[record.phone.unique_composition]
         except KeyError:
             self.counter['phones'] += 1
             phone = record.phone
-            self.phones[phone.hash] = phone
+            phone.address = address
+            self.phones[phone.unique_composition] = phone
 
         person_phone = PersonPhone()
         person_phone.person = person
         person_phone.phone = phone
-        person_phone.hash = PersonPhone.make_hash(person.hash, phone.hash)
 
         try:
-            person_phone = self.people_phones[person_phone.hash]
+            person_phone = self.people_phones[person_phone.unique_composition]
         except KeyError:
-            self.people_phones[person_phone.hash] = person_phone
+            self.people_phones[person_phone.unique_composition] = person_phone
 
     def get_finish(self, start, now):
 
@@ -229,6 +229,8 @@ class Command(BaseCommand):
                 self.counter['errors'],
                 self.counter['people'],
                 self.counter['updated_people'],
+                self.counter['L_people'],
+                self.counter['P_people'],
                 self.counter['phones'],
                 self.counter['updated_phones'],
                 self.counter['addresses'],
@@ -285,27 +287,36 @@ class Command(BaseCommand):
         except Phone.DoesNotExist:
             pass
 
-        record_handler = {
-            CNPJValidationError: self.handle_document_error,
-            CPFValidationError: self.handle_document_error,
-            ZipCodeValidationError: self.handle_zipcode_error,
-            PhoneValidationError: self.handle_phone_error
-        }
-
         start = datetime.datetime.now()
 
-        for record in self.read(path, skip, delimiter, quotechar, carrier, areacode, phone_type):
-            record_handler.get(type(record.exception),
-                               self.handle_valid)(record)
+        for row in self.read(path, skip, delimiter, quotechar):
+
+            sys.stdout.write('\r%s' % (self.counter['record'] + 1))
+            sys.stdout.flush()
+
+            try:
+                record = ZoomRecord.parse(row, carrier, areacode, phone_type)
+                self.handle_valid(record)
+            except (CNPJValidationError, CPFValidationError):
+                self.handle_document_error(record)
+            except ZipCodeValidationError:
+                self.handle_zipcode_error(record)
+            except PhoneValidationError:
+                self.handle_phone_error(record)
+            except AreaCodeValidationError:
+                self.handle_areacode_error(record)
+            except UnicodeEncodeError as e:
+                import pdb
+                pdb.set_trace()
 
             if (self.counter['batch'] + 1) == batchsize:
-                self.persist()
+                self.persist(self.counter['batch'])
                 self.counter['batch'] = 0
             else:
                 self.counter['batch'] += 1
 
             self.counter['record'] += 1
 
-        self.persist()
+        self.persist(self.counter['batch'])
         sys.stdout.write(self.get_finish(start, datetime.datetime.now()))
         sys.stdout.flush()

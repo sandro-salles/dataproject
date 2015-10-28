@@ -5,9 +5,7 @@ from django.utils.translation import ugettext as _
 from core.models import DatableModel, SlugModel
 from core.util import normalize_text
 from person.models import Person
-import mmh3
 import reversion
-from memoize import memoize
 from localflavor.br.br_states import STATE_CHOICES
 from db.models.manager import UpsertManager
 
@@ -28,17 +26,62 @@ class Contact(DatableModel):
         abstract = True
 
 
+class Address(Contact):
+
+    persons = models.ManyToManyField(Person, through="PersonAddress", related_name='addresses')
+    state = models.CharField(_(u'State'), max_length=2,
+                             db_index=True, choices=STATE_CHOICES)
+    city = models.CharField(_(u'Cidade'), max_length=200, db_index=True)
+    neighborhood = models.CharField(_(u'Bairro'), max_length=200)
+    location = models.TextField(_(u'Endereço'))
+    zipcode = models.CharField(_(u'CEP'), max_length=8)
+
+    class Meta:
+        verbose_name = _(u"Endereço Físico")
+        verbose_name_plural = _(u"Endereços Físicos")
+        unique_together = ('zipcode', 'location')
+
+    @property
+    def unique_composition(self):
+        return '%s_%s' % (self.zipcode, self.location)
+
+    def save(self, *args, **kwargs):
+        self.state = normalize_text(self.state)
+        self.city = normalize_text(self.city)
+        self.neighborhood = normalize_text(self.neighborhood)
+        self.location = normalize_text(self.location)
+        self.zipcode = normalize_text(self.zipcode)
+        super(Address, self).save(*args, **kwargs)
+
+    def __unicode__(self):
+        return self.location
+
+
+class PersonAddress(DatableModel):
+    person = models.ForeignKey(Person)
+    address = models.ForeignKey(Address)
+
+    objects = UpsertManager()
+
+    @property
+    def unique_composition(self):
+        return '%s_%s' % (self.person.unique_composition, self.address.unique_composition)
+
+    class Meta:
+        unique_together = ('person', 'address')
+
+
 @reversion.register
 class Phone(Contact):
 
-    persons = models.ManyToManyField(Person, through="PersonPhone")
+    persons = models.ManyToManyField(Person, through="PersonPhone", related_name='phones')
 
     TYPE_CHOICES_CELLPHONE = ('cel', _('Celular'))
     TYPE_CHOICES_TELEPHONE = ('tel', _('Telefone Fixo'))
     TYPE_CHOICES = (TYPE_CHOICES_CELLPHONE, TYPE_CHOICES_TELEPHONE)
 
     type = models.CharField(_('Tipo do Aparelho'),
-                            max_length=3, choices=TYPE_CHOICES)
+                            max_length=3, db_index=True, choices=TYPE_CHOICES)
 
     AREACODE_CHOICES = ((11, 11), (12, 12), (13, 13), (14, 14), (15, 15),
                         (16, 16), (17, 17), (18, 18), (19, 19), (21, 21),
@@ -56,88 +99,36 @@ class Phone(Contact):
                         (98, 98), (99, 99),)
 
     areacode = models.IntegerField(
-        _(u' Código DDD'), choices=AREACODE_CHOICES)
+        _(u' Código DDD'), db_index=True, choices=AREACODE_CHOICES)
     number = models.CharField(_(u'Número'), max_length=9)
     carrier = models.ForeignKey(Carrier)
-    hash = models.IntegerField(_('Hash'), unique=True, editable=False)
+    address = models.ForeignKey(Address)
+
+    @property
+    def unique_composition(self):
+        return '%s_%s_%s' % (self.type, self.areacode, self.number)
 
     class Meta:
         verbose_name = _(u"Telefone")
         verbose_name_plural = _(u"Telefones")
         unique_together = ('type', 'areacode', 'number')
 
-    @staticmethod
-    @memoize()
-    def make_hash(type, areacode, number):
-        return mmh3.hash('%s%s%s' % (type, areacode, number))
-
-    def save(self, *args, **kwargs):
-        self.hash = Phone.make_hash(self.type, self.areacode, self.number)
-        super(Phone, self).save(*args, **kwargs)
-
     def __unicode__(self):
         return '%s %s (%s)' % (self.areacode, self.number, self.type)
 
 
 class PersonPhone(models.Model):
-    hash = None
     person = models.ForeignKey(Person)
     phone = models.ForeignKey(Phone)
 
     objects = UpsertManager()
 
-    @staticmethod
-    @memoize()
-    def make_hash(person_hash, phone_hash):
-        return mmh3.hash('%s%s' % (person_hash, phone_hash))
+    @property
+    def unique_composition(self):
+        return '%s_%s' % (self.person.unique_composition, self.phone.unique_composition)
 
     class Meta:
         unique_together = ('person', 'phone')
-
-
-class Address(Contact):
-
-    persons = models.ManyToManyField(Person, through="PersonAddress")
-    state = models.CharField(_(u'State'), max_length=2,
-                             db_index=True, choices=STATE_CHOICES)
-    city = models.CharField(_(u'Cidade'), max_length=200)
-    neighborhood = models.CharField(_(u'Bairro'), max_length=200)
-    location = models.TextField(_(u'Endereço'))
-    zipcode = models.CharField(_(u'CEP'), max_length=8)
-    hash = models.IntegerField(_('Hash'), unique=True, editable=False)
-
-    class Meta:
-        verbose_name = _(u"Endereço Físico")
-        verbose_name_plural = _(u"Endereços Físicos")
-
-    @staticmethod
-    @memoize()
-    def make_hash(zipcode, location):
-        return mmh3.hash('%s%s' % (zipcode, location))
-
-    def save(self, *args, **kwargs):
-        self.location = normalize_text(self.location)
-        self.hash = Address.make_hash(self.zipcode, self.location)
-        super(Address, self).save(*args, **kwargs)
-
-    def __unicode__(self):
-        return self.location
-
-
-class PersonAddress(DatableModel):
-    hash = None
-    person = models.ForeignKey(Person)
-    address = models.ForeignKey(Address)
-
-    objects = UpsertManager()
-
-    @staticmethod
-    @memoize()
-    def make_hash(person_hash, address_hash):
-        return mmh3.hash('%s%s' % (person_hash, address_hash))
-
-    class Meta:
-        unique_together = ('person', 'address')
 
 
 class Email(Contact):
