@@ -2,7 +2,7 @@
 
 /**
  * @ngdoc directive
- * @name DATAPROJECT.directive:offcanvasSidebar
+ * @name CONTACTPRO.directive:offcanvasSidebar
  * @description
  * # offcanvasSidebar
  */

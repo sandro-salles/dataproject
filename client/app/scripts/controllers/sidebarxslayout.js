@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name DATAPROJECT.controller:SidebarxslayoutCtrl
+ * @name CONTACTPRO.controller:SidebarxslayoutCtrl
  * @description
  * # SidebarxslayoutCtrl
- * Controller of the DATAPROJECT
+ * Controller of the CONTACTPRO
  */
 app
   .controller('SidebarxslayoutCtrl', function ($scope) {

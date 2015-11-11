@@ -2,7 +2,7 @@
 
 /**
  * @ngdoc directive
- * @name DATAPROJECT.directive:nativeTab
+ * @name CONTACTPRO.directive:nativeTab
  * @description
  * # nativeTab
  */

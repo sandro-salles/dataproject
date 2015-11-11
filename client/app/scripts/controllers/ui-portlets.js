@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name DATAPROJECT.controller:UiPortletsCtrl
+ * @name CONTACTPRO.controller:UiPortletsCtrl
  * @description
  * # UiPortletsCtrl
- * Controller of the DATAPROJECT
+ * Controller of the CONTACTPRO
  */
 app
   .controller('PortletsCtrl', function ($scope) {

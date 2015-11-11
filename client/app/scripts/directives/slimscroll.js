@@ -2,7 +2,7 @@
 
 /**
  * @ngdoc directive
- * @name DATAPROJECT.directive:slimScroll
+ * @name CONTACTPRO.directive:slimScroll
  * @description
  * # slimScroll
  */

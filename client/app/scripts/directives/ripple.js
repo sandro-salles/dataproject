@@ -2,7 +2,7 @@
 
 /**
  * @ngdoc directive
- * @name DATAPROJECT.directive:ripple
+ * @name CONTACTPRO.directive:ripple
  * @description
  * # ripple
  */

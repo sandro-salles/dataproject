@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name DATAPROJECT.controller:ButtonsiconsCtrl
+ * @name CONTACTPRO.controller:ButtonsiconsCtrl
  * @description
  * # ButtonsiconsCtrl
- * Controller of the DATAPROJECT
+ * Controller of the CONTACTPRO
  */
 app
   .controller('ButtonsIconsCtrl', function ($scope) {

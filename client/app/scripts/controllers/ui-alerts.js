@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name DATAPROJECT.controller:UiAlertsCtrl
+ * @name CONTACTPRO.controller:UiAlertsCtrl
  * @description
  * # UiAlertsCtrl
- * Controller of the DATAPROJECT
+ * Controller of the CONTACTPRO
  */
 app
   .controller('AlertsCtrl', function ($scope) {

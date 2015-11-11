@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name DATAPROJECT.controller:FormUploadCtrl
+ * @name CONTACTPRO.controller:FormUploadCtrl
  * @description
  * # FormUploadCtrl
- * Controller of the DATAPROJECT
+ * Controller of the CONTACTPRO
  */
 app
   .controller('FormUploadCtrl', ['$scope', 'FileUploader', function($scope, FileUploader) {

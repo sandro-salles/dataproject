@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name DATAPROJECT.controller:MapsGoogleMapCtrl
+ * @name CONTACTPRO.controller:MapsGoogleMapCtrl
  * @description
  * # MapsGoogleMapCtrl
- * Controller of the DATAPROJECT
+ * Controller of the CONTACTPRO
  */
 app
   .controller('GoogleMapCtrl', function ($scope, $ocLazyLoad) {

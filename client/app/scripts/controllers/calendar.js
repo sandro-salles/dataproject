@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name DATAPROJECT.controller:CalendarCtrl
+ * @name CONTACTPRO.controller:CalendarCtrl
  * @description
  * # CalendarCtrl
- * Controller of the DATAPROJECT
+ * Controller of the CONTACTPRO
  */
 app
   .controller('CalendarCtrl', function ($scope,$compile,uiCalendarConfig) {

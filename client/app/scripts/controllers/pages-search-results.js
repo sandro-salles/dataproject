@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name DATAPROJECT.controller:PagesSearchResultsCtrl
+ * @name CONTACTPRO.controller:PagesSearchResultsCtrl
  * @description
  * # PagesSearchResultsCtrl
- * Controller of the DATAPROJECT
+ * Controller of the CONTACTPRO
  */
 app
   .controller('SearchResultsCtrl', function ($scope) {

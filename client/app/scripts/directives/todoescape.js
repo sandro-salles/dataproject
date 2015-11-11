@@ -2,7 +2,7 @@
 
 /**
  * @ngdoc directive
- * @name DATAPROJECT.directive:todoEscape
+ * @name CONTACTPRO.directive:todoEscape
  * @description
  * # todoEscape
  */

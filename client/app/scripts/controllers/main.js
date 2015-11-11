@@ -2,16 +2,16 @@
 
 /**
  * @ngdoc function
- * @name DATAPROJECT.controller:MainCtrl
+ * @name CONTACTPRO.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of the DATAPROJECT
+ * Controller of the CONTACTPRO
  */
 app
   .controller('MainCtrl', function ($scope, $http) {
 
     $scope.main = {
-      title: 'DATAPROJECT',
+      title: 'CONTACTPRO',
       settings: {
         navbarHeaderColor: 'scheme-default',
         sidebarColor: 'scheme-default',

@@ -2,7 +2,7 @@
 
 /**
  * @ngdoc directive
- * @name DATAPROJECT.directive:activateButton
+ * @name CONTACTPRO.directive:activateButton
  * @description
  * # activateButton
  */

@@ -2,7 +2,7 @@
 
 /**
  * @ngdoc directive
- * @name DATAPROJECT.directive:wrapOwlcarousel
+ * @name CONTACTPRO.directive:wrapOwlcarousel
  * @description
  * # wrapOwlcarousel
  */

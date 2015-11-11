@@ -2,7 +2,7 @@
 
 /**
  * @ngdoc directive
- * @name DATAPROJECT.directive:daterangepicker
+ * @name CONTACTPRO.directive:daterangepicker
  * @description
  * # daterangepicker
  */

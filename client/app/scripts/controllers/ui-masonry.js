@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name DATAPROJECT.controller:UimasonryCtrl
+ * @name CONTACTPRO.controller:UimasonryCtrl
  * @description
  * # UiMasonryCtrl
- * Controller of the DATAPROJECT
+ * Controller of the CONTACTPRO
  */
 app
   .controller('UiMasonryCtrl', function ($scope, ipsumService) {

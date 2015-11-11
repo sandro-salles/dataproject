@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name DATAPROJECT.controller:UiModalsCtrl
+ * @name CONTACTPRO.controller:UiModalsCtrl
  * @description
  * # UiModalsCtrl
- * Controller of the DATAPROJECT
+ * Controller of the CONTACTPRO
  */
 app
   .controller('ModalsCtrl', function ($scope) {

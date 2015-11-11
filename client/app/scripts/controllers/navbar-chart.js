@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name DATAPROJECT.controller:SparklineCtrl
+ * @name CONTACTPRO.controller:SparklineCtrl
  * @description
  * # sparklineCtrl navbar
- * Controller of the DATAPROJECT
+ * Controller of the CONTACTPRO
  */
 app
   .controller('SparklineCtrl', function ($scope) {

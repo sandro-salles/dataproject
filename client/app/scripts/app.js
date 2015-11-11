@@ -2,97 +2,185 @@
 
 /**
  * @ngdoc overview
- * @name DATAPROJECT
+ * @name CONTACTPRO
  * @description
- * # DATAPROJECT
+ * # CONTACTPRO
  *
  * Main module of the application.
  */
 
-  /*jshint -W079 */
+/*jshint -W079 */
 
 var app = angular
-  .module('DATAPROJECT', [
-    'ngAnimate',
-    'ngCookies',
-    'ngResource',
-    'ngSanitize',
-    'ngTouch',
-    'ngMessages',
-    'picardy.fontawesome',
-    'ui.bootstrap',
-    'ui.router',
-    'ui.utils',
-    'angular-loading-bar',
-    'angular-momentjs',
-    'FBAngular',
-    'toastr',
-    'angularBootstrapNavTree',
-    'oc.lazyLoad',
-    'ui.select',
-    'ui.tree',
-    'textAngular',
-    'angular-flot',
-    'angular-rickshaw',
-    'easypiechart',
-    'ui.calendar',
-    'ngTagsInput',
-    'ngMaterial',
-    'localytics.directives',
-    'angular-intro',
-    'dragularModule',
-    'djangoRESTResources'
-  ])
-  .run(['$rootScope', '$state', '$stateParams', function($rootScope, $state, $stateParams) {
-    $rootScope.$state = $state;
-    $rootScope.$stateParams = $stateParams;
-    $rootScope.$on('$stateChangeSuccess', function(event, toState) {
+    .module('CONTACTPRO', [
+        'ngAnimate',
+        'ngCookies',
+        'ngResource',
+        'ngSanitize',
+        'ngTouch',
+        'ngMessages',
+        'picardy.fontawesome',
+        'ui.bootstrap',
+        'ui.router',
+        'ui.utils',
+        'angular-loading-bar',
+        'angular-momentjs',
+        'jcs-autoValidate',
+        'FBAngular',
+        'toastr',
+        'angularBootstrapNavTree',
+        'oc.lazyLoad',
+        'ui.select',
+        'ui.tree',
+        'ui.gravatar',
+        'textAngular',
+        'angular-flot',
+        'angular-rickshaw',
+        'easypiechart',
+        'ui.calendar',
+        'ngTagsInput',
+        'ngMaterial',
+        'localytics.directives',
+        'angular-intro',
+        'dragularModule',
+        'djangoRESTResources',
+        'angular-jwt',
+        'ngCpfCnpj'
+    ])
+    .run(['$rootScope', '$state', '$stateParams', '$location', '$cookieStore', '$http', 'jwtHelper', 'bootstrap3ElementModifier', 'AuthService', function($rootScope, $state, $stateParams, $location, $cookieStore, $http, jwtHelper, bootstrap3ElementModifier,  AuthService) {
 
-      event.targetScope.$watch('$viewContentLoaded', function () {
+        bootstrap3ElementModifier.enableValidationStateIcons(true);
 
-        angular.element('html, body, #content').animate({ scrollTop: 0 }, 200);
+        $rootScope.globals = $cookieStore.get('globals') || {};
 
-        setTimeout(function () {
-          angular.element('#wrap').css('visibility','visible');
+        if ($rootScope.globals.currentUser) {
+            $http.defaults.headers.common['Authorization'] = 'JWT ' + $rootScope.globals.currentUser.token; // jshint ignore:line
+        }
 
-          if (!angular.element('.dropdown').hasClass('open')) {
-            angular.element('.dropdown').find('>ul').slideUp();
-          }
-        }, 200);
-      });
-      $rootScope.containerClass = toState.containerClass;
-    });
-  }])
+        $rootScope.$state = $state;
+        $rootScope.$stateParams = $stateParams;
+        $rootScope.$on('$stateChangeSuccess', function(event, toState) {
 
-  .config(['uiSelectConfig', function (uiSelectConfig) {
-    uiSelectConfig.theme = 'bootstrap';
-  }])
+            event.targetScope.$watch('$viewContentLoaded', function() {
 
-  .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+                angular.element('html, body, #content').animate({
+                    scrollTop: 0
+                }, 200);
 
-    $urlRouterProvider.otherwise('/app/dashboard');
+                setTimeout(function() {
+                    angular.element('#wrap').css('visibility', 'visible');
 
-    $stateProvider
+                    if (!angular.element('.dropdown').hasClass('open')) {
+                        angular.element('.dropdown').find('>ul').slideUp();
+                    }
+                }, 200);
+            });
+            $rootScope.containerClass = toState.containerClass;
+        });
 
-    .state('app', {
-      abstract: true,
-      url: '/app',
-      templateUrl: 'views/tmpl/app.html'
+        var checkUserSession = function(next, current) {
+
+          
+            // redirect to login page if not logged in and trying to access a restricted page
+            var restrictedPage = $.inArray($location.path(), ['/core/login', '/core/forgotpass', '/core/forgotpass/success']) === -1;
+            console.log('path: ' + $location.path() + ' | restricted: ' + restrictedPage);
+            var loggedIn = $rootScope.globals.currentUser;
+            if (restrictedPage && (!loggedIn || jwtHelper.isTokenExpired(loggedIn.token))) {
+                AuthService.ClearCredentials();
+                $location.path('/core/login');
+            }
+        };
+
+        $rootScope.$on('$locationChangeStart', function(event, next, current) {
+            checkUserSession(next, current);
+        });
+
+        $rootScope.$on('$stateChangeStart', function(event, next, current) {
+            checkUserSession(next, current);
+        });
+
+        $rootScope.Logout = function() {
+            AuthService.ClearCredentials();
+            $location.path('/core/login');
+        }
+
+    }])
+    .config(['uiSelectConfig', function(uiSelectConfig) {
+        uiSelectConfig.theme = 'bootstrap';
+    }])
+    .config(function($resourceProvider) {
+        $resourceProvider.defaults.stripTrailingSlashes = false;
     })
+    .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
 
-    //dashboard
-    .state('app.dashboard', {
-      url: '/dashboard',
-      controller: 'DashboardCtrl',
-      templateUrl: 'views/tmpl/dashboard.html',
-    })
+      $urlRouterProvider.otherwise('/app/dashboard');
 
-    //explorer
-    .state('app.explorer', {
-      url: '/explorer',
-      controller: 'ExplorerCtrl',
-      templateUrl: 'views/tmpl/explorer.html',
-      containerClass: 'sidebar-xs-forced sidebar-xs'
-    });
-  }]);
+      $stateProvider
 
+          //app core pages (errors, login,signup)
+          .state('core', {
+              abstract: true,
+              url: '/core',
+              template: '<div ui-view></div>'
+          })
+          .state('core.login', {
+              url: '/login',
+              controller: 'LoginCtrl',
+              templateUrl: 'views/tmpl/login.html'
+          })
+          .state('core.forgotpass', {
+              url: '/forgotpass',
+              controller: 'ForgotPasswordCtrl',
+              templateUrl: 'views/tmpl/forgotpass.html'
+          })
+          .state('core.forgotpass-success', {
+              url: '/forgotpass/success',
+              controller: 'ForgotPasswordSuccessCtrl',
+              templateUrl: 'views/tmpl/forgotpass-success.html'
+          })
+
+
+          .state('app', {
+              abstract: true,
+              url: '/app',
+              templateUrl: 'views/tmpl/app.html'
+          })
+
+          //dashboard
+          .state('app.dashboard', {
+              url: '/dashboard',
+              controller: 'DashboardCtrl',
+              templateUrl: 'views/tmpl/dashboard.html',
+          })
+
+          //explorer
+          .state('app.explorer', {
+              url: '/explorer',
+              controller: 'ExplorerCtrl',
+              templateUrl: 'views/tmpl/explorer.html',
+              containerClass: 'sidebar-xs-forced sidebar-xs'
+          })
+
+          //explorer
+          .state('app.corporation', {
+              url: '/corporation',
+              controller: 'CorporationCtrl',
+              templateUrl: 'views/tmpl/corporation.html',
+              containerClass: 'sidebar-xs-forced sidebar-xs'
+          })
+
+          //explorer
+          .state('app.collections', {
+                  url: '/collections',
+                  controller: 'CollectionsCtrl',
+                  templateUrl: 'views/tmpl/collections.html',
+                  containerClass: 'sidebar-xs-forced sidebar-xs'
+              })
+              //explorer
+              .state('app.collections.navigator', {
+                  url: '/collections/navigator',
+                  controller: 'NavigatorCtrl',
+                  templateUrl: 'views/tmpl/collections.html',
+                  containerClass: 'sidebar-xs-forced sidebar-xs'
+              });
+    }]);

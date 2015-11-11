@@ -2,7 +2,7 @@
 
 /**
  * @ngdoc directive
- * @name DATAPROJECT.directive:tileControlRefresh
+ * @name CONTACTPRO.directive:tileControlRefresh
  * @description
  * # tileControlRefresh
  */

@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name DATAPROJECT.controller:UiGeneralCtrl
+ * @name CONTACTPRO.controller:UiGeneralCtrl
  * @description
  * # UiGeneralCtrl
- * Controller of the DATAPROJECT
+ * Controller of the CONTACTPRO
  */
 app
   .controller('GeneralCtrl', function ($scope) {

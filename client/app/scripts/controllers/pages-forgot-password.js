@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name DATAPROJECT.controller:PagesForgotPasswordCtrl
+ * @name CONTACTPRO.controller:PagesForgotPasswordCtrl
  * @description
  * # PagesForgotPasswordCtrl
- * Controller of the DATAPROJECT
+ * Controller of the CONTACTPRO
  */
 app
   .controller('ForgotPasswordCtrl', function ($scope) {

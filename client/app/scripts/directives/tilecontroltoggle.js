@@ -2,7 +2,7 @@
 
 /**
  * @ngdoc directive
- * @name DATAPROJECT.directive:tileControlToggle
+ * @name CONTACTPRO.directive:tileControlToggle
  * @description
  * # tileControlToggle
  */

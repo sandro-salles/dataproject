@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name DATAPROJECT.controller:UitilesCtrl
+ * @name CONTACTPRO.controller:UitilesCtrl
  * @description
  * # UitilesCtrl
- * Controller of the DATAPROJECT
+ * Controller of the CONTACTPRO
  */
 app
   .controller('TilesCtrl', function ($scope) {

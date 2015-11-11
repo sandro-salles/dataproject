@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name DATAPROJECT.controller:MapsVectorMapCtrl
+ * @name CONTACTPRO.controller:MapsVectorMapCtrl
  * @description
  * # MapsVectorMapCtrl
- * Controller of the DATAPROJECT
+ * Controller of the CONTACTPRO
  */
 app
   .controller('VectorMapCtrl', function ($scope) {

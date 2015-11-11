@@ -41,7 +41,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True, null=True)),
-                ('is_dirty', models.BooleanField(default=False, verbose_name='Inconsistente')),
+                ('is_dirty', models.BooleanField(default=False, verbose_name=b'Inconsistente')),
                 ('name', models.CharField(max_length=300, verbose_name='Nome', db_index=True)),
                 ('nature', models.CharField(db_index=True, max_length=3, verbose_name='Natureza', choices=[(b'P', 'F\xedsica'), (b'L', 'Jur\xeddica')])),
                 ('document', models.CharField(unique=True, max_length=14, verbose_name='Documento')),

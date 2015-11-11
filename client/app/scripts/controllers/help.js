@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name DATAPROJECT.controller:HelpCtrl
+ * @name CONTACTPRO.controller:HelpCtrl
  * @description
  * # HelpCtrl
- * Controller of the DATAPROJECT
+ * Controller of the CONTACTPRO
  */
 app
   .controller('HelpCtrl', function ($scope) {

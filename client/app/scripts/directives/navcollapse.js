@@ -2,7 +2,7 @@
 
 /**
  * @ngdoc directive
- * @name DATAPROJECT.directive:navCollapse
+ * @name CONTACTPRO.directive:navCollapse
  * @description
  * # navCollapse
  * # sidebar navigation dropdown collapse

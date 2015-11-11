@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name DATAPROJECT.controller:MailComposeCtrl
+ * @name CONTACTPRO.controller:MailComposeCtrl
  * @description
  * # MailComposeCtrl
- * Controller of the DATAPROJECT
+ * Controller of the CONTACTPRO
  */
 app
   .controller('MailComposeCtrl', function ($scope) {

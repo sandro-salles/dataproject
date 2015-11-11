@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name DATAPROJECT.controller:FormsValidateCtrl
+ * @name CONTACTPRO.controller:FormsValidateCtrl
  * @description
  * # FormsValidateCtrl
- * Controller of the DATAPROJECT
+ * Controller of the CONTACTPRO
  */
 app
   .controller('FormsValidateCtrl', function ($scope) {

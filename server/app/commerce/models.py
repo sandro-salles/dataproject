@@ -2,7 +2,7 @@
 from django.db import models
 from django.utils.translation import ugettext as _
 from core.models import DatableModel
-from account.models import Account
+from account.models import Corporation
 from person.models import Collection
 from polymorphic import PolymorphicModel
 
@@ -51,7 +51,7 @@ class DataMatch(Product):
 
 
 class Purchase(PolymorphicModel, DatableModel):
-    account = models.ForeignKey(Account)
+    corporation = models.ForeignKey(Corporation)
 
     class Meta:
         verbose_name = _('Compra')

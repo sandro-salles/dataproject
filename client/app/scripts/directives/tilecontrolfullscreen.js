@@ -2,7 +2,7 @@
 
 /**
  * @ngdoc directive
- * @name DATAPROJECT.directive:tileControlFullscreen
+ * @name CONTACTPRO.directive:tileControlFullscreen
  * @description
  * # tileControlFullscreen
  */

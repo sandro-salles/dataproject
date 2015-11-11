@@ -2,7 +2,7 @@
 
 /**
  * @ngdoc directive
- * @name DATAPROJECT.directive:collapseSidebarSm
+ * @name CONTACTPRO.directive:collapseSidebarSm
  * @description
  * # collapseSidebarSm
  */

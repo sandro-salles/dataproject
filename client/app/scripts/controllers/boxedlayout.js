@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name DATAPROJECT.controller:BoxedlayoutCtrl
+ * @name CONTACTPRO.controller:BoxedlayoutCtrl
  * @description
  * # BoxedlayoutCtrl
- * Controller of the DATAPROJECT
+ * Controller of the CONTACTPRO
  */
 app
   .controller('BoxedlayoutCtrl', function ($scope) {

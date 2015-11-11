@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name DATAPROJECT.controller:PagesChatCtrl
+ * @name CONTACTPRO.controller:PagesChatCtrl
  * @description
  * # PagesChatCtrl
- * Controller of the DATAPROJECT
+ * Controller of the CONTACTPRO
  */
 app
   .controller('ChatCtrl', function ($scope, $resource) {

@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name DATAPROJECT.controller:MailSingleCtrl
+ * @name CONTACTPRO.controller:MailSingleCtrl
  * @description
  * # MailSingleCtrl
- * Controller of the DATAPROJECT
+ * Controller of the CONTACTPRO
  */
 app
   .controller('MailSingleCtrl', function ($scope) {

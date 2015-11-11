@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name DATAPROJECT.controller:DashboardCtrl
+ * @name CONTACTPRO.controller:DashboardCtrl
  * @description
  * # DashboardCtrl
- * Controller of the DATAPROJECT
+ * Controller of the CONTACTPRO
  */
 app
   .controller('DashboardCtrl', function($scope,$http){

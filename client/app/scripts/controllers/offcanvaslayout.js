@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name DATAPROJECT.controller:OffcanvaslayoutCtrl
+ * @name CONTACTPRO.controller:OffcanvaslayoutCtrl
  * @description
  * # OffcanvaslayoutCtrl
- * Controller of the DATAPROJECT
+ * Controller of the CONTACTPRO
  */
 app
   .controller('OffcanvaslayoutCtrl', function ($scope) {

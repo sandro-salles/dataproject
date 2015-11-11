@@ -1,8 +1,8 @@
 <!doctype html>
-<html ng-app="DATAPROJECT" ng-controller="MainCtrl" class="no-js {{containerClass}}">
+<html ng-app="CONTACTPRO" ng-controller="MainCtrl" class="no-js {{containerClass}}">
   <head>
     <meta charset="utf-8">
-    <title>Minovate - Admin Dashboard</title>
+    <title>ContactPro - Administração</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
@@ -90,6 +90,7 @@
     <script src="bower_components/angular-bootstrap-nav-tree/dist/abn_tree_directive.js"></script>
     <script src="bower_components/chosen/chosen.jquery.min.js"></script>
     <script src="bower_components/angular-chosen-localytics/chosen.js"></script>
+    <script src="bower_components/angular-auto-validate/dist/jcs-auto-validate.js"></script>
     <script src="bower_components/angular-cookies/angular-cookies.js"></script>
     <script src="bower_components/datatables/media/js/jquery.dataTables.js"></script>
     <script src="bower_components/angular-datatables/dist/angular-datatables.min.js"></script>
@@ -106,12 +107,14 @@
     <script src="bower_components/angular-flot/angular-flot.js"></script>
     <script src="bower_components/angular-fontawesome/dist/angular-fontawesome.js"></script>
     <script src="bower_components/angular-fullscreen/src/angular-fullscreen.js"></script>
+    <script src="bower_components/angular-gravatar/build/angular-gravatar.js"></script>
     <script src="bower_components/angular-simple-logger/dist/angular-simple-logger.js"></script>
     <script src="bower_components/lodash/lodash.js"></script>
     <script src="bower_components/angular-google-maps/dist/angular-google-maps.js"></script>
     <script src="bower_components/intro.js/intro.js"></script>
     <script src="bower_components/angular-intro.js/src/angular-intro.js"></script>
     <script src="bower_components/angular-ipsum/dist/ipsum.min.js"></script>
+    <script src="bower_components/angular-jwt/dist/angular-jwt.js"></script>
     <script src="bower_components/leaflet/dist/leaflet-src.js"></script>
     <script src="bower_components/angular-leaflet-directive/dist/angular-leaflet-directive.js"></script>
     <script src="bower_components/angular-loading-bar/build/loading-bar.js"></script>
@@ -183,6 +186,8 @@
     <script src="bower_components/ng-bs-daterangepicker/src/ng-bs-daterangepicker.js"></script>
     <script src="bower_components/ng-table/dist/ng-table.min.js"></script>
     <script src="bower_components/ng-tags-input/ng-tags-input.min.js"></script>
+    <script src="bower_components/cpf_cnpj/build/cpf_cnpj.js"></script>
+    <script src="bower_components/ng-cpf-cnpj/lib/ngCpfCnpj.js"></script>
     <script src="bower_components/ngImgCrop/compile/minified/ng-img-crop.js"></script>
     <script src="bower_components/oclazyload/dist/ocLazyLoad.js"></script>
     <script src="bower_components/owl-carousel/owl-carousel/owl.carousel.min.js"></script>
@@ -204,7 +209,13 @@
     <script src="scripts/directives/sparkline.js"></script>    
     <script src="scripts/controllers/dashboard.js"></script>
     <script src="scripts/controllers/explorer.js"></script>
-    <script src="scripts/resources/person.js"></script>  
+    <script src="scripts/controllers/corporation.js"></script>
+    <script src="scripts/controllers/login.js"></script>
+    <script src="scripts/controllers/forgot-password.js"></script>
+    <script src="scripts/resources/authentication.js"></script>
+    <script src="scripts/resources/person.js"></script>
+    <script src="scripts/resources/corporation.js"></script>  
+    <script src="scripts/resources/user.js"></script>  
     <script src="scripts/directives/collapsesidebar.js"></script>
     <script src="scripts/directives/ripple.js"></script>
     <script src="scripts/controllers/nav.js"></script>    

@@ -88,7 +88,7 @@ class Command(BaseCommand):
 
         parser.add_argument('-b', '--batchsize',
                             dest='batchsize',
-                            default=50000,
+                            default=20000,
                             type=int,
                             help=' -- HELP HERE')
 
@@ -163,7 +163,7 @@ class Command(BaseCommand):
         self.phones = dict()
         self.people_phones = dict()
 
-        os.system("sudo sync && echo 3 | sudo tee /proc/sys/vm/drop_caches")
+        # os.system("sudo sync && echo 3 | sudo tee /proc/sys/vm/drop_caches |&")
 
     def handle_document_error(self, record):
         self.counter['errors'] += 1
@@ -289,34 +289,53 @@ class Command(BaseCommand):
 
         start = datetime.datetime.now()
 
-        for row in self.read(path, skip, delimiter, quotechar):
+        paths = [path,]
 
-            sys.stdout.write('\r%s' % (self.counter['record'] + 1))
-            sys.stdout.flush()
+        if os.path.isdir(path):
+            paths = []
 
-            try:
-                record = ZoomRecord.parse(row, carrier, areacode, phone_type)
-                self.handle_valid(record)
-            except (CNPJValidationError, CPFValidationError):
-                self.handle_document_error(record)
-            except ZipCodeValidationError:
-                self.handle_zipcode_error(record)
-            except PhoneValidationError:
-                self.handle_phone_error(record)
-            except AreaCodeValidationError:
-                self.handle_areacode_error(record)
-            except UnicodeEncodeError as e:
-                import pdb
-                pdb.set_trace()
+            for (dirpath, dirnames, filenames) in os.walk(path):
+                paths.extend(['%s/%s' % (path, filename) for filename in filenames if '.csv' in filename])
+                break
 
-            if (self.counter['batch'] + 1) == batchsize:
-                self.persist(self.counter['batch'])
-                self.counter['batch'] = 0
-            else:
-                self.counter['batch'] += 1
+        for path in paths:
 
-            self.counter['record'] += 1
+            print 'File to process: %s' % path
 
-        self.persist(self.counter['batch'])
+            for row in self.read(path, skip, delimiter, quotechar):
+
+                sys.stdout.write('\r%s' % (self.counter['record'] + 1))
+                sys.stdout.flush()
+
+                if self.counter['record'] < 200000:
+                    self.counter['record'] += 1
+                    continue
+
+                try:
+                    record = ZoomRecord.parse(row, carrier, areacode, phone_type)
+                    self.handle_valid(record)
+                except (CNPJValidationError, CPFValidationError):
+                    self.handle_document_error(record)
+                except ZipCodeValidationError:
+                    self.handle_zipcode_error(record)
+                except PhoneValidationError:
+                    self.handle_phone_error(record)
+                except AreaCodeValidationError:
+                    self.handle_areacode_error(record)
+                except UnicodeEncodeError as e:
+                    import pdb
+                    pdb.set_trace()
+
+                if (self.counter['batch'] + 1) == batchsize:
+                    self.persist(self.counter['batch'])
+                    self.counter['batch'] = 0
+                else:
+                    self.counter['batch'] += 1
+
+                self.counter['record'] += 1
+
+            self.persist(self.counter['batch'])
+            self.counter['batch'] = 0
+
         sys.stdout.write(self.get_finish(start, datetime.datetime.now()))
         sys.stdout.flush()

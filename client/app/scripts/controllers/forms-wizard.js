@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name DATAPROJECT.controller:FormsWizardCtrl
+ * @name CONTACTPRO.controller:FormsWizardCtrl
  * @description
  * # FormsWizardCtrl
- * Controller of the DATAPROJECT
+ * Controller of the CONTACTPRO
  */
 app
   .controller('FormWizardCtrl', function ($scope) {

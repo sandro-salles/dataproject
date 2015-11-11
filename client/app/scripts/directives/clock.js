@@ -2,7 +2,7 @@
 
 /**
  * @ngdoc directive
- * @name DATAPROJECT.directive:clock
+ * @name CONTACTPRO.directive:clock
  * @description
  * # clock
  */

@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name DATAPROJECT.controller:UiGridCtrl
+ * @name CONTACTPRO.controller:UiGridCtrl
  * @description
  * # UiGridCtrl
- * Controller of the DATAPROJECT
+ * Controller of the CONTACTPRO
  */
 app
   .controller('GridCtrl', function ($scope) {

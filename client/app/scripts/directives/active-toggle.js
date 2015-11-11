@@ -2,7 +2,7 @@
 
 /**
  * @ngdoc directive
- * @name DATAPROJECT.directive:activeToggle
+ * @name CONTACTPRO.directive:activeToggle
  * @description
  * # activeToggle
  */

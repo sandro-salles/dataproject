@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name DATAPROJECT.controller:PagesTimelineCtrl
+ * @name CONTACTPRO.controller:PagesTimelineCtrl
  * @description
  * # PagesTimelineCtrl
- * Controller of the DATAPROJECT
+ * Controller of the CONTACTPRO
  */
 app
   .controller('TimelineCtrl', function ($scope) {

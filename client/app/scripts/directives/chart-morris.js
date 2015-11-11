@@ -2,7 +2,7 @@
 
 /**
  * @ngdoc directive
- * @name DATAPROJECT.directive:chartMorris
+ * @name CONTACTPRO.directive:chartMorris
  * @description
  * # chartMorris
  * https://github.com/jasonshark/ng-morris/blob/master/src/ngMorris.js

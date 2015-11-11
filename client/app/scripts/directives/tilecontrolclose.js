@@ -2,7 +2,7 @@
 
 /**
  * @ngdoc directive
- * @name DATAPROJECT.directive:TileControlClose
+ * @name CONTACTPRO.directive:TileControlClose
  * @description
  * # TileControlClose
  */

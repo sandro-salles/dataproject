@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name DATAPROJECT.controller:UiWidgetsCtrl
+ * @name CONTACTPRO.controller:UiWidgetsCtrl
  * @description
  * # UiWidgetsCtrl
- * Controller of the DATAPROJECT
+ * Controller of the CONTACTPRO
  */
 app
   .controller('WidgetsCtrl', function ($scope) {

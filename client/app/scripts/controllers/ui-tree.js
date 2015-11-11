@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name DATAPROJECT.controller:UiTreeCtrl
+ * @name CONTACTPRO.controller:UiTreeCtrl
  * @description
  * # UiTreeCtrl
- * Controller of the DATAPROJECT
+ * Controller of the CONTACTPRO
  */
 app
   /* jshint ignore:start */

@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name DATAPROJECT.controller:TypographyCtrl
+ * @name CONTACTPRO.controller:TypographyCtrl
  * @description
  * # TypographyCtrl
- * Controller of the DATAPROJECT
+ * Controller of the CONTACTPRO
  */
 app
   .controller('TypographyCtrl', function ($scope) {

@@ -16,6 +16,7 @@ import os
 import datetime
 from unipath import Path
 
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_DIR = Path(__file__).parent
 
@@ -56,12 +57,11 @@ INSTALLED_APPS = (
 )
 
 MIDDLEWARE_CLASSES = (
-    'corsheaders.middleware.CorsMiddleware',                      
+    'corsheaders.middleware.CorsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
@@ -136,11 +136,6 @@ STATIC_ROOT = PROJECT_DIR.child('public')
 MEDIA_ROOT = PROJECT_DIR.child('media')
 
 
-def custom_show_toolbar(request):
-    import pdb
-    pdb.set_trace()
-
-
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
@@ -152,17 +147,26 @@ REST_FRAMEWORK = {
 
 CORS_ORIGIN_ALLOW_ALL = True
 
+
+def jwt_response_payload_handler(token, user=None, request=None):
+    from account.serializers import UserSerializer
+    return {
+        'token': token,
+        'user': UserSerializer(user).data
+    }
+
 JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': datetime.timedelta(minutes=10),
     'JWT_ALLOW_REFRESH': True,
+    'JWT_RESPONSE_PAYLOAD_HANDLER': jwt_response_payload_handler
 }
 
 DEBUG_TOOLBAR_PATCH_SETTINGS = True
 
 DEBUG_TOOLBAR_CONFIG = {
-    # 'SHOW_TOOLBAR_CALLBACK': custom_show_toolbar,
     'INTERCEPT_REDIRECTS': False,
 }
 
 INTERNAL_IPS = ('10.46.80.1',)
 
+AUTH_USER_MODEL = 'account.User'

@@ -2,7 +2,7 @@
 
 /**
  * @ngdoc directive
- * @name DATAPROJECT.directive:gaugeChart
+ * @name CONTACTPRO.directive:gaugeChart
  * @description
  * # gaugeChart
 */

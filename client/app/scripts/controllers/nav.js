@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name DATAPROJECT.controller:NavCtrl
+ * @name CONTACTPRO.controller:NavCtrl
  * @description
  * # NavCtrl
- * Controller of the DATAPROJECT
+ * Controller of the CONTACTPRO
  */
 app
   .controller('NavCtrl', function ($scope) {

@@ -2,7 +2,7 @@
 
 /**
  * @ngdoc directive
- * @name DATAPROJECT.directive:prettyprint
+ * @name CONTACTPRO.directive:prettyprint
  * @description
  * # prettyprint
  */

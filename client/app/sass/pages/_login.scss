@@ -1,0 +1,22 @@
+.page-login h1 {
+	max-width: 420px;
+	margin: 0 auto;
+}
+
+.page-login h1 span {
+	position: relative;
+}
+
+.page-login h1 span:before {
+    content: "";
+    margin: 0 auto;
+    top: -7px;
+    display: block;
+    width: 200px;
+    height: 97px;
+    background: url(../images/contactpro-logo-xl.png) no-repeat 0 -32px !important;
+}
+
+.page-login form[name='form'] .help-block.error-msg {
+    display: none;
+}

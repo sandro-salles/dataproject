@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name DATAPROJECT.controller:PagesProfileCtrl
+ * @name CONTACTPRO.controller:PagesProfileCtrl
  * @description
  * # PagesProfileCtrl
- * Controller of the DATAPROJECT
+ * Controller of the CONTACTPRO
  */
 app
   .controller('ProfileCtrl', function ($scope) {

@@ -2,7 +2,7 @@
 
 /**
  * @ngdoc directive
- * @name DATAPROJECT.directive:pageLoader
+ * @name CONTACTPRO.directive:pageLoader
  * @description
  * # pageLoader
  */

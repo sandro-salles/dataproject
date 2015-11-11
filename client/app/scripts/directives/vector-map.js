@@ -2,7 +2,7 @@
 
 /**
  * @ngdoc directive
- * @name DATAPROJECT.directive:vectorMap
+ * @name CONTACTPRO.directive:vectorMap
  * @description
  * # vectorMap
  */

@@ -2,7 +2,7 @@
 
 /**
  * @ngdoc directive
- * @name DATAPROJECT.directive:checkToggler
+ * @name CONTACTPRO.directive:checkToggler
  * @description
  * # checkToggler
  */

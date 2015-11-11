@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name DATAPROJECT.controller:ShopSingleProductCtrl
+ * @name CONTACTPRO.controller:ShopSingleProductCtrl
  * @description
  * # ShopSingleProductCtrl
- * Controller of the DATAPROJECT
+ * Controller of the CONTACTPRO
  */
 app
   .controller('SingleProductCtrl', function ($scope) {

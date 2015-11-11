@@ -2,7 +2,7 @@
 
 /**
  * @ngdoc directive
- * @name DATAPROJECT.directive:sparkline
+ * @name CONTACTPRO.directive:sparkline
  * @description
  * # sparkline
  */

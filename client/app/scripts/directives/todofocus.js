@@ -2,7 +2,7 @@
 
 /**
  * @ngdoc directive
- * @name DATAPROJECT.directive:todoFocus
+ * @name CONTACTPRO.directive:todoFocus
  * @description
  * # todoFocus
  */

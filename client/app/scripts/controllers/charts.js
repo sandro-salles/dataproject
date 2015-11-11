@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name DATAPROJECT.controller:ChartsCtrl
+ * @name CONTACTPRO.controller:ChartsCtrl
  * @description
  * # ChartsCtrl
- * Controller of the DATAPROJECT
+ * Controller of the CONTACTPRO
  */
 app
   .controller('ChartsCtrl', function ($scope) {

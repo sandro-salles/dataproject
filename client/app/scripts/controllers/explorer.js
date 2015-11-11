@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name DATAPROJECT.controller:ExplorerCtrl
+ * @name CONTACTPRO.controller:ExplorerCtrl
  * @description
  * # ExplorerCtrl
- * Controller of the DATAPROJECT
+ * Controller of the CONTACTPRO
  */
 app
     .controller('ExplorerCtrl', ['$scope', '$http', 'Person', function($scope, $http, Person) {

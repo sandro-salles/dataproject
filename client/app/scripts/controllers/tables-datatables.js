@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name DATAPROJECT.controller:TablesDatatablesCtrl
+ * @name CONTACTPRO.controller:TablesDatatablesCtrl
  * @description
  * # TablesDatatablesCtrl
- * Controller of the DATAPROJECT
+ * Controller of the CONTACTPRO
  */
 app
 

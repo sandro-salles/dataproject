@@ -2,7 +2,7 @@
 
 /**
  * @ngdoc directive
- * @name DATAPROJECT.directive:onBlurValidation
+ * @name CONTACTPRO.directive:onBlurValidation
  * @description
  * # onBlurValidation
  */

@@ -2,7 +2,7 @@
 
 /**
  * @ngdoc directive
- * @name DATAPROJECT.directive:submitValidate
+ * @name CONTACTPRO.directive:submitValidate
  * @description
  * # submitValidate
  */

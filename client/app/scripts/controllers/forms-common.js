@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name DATAPROJECT.controller:FormsCommonCtrl
+ * @name CONTACTPRO.controller:FormsCommonCtrl
  * @description
  * # FormsCommonCtrl
- * Controller of the DATAPROJECT
+ * Controller of the CONTACTPRO
  */
 app
   .controller('FormsCommonCtrl', function ($scope) {

@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name DATAPROJECT.controller:FormImgCropCtrl
+ * @name CONTACTPRO.controller:FormImgCropCtrl
  * @description
  * # FormImgCropCtrl
- * Controller of the DATAPROJECT
+ * Controller of the CONTACTPRO
  */
 app
   .controller('FormImgCropCtrl', function ($scope) {

@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name DATAPROJECT.controller:PagesGalleryCtrl
+ * @name CONTACTPRO.controller:PagesGalleryCtrl
  * @description
  * # PagesGalleryCtrl
- * Controller of the DATAPROJECT
+ * Controller of the CONTACTPRO
  */
 app
   .controller('GalleryCtrl', function ($scope) {

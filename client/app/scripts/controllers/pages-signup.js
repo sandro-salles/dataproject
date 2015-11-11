@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name DATAPROJECT.controller:PagesSignupCtrl
+ * @name CONTACTPRO.controller:PagesSignupCtrl
  * @description
  * # PagesSignupCtrl
- * Controller of the DATAPROJECT
+ * Controller of the CONTACTPRO
  */
 app
   .controller('SignupCtrl', function ($scope) {

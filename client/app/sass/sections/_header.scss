@@ -45,14 +45,14 @@
     padding: 0 15px;
 
     a.brand {
-      font-family: $font-dosis;
+      font-family: $font-lato;
       font-size: $font-size-large;
       font-weight: $font-weight-light;
       color: white;
       padding-left: 30px;
       height: 45px;
       line-height: 45px;
-      background: url(../images/minovate-logo.png) no-repeat 0 10px;
+      background: url(../images/contactpro-logo.png) no-repeat 0 10px;
       float: left;
       @include transition(none);
 
@@ -140,6 +140,22 @@
           position: absolute;
           top: 7px;
           left: 1px;
+        }
+      }
+
+      &.nav-account {
+        margin-top: 0;
+        >a {
+          font-size: $font-size-small;
+
+          span {
+            margin: 0 5px;
+            line-height: 45px;
+
+            >i {
+              margin-left: 5px;
+            }
+          }
         }
       }
 

@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name DATAPROJECT.controller:TablesBootstrapCtrl
+ * @name CONTACTPRO.controller:TablesBootstrapCtrl
  * @description
  * # TablesBootstrapCtrl
- * Controller of the DATAPROJECT
+ * Controller of the CONTACTPRO
  */
 app
   .controller('TablesBootstrapCtrl', function ($scope) {

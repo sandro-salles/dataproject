@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name DATAPROJECT.controller:MailInboxCtrl
+ * @name CONTACTPRO.controller:MailInboxCtrl
  * @description
  * # MailInboxCtrl
- * Controller of the DATAPROJECT
+ * Controller of the CONTACTPRO
  */
 app
   .controller('MailInboxCtrl', function ($scope, $resource) {

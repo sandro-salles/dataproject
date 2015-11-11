@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name DATAPROJECT.controller:HzmenuCtrl
+ * @name CONTACTPRO.controller:HzmenuCtrl
  * @description
  * # HzmenuCtrl
- * Controller of the DATAPROJECT
+ * Controller of the CONTACTPRO
  */
 app
   .controller('HzmenuCtrl', function ($scope) {

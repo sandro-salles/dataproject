@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name DATAPROJECT.controller:TablesSmartTableCtrl
+ * @name CONTACTPRO.controller:TablesSmartTableCtrl
  * @description
  * # TablesSmartTableCtrl
- * Controller of the DATAPROJECT
+ * Controller of the CONTACTPRO
  */
 app
   .controller('TablesSmartTableCtrl', function ($scope) {

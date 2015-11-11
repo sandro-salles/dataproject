@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name DATAPROJECT.controller:DaterangepickerCtrl
+ * @name CONTACTPRO.controller:DaterangepickerCtrl
  * @description
  * # DaterangepickerCtrl
- * Controller of the DATAPROJECT
+ * Controller of the CONTACTPRO
  */
 app
   .controller('DaterangepickerCtrl', function ($scope, $moment) {
