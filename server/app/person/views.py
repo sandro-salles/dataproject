@@ -29,6 +29,7 @@ class PersonCount(APIView):
 
     def get(self, request, format=None):
 
+        import  pdb; pdb.set_trace()
         cache_key = get_cache_key_from_querystring(request)
         count = cache.get(cache_key, settings.CACHE_EXPIRED_IDENTIFIER)
 

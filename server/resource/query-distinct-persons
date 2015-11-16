@@ -274,15 +274,10 @@ SELECT distinct on (person_person.id) person_person.id, person_person.created_at
 
 
 vacuum full analyze person_person;
-analyze person_person;
 vacuum full analyze contact_address;
-analyze contact_address;
 vacuum full analyze contact_personaddress;
-analyze contact_personaddress;
 vacuum full analyze contact_phone;
-analyze contact_phone;
 vacuum full analyze contact_personphone;
-analyze contact_personphone;
 
 
 325	M & M COMERCIAL LTDA ME	03256471000153	L	20532	11	46241475	GVT Fixo	19628	SP	OSASCO	PRESIDENTE ALTINO	R REVERENDO JOAO EUCLIDES PEREIRA 720 	06216280
