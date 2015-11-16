@@ -2,9 +2,10 @@
 from __future__ import unicode_literals
 
 from django.db import migrations, models
-import django.utils.timezone
-import django.core.validators
 import django.contrib.auth.models
+import django.utils.timezone
+from django.conf import settings
+import django.core.validators
 
 
 class Migration(migrations.Migration):
@@ -38,20 +39,6 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='Account',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('name', models.CharField(max_length=200, verbose_name=b'Nome', db_index=True)),
-                ('slug', models.SlugField(null=True, max_length=200, blank=True, unique=True, verbose_name=b'Identificador')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True, null=True)),
-            ],
-            options={
-                'verbose_name': 'Conta',
-                'verbose_name_plural': 'Contas',
-            },
-        ),
-        migrations.CreateModel(
             name='Corporation',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
@@ -59,7 +46,8 @@ class Migration(migrations.Migration):
                 ('slug', models.SlugField(null=True, max_length=200, blank=True, unique=True, verbose_name=b'Identificador')),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True, null=True)),
-                ('account', models.ForeignKey(to='account.Account')),
+                ('document', models.CharField(unique=True, max_length=14, verbose_name=b'CNPJ')),
+                ('owner', models.ForeignKey(related_name='owned_corporation', to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'verbose_name': 'Empresa',
@@ -68,8 +56,8 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='user',
-            name='account',
-            field=models.ForeignKey(blank=True, to='account.Account', null=True),
+            name='corporation',
+            field=models.ForeignKey(to='account.Corporation'),
         ),
         migrations.AddField(
             model_name='user',

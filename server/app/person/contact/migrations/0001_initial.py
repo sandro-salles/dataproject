@@ -7,6 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
+        ('person', '0001_initial'),
     ]
 
     operations = [
@@ -59,6 +60,8 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True, null=True)),
+                ('address', models.ForeignKey(to='contact.Address')),
+                ('person', models.ForeignKey(to='person.Person')),
             ],
         ),
         migrations.CreateModel(
@@ -67,12 +70,15 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True, null=True)),
+                ('email', models.ForeignKey(to='contact.Email')),
+                ('person', models.ForeignKey(to='person.Person')),
             ],
         ),
         migrations.CreateModel(
             name='PersonPhone',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('person', models.ForeignKey(to='person.Person')),
             ],
         ),
         migrations.CreateModel(
@@ -86,10 +92,46 @@ class Migration(migrations.Migration):
                 ('number', models.CharField(max_length=9, verbose_name='N\xfamero')),
                 ('address', models.ForeignKey(to='contact.Address')),
                 ('carrier', models.ForeignKey(to='contact.Carrier')),
+                ('persons', models.ManyToManyField(related_name='phones', through='contact.PersonPhone', to='person.Person')),
             ],
             options={
                 'verbose_name': 'Telefone',
                 'verbose_name_plural': 'Telefones',
             },
+        ),
+        migrations.AddField(
+            model_name='personphone',
+            name='phone',
+            field=models.ForeignKey(to='contact.Phone'),
+        ),
+        migrations.AddField(
+            model_name='email',
+            name='persons',
+            field=models.ManyToManyField(to='person.Person', through='contact.PersonEmail'),
+        ),
+        migrations.AddField(
+            model_name='address',
+            name='persons',
+            field=models.ManyToManyField(related_name='addresses', through='contact.PersonAddress', to='person.Person'),
+        ),
+        migrations.AlterUniqueTogether(
+            name='phone',
+            unique_together=set([('type', 'areacode', 'number')]),
+        ),
+        migrations.AlterUniqueTogether(
+            name='personphone',
+            unique_together=set([('person', 'phone')]),
+        ),
+        migrations.AlterUniqueTogether(
+            name='personemail',
+            unique_together=set([('person', 'email')]),
+        ),
+        migrations.AlterUniqueTogether(
+            name='personaddress',
+            unique_together=set([('person', 'address')]),
+        ),
+        migrations.AlterUniqueTogether(
+            name='address',
+            unique_together=set([('zipcode', 'location')]),
         ),
     ]

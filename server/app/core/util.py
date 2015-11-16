@@ -2,7 +2,7 @@
 
 import unicodedata
 import string
-
+from collections import namedtuple
 
 def replace_diacritics(text):
     try:
@@ -33,24 +33,3 @@ def normalize_text(text):
 def as_digits(text):
     return ''.join(c for c in str(text) if c.isdigit())
 
-
-def disable_auto_now(*models):
-    """Turns off the auto_now and auto_now_add attributes on a Model's fields,
-    so that an instance of the Model can be saved with a custom value.
-    """
-    for model in models:
-        for field in model._meta.local_fields:
-            if hasattr(field, 'auto_now') and field.auto_now:
-                field.auto_now = False
-                setattr(field, 'auto_now_disabled', True)
-
-
-def enable_auto_now(*models):
-    """Turns off the auto_now and auto_now_add attributes on a Model's fields,
-    so that an instance of the Model can be saved with a custom value.
-    """
-    for model in models:
-        for field in model._meta.local_fields:
-            if hasattr(field, 'auto_now_disabled'):
-                field.auto_now = True
-                delattr(field, 'auto_now_disabled')

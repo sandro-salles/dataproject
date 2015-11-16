@@ -5,7 +5,6 @@ from django.utils.translation import ugettext as _
 from core.models import DatableModel, SlugModel
 from core.util import normalize_text
 from person.models import Person
-import reversion
 from localflavor.br.br_states import STATE_CHOICES
 from db.models.manager import UpsertManager
 
@@ -26,9 +25,34 @@ class Contact(DatableModel):
         abstract = True
 
 
+class AddressCity(models.Model):
+    city = models.CharField(_(u'Cidade'), max_length=300, primary_key=True)
+
+    class Meta:
+        managed = False
+        db_table = 'contact_address_city'
+
+    def __unicode__(self):
+        return self.city
+
+class AddressCityNeighborhood(models.Model):
+
+    id = models.CharField(_(u'Id'), max_length=300, primary_key=True)
+    city = models.CharField(_(u'Cidade'), max_length=200, db_index=True)
+    neighborhood = models.CharField(_(u'Bairro'), max_length=200)
+
+    class Meta:
+        managed = False
+        db_table = 'contact_address_city_neighborhood'
+
+    def __unicode__(self):
+        return '%s - %s' % (self.city, self.neighborhood)
+
+
 class Address(Contact):
 
-    persons = models.ManyToManyField(Person, through="PersonAddress", related_name='addresses')
+    persons = models.ManyToManyField(
+        Person, through="PersonAddress", related_name='addresses')
     state = models.CharField(_(u'State'), max_length=2,
                              db_index=True, choices=STATE_CHOICES)
     city = models.CharField(_(u'Cidade'), max_length=200, db_index=True)
@@ -71,10 +95,20 @@ class PersonAddress(DatableModel):
         unique_together = ('person', 'address')
 
 
-@reversion.register
+class PhoneAreacode(models.Model):
+    areacode = models.CharField(_(u'DDD'), max_length=2, primary_key=True)
+
+    class Meta:
+        managed = False
+        db_table = 'contact_phone_areacode'
+
+    def __unicode__(self):
+        return self.areacode
+
 class Phone(Contact):
 
-    persons = models.ManyToManyField(Person, through="PersonPhone", related_name='phones')
+    persons = models.ManyToManyField(
+        Person, through="PersonPhone", related_name='phones')
 
     TYPE_CHOICES_CELLPHONE = ('cel', _('Celular'))
     TYPE_CHOICES_TELEPHONE = ('tel', _('Telefone Fixo'))

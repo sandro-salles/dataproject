@@ -4,12 +4,9 @@ from django.db import models
 from django.utils.translation import ugettext as _
 from core.models import DatableModel, DirtyModel
 from core.util import normalize_text, as_digits
-import reversion
-from reversion.models import Revision
 from db.models.manager import UpsertManager
 
 
-@reversion.register
 class Person(DatableModel, DirtyModel):
 
     NATURE_CHOICES_PHYSICAL = ('P', _(u'Física'))
@@ -39,28 +36,3 @@ class Person(DatableModel, DirtyModel):
     def __unicode__(self):
         return self.name
 
-
-class Collection(DatableModel):
-    name = models.CharField(_('Nome'), max_length=200, null=False, blank=False)
-    persons = models.ManyToManyField(Person, through='CollectionItem')
-
-    class Meta:
-        verbose_name = _(u'Coleção de Pessoas')
-        verbose_name_plural = _(u'Coleções de Pessoas')
-
-    def __unicode__(self):
-        return self.name
-
-
-class CollectionItem(models.Model):
-    person = models.ForeignKey(Person)
-    collection = models.ForeignKey(Collection)
-    revision = models.ForeignKey(Revision)
-
-    class Meta:
-        verbose_name = _(u"Item de Coleção de Pessoas")
-        verbose_name_plural = _(u"Itens de Coleção de Pessoas")
-        unique_together = ('person', 'collection', 'revision')
-
-    def __unicode__(self):
-        return self.person

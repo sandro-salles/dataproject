@@ -145,6 +145,7 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',),
 }
 
+
 CORS_ORIGIN_ALLOW_ALL = True
 
 
@@ -160,6 +161,8 @@ JWT_AUTH = {
     'JWT_ALLOW_REFRESH': True,
     'JWT_RESPONSE_PAYLOAD_HANDLER': jwt_response_payload_handler
 }
+
+
 
 DEBUG_TOOLBAR_PATCH_SETTINGS = True
 

@@ -15,6 +15,9 @@
   padding: 60px 10px;
   background-color: #3f4e62; }
 
+.bg-dutch-light {
+  background-color: #EEF6FA !important; }
+
 .page-tree {
   height: 100%;
   padding: 0; }

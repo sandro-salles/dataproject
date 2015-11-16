@@ -9,6 +9,7 @@
     "angular-bootstrap-nav-tree": "*",
     "angular-chosen-localytics": "~1.0.7",
     "angular-auto-validate": "latest",
+    "angular-dynamic-number": "latest",
     "angular-cookies": "1.4.6",
     "angular-datatables": "~0.5.0",
     "d3": "~3.5.6",

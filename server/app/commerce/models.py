@@ -3,11 +3,11 @@ from django.db import models
 from django.utils.translation import ugettext as _
 from core.models import DatableModel
 from account.models import Corporation
-from person.models import Collection
 from polymorphic import PolymorphicModel
+from person.models import Person
 
 
-class Product(PolymorphicModel, DatableModel):
+class Purchasable(PolymorphicModel, DatableModel):
 
     class Meta:
         verbose_name = _('Produto')
@@ -17,8 +17,8 @@ class Product(PolymorphicModel, DatableModel):
         return self.id
 
 
-class DataCollection(Product):
-    collection = models.ForeignKey(Collection)
+class DataCollection(models.Model):
+    persons = models.ManyToManyField(Person, through='DataCollectionItem')
 
     class Meta:
         verbose_name = _(u'Coleção de Dados')
@@ -28,8 +28,22 @@ class DataCollection(Product):
         return self.id
 
 
-class DataCheckout(Product):
-    data_collection = models.ForeignKey(DataCollection)
+class DataCollectionItem(models.Model):
+    person = models.ForeignKey(Person)
+    collection = models.ForeignKey(DataCollection)
+    
+
+    class Meta:
+        verbose_name = _(u"Item de Coleção de Dados")
+        verbose_name_plural = _(u"Itens de Coleção de Dados")
+        unique_together = ('person', 'collection',)
+
+    def __unicode__(self):
+        return self.person
+
+
+class DataCheckout(Purchasable):
+    collection = models.ForeignKey(DataCollection)
 
     class Meta:
         verbose_name = _('Checkout de Dados')
@@ -39,8 +53,7 @@ class DataCheckout(Product):
         return self.id
 
 
-class DataMatch(Product):
-    data_collection = models.ForeignKey(DataCollection)
+class DataMatch(DataCheckout):
 
     class Meta:
         verbose_name = _('Cruzamento de Dados')
@@ -62,7 +75,7 @@ class Purchase(PolymorphicModel, DatableModel):
 
 
 class PurchaseItem(PolymorphicModel, DatableModel):
-    product = models.ForeignKey(Product)
+    purchasable = models.ForeignKey(Purchasable)
 
     class Meta:
         verbose_name = _('Item de Compra')

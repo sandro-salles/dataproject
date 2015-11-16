@@ -45,9 +45,10 @@ var app = angular
         'dragularModule',
         'djangoRESTResources',
         'angular-jwt',
-        'ngCpfCnpj'
+        'ngCpfCnpj',
+        'dynamicNumber'
     ])
-    .run(['$rootScope', '$state', '$stateParams', '$location', '$cookieStore', '$http', 'jwtHelper', 'bootstrap3ElementModifier', 'AuthService', function($rootScope, $state, $stateParams, $location, $cookieStore, $http, jwtHelper, bootstrap3ElementModifier,  AuthService) {
+    .run(['$rootScope', '$state', '$stateParams', '$location', '$cookieStore', '$http', 'jwtHelper', 'bootstrap3ElementModifier', 'AuthService', function($rootScope, $state, $stateParams, $location, $cookieStore, $http, jwtHelper, bootstrap3ElementModifier, AuthService) {
 
         bootstrap3ElementModifier.enableValidationStateIcons(true);
 
@@ -80,14 +81,21 @@ var app = angular
 
         var checkUserSession = function(next, current) {
 
-          
-            // redirect to login page if not logged in and trying to access a restricted page
-            var restrictedPage = $.inArray($location.path(), ['/core/login', '/core/forgotpass', '/core/forgotpass/success']) === -1;
-            console.log('path: ' + $location.path() + ' | restricted: ' + restrictedPage);
+            var public_states = ['/core/login/', '/core/forgotpass/', '/core/forgotpass/success/'];
+            var restricted = true;
+            var current_path = $location.path();
+            
+            for (var pstate in public_states) {
+                if (current_path.indexOf(public_states[pstate]) > -1) {
+                    restricted = false;
+                    break;
+                }
+            }
+
             var loggedIn = $rootScope.globals.currentUser;
-            if (restrictedPage && (!loggedIn || jwtHelper.isTokenExpired(loggedIn.token))) {
+            if (restricted && (!loggedIn || jwtHelper.isTokenExpired(loggedIn.token))) {
                 AuthService.ClearCredentials();
-                $location.path('/core/login');
+                $location.path('/core/login/').search('origin', encodeURIComponent(current_path));
             }
         };
 
@@ -101,7 +109,7 @@ var app = angular
 
         $rootScope.Logout = function() {
             AuthService.ClearCredentials();
-            $location.path('/core/login');
+            $location.path('/core/login/');
         }
 
     }])
@@ -113,74 +121,76 @@ var app = angular
     })
     .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
 
-      $urlRouterProvider.otherwise('/app/dashboard');
+        $urlRouterProvider.otherwise('/app/dashboard');
 
-      $stateProvider
+        $stateProvider
 
-          //app core pages (errors, login,signup)
-          .state('core', {
-              abstract: true,
-              url: '/core',
-              template: '<div ui-view></div>'
-          })
-          .state('core.login', {
-              url: '/login',
-              controller: 'LoginCtrl',
-              templateUrl: 'views/tmpl/login.html'
-          })
-          .state('core.forgotpass', {
-              url: '/forgotpass',
-              controller: 'ForgotPasswordCtrl',
-              templateUrl: 'views/tmpl/forgotpass.html'
-          })
-          .state('core.forgotpass-success', {
-              url: '/forgotpass/success',
-              controller: 'ForgotPasswordSuccessCtrl',
-              templateUrl: 'views/tmpl/forgotpass-success.html'
-          })
+        //app core pages (errors, login,signup)
+            .state('core', {
+                abstract: true,
+                url: '/core',
+                template: '<div ui-view></div>',
+                authenticated: false
+            })
+            .state('core.login', {
+                url: '/login/?origin',
+                controller: 'LoginCtrl',
+                templateUrl: 'views/tmpl/login.html'
+            })
+            .state('core.forgotpass', {
+                url: '/forgotpass',
+                controller: 'ForgotPasswordCtrl',
+                templateUrl: 'views/tmpl/forgotpass.html'
+            })
+            .state('core.forgotpass-success', {
+                url: '/forgotpass/success',
+                controller: 'ForgotPasswordSuccessCtrl',
+                templateUrl: 'views/tmpl/forgotpass-success.html'
+            })
 
 
-          .state('app', {
-              abstract: true,
-              url: '/app',
-              templateUrl: 'views/tmpl/app.html'
-          })
+        .state('app', {
+            abstract: true,
+            url: '/app',
+            templateUrl: 'views/tmpl/app.html',
+            authenticated: true
+        })
 
-          //dashboard
-          .state('app.dashboard', {
-              url: '/dashboard',
-              controller: 'DashboardCtrl',
-              templateUrl: 'views/tmpl/dashboard.html',
-          })
+        //dashboard
+        .state('app.dashboard', {
+            url: '/dashboard',
+            controller: 'DashboardCtrl',
+            templateUrl: 'views/tmpl/dashboard.html',
+        })
 
-          //explorer
-          .state('app.explorer', {
-              url: '/explorer',
-              controller: 'ExplorerCtrl',
-              templateUrl: 'views/tmpl/explorer.html',
-              containerClass: 'sidebar-xs-forced sidebar-xs'
-          })
+        //explorer
+        .state('app.purchase', {
+            url: '/purchase',
+            controller: 'PurchaseCtrl',
+            templateUrl: 'views/tmpl/purchase.html',
+            containerClass: 'sidebar-xs-forced sidebar-xs'
+        })
 
-          //explorer
-          .state('app.corporation', {
-              url: '/corporation',
-              controller: 'CorporationCtrl',
-              templateUrl: 'views/tmpl/corporation.html',
-              containerClass: 'sidebar-xs-forced sidebar-xs'
-          })
+        //explorer
+        .state('app.corporation', {
+            url: '/corporation',
+            controller: 'CorporationCtrl',
+            templateUrl: 'views/tmpl/corporation.html',
+            containerClass: 'sidebar-xs-forced sidebar-xs'
+        })
 
-          //explorer
-          .state('app.collections', {
-                  url: '/collections',
-                  controller: 'CollectionsCtrl',
-                  templateUrl: 'views/tmpl/collections.html',
-                  containerClass: 'sidebar-xs-forced sidebar-xs'
-              })
-              //explorer
-              .state('app.collections.navigator', {
-                  url: '/collections/navigator',
-                  controller: 'NavigatorCtrl',
-                  templateUrl: 'views/tmpl/collections.html',
-                  containerClass: 'sidebar-xs-forced sidebar-xs'
-              });
+        //explorer
+        .state('app.collections', {
+                url: '/collections',
+                controller: 'CollectionsCtrl',
+                templateUrl: 'views/tmpl/collections.html',
+                containerClass: 'sidebar-xs-forced sidebar-xs'
+            })
+            //explorer
+            .state('app.collections.navigator', {
+                url: '/collections/navigator',
+                controller: 'NavigatorCtrl',
+                templateUrl: 'views/tmpl/collections.html',
+                containerClass: 'sidebar-xs-forced sidebar-xs'
+            });
     }]);
