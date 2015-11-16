@@ -7,3 +7,7 @@ class PersonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Person
         depth = 1
+
+
+class PersonCounterWrapperSerializer(serializers.Serializer):
+    count = serializers.IntegerField()

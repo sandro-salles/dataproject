@@ -42,6 +42,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'debug_toolbar',
+    'clear_cache',
     'corsheaders',
     'rest_framework',
     'memoize',
@@ -145,6 +146,17 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',),
 }
 
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': '/var/tmp/django_cache',
+        'TIMEOUT': 1296000, # 15 days
+        'KEY_PREFIX': 'dev_'
+    }
+}
+
+CACHE_EXPIRED_IDENTIFIER = '$$CACHEEXPIRED$$'
 
 CORS_ORIGIN_ALLOW_ALL = True
 

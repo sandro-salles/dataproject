@@ -24,7 +24,7 @@ Vagrant.configure("2") do |config|
         mem = 1024
       end
 
-      v.customize ["modifyvm", :id, "--memory", 1024*6]
+      v.customize ["modifyvm", :id, "--memory", 1024*10]
       v.customize ["modifyvm", :id, "--cpus", cpus]
     end
 

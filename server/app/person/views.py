@@ -2,46 +2,62 @@ from rest_framework import generics
 from rest_framework import permissions, status
 from rest_framework import filters
 from person.models import Person
-from person.serializers import PersonSerializer
+from person.serializers import PersonSerializer, PersonCounterWrapperSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from rest_framework_extensions.key_constructor import bits
-from rest_framework_extensions.key_constructor import constructors
-from rest_framework_extensions.cache.decorators import (
-    cache_response
-)
+from django.core.cache import cache
+from django.core.urlresolvers import resolve
 
-class QueryParamsKeyConstructor(constructors.KeyConstructor):
-    all_query_params = bits.QueryParamsKeyBit('*')
+
+from django.conf import settings
+
+
+def get_cache_key_from_querystring(request):
+    params = ','.join(['%s=%s' % (item[0], item[1])
+                       for item in request.GET.items()])
+    return '%s__%s' % (resolve(request.path).url_name, params)
+
+
+class PersonCounterWrapper:
+
+    def __init__(self, count, *args, **kwargs):
+        self.count = count
+
 
 class PersonCount(APIView):
 
-    @cache_response(60 * 60, key_func=QueryParamsKeyConstructor())
     def get(self, request, format=None):
 
-        qs = Person.objects.exclude(phones=None)
+        cache_key = get_cache_key_from_querystring(request)
+        count = cache.get(cache_key, settings.CACHE_EXPIRED_IDENTIFIER)
 
-        nature = request.GET.get('nature', '')
-        carrier = request.GET.get('carrier', '')
-        areacode = request.GET.get('areacode', '')
-        city = request.GET.get('city', '')
+        if str(count) == settings.CACHE_EXPIRED_IDENTIFIER:
 
+            qs = Person.objects.exclude(phones=None).only("id")
 
-        if nature:
-            qs = qs.filter(nature__in=nature.split('|'))
+            nature = request.GET.get('nature', '')
+            carrier = request.GET.get('carrier', '')
+            areacode = request.GET.get('areacode', '')
+            city = request.GET.get('city', '')
 
-        if carrier:
-            qs = qs.filter(phones__carrier_id__in=carrier.split('|'))
+            if nature:
+                qs = qs.filter(nature__in=nature.split('|'))
 
-        if areacode:
-            qs = qs.filter(phones__areacode__in=areacode.split('|'))
+            if carrier:
+                qs = qs.filter(phones__carrier_id__in=carrier.split('|'))
 
-        if city:
-            qs = qs.filter(phones__address__city__in=city.split('|'))
+            if areacode:
+                qs = qs.filter(phones__areacode__in=areacode.split('|'))
 
+            if city:
+                qs = qs.filter(phones__address__city__in=city.split('|'))
 
-        return Response(qs.distinct('id').count(), status=status.HTTP_200_OK)
+            count = qs.distinct('id').count()
+
+            cache.set(cache_key, count)
+
+        return Response(PersonCounterWrapperSerializer(PersonCounterWrapper(count)).data, status=status.HTTP_200_OK)
 
 
 class PersonList(generics.ListCreateAPIView):

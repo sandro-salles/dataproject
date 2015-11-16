@@ -76,7 +76,7 @@ app
                 .get('http://10.46.80.80:8080/person/count/?' + params)
                 .then(
                     function(response) {
-                        $scope.count = response.data;
+                        $scope.count = response.data.count;
                         $scope.counting = false;
                     },
                     function(response) {
