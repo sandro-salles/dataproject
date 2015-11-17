@@ -50,35 +50,35 @@
                                 <div class="form-group">
                                     <h4>Tipo de Registro</h4>
                                     <div>
-                                        <select ng-disabled="counting == true" chosen="{width: '100%'}" ng-model="filter.person.nature" ng-options="nature.id as nature.name for nature in natures" id="natures">
+                                        <select ng-disabled="counting == true" chosen="{width: '100%'}" ng-model="filter.nature" ng-options="nature.id as nature.name for nature in natures" id="natures">
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <h4>Operadora</h4>
                                     <div>
-                                        <select ng-disabled="counting == true" chosen="{width: '100%'}" ng-model="filter.contact.phone.carrier" ng-options="carrier.id as carrier.name for carrier in carriers" id="carriers">
+                                        <select ng-disabled="counting == true" chosen="{width: '100%'}" ng-model="filter.carrier" ng-options="carrier.id as carrier.name for carrier in carriers" id="carriers">
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <h4>DDD</h4>
                                     <div>
-                                        <select ng-disabled="counting == true" chosen="{width: '100%'}" ng-model="filter.contact.phone.areacode" ng-options="areacode.areacode as areacode.areacode for areacode in areacodes" id="areacodes">
+                                        <select ng-disabled="counting == true" chosen="{width: '100%'}" ng-model="filter.areacode" ng-options="areacode.areacode as areacode.areacode for areacode in areacodes" id="areacodes">
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <h4>Cidade</h4>
                                     <div>
-                                        <select ng-disabled="counting == true" chosen="{width: '100%'}" ng-model="filter.contact.phone.address.city" ng-options="city.city as city.city for city in cities" id="cities">
+                                        <select ng-disabled="counting == true" chosen="{width: '100%'}" ng-model="filter.city" ng-options="city.city as city.city for city in cities" id="cities">
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <h4>Bairro</h4>
                                     <div>
-                                        <select ng-disabled="counting == true" chosen="{width: '100%'}" ng-model="filter.contact.phone.address.neighborhood" ng-options="neighborhood.neighborhood as neighborhood.neighborhood for neighborhood in neighborhoods" id="neighborhoods">
+                                        <select ng-disabled="counting == true" chosen="{width: '100%'}" ng-model="filter.neighborhood" ng-options="neighborhood.neighborhood as neighborhood.neighborhood for neighborhood in neighborhoods" id="neighborhoods">
                                         </select>
                                     </div>
                                 </div>

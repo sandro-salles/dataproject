@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from person.contact.models import Carrier
 
 class PersonCountSerializer(serializers.Serializer):
     count = serializers.IntegerField()
@@ -19,25 +20,29 @@ class CarrierSerializer(serializers.ModelSerializer):
 
     class Meta:
         depth = 1
+        model = Carrier
         fields = ('id', 'name', 'slug')
 
 
-class AreacodeSerializer(serializers.ModelSerializer):
+class AreacodeSerializer(serializers.Serializer):
+    areacode = serializers.CharField()
 
     class Meta:
         depth = 1
         fields = ('areacode',)
 
 
-class CitySerializer(serializers.ModelSerializer):
+class CitySerializer(serializers.Serializer):
+    city = serializers.CharField()
 
     class Meta:
         depth = 1
         fields = ('city',)
 
 
-class NeighborhoodSerializer(serializers.ModelSerializer):
-
+class NeighborhoodSerializer(serializers.Serializer):
+    neighborhood = serializers.CharField()
+    
     class Meta:
         depth = 1
         fields = ('neighborhood',)

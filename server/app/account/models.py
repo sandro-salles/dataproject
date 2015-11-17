@@ -4,15 +4,7 @@ from core.models import DatableModel, SlugModel
 from django.contrib.auth.models import AbstractUser
 from polymorphic import PolymorphicModel
 
-class User(PolymorphicModel, AbstractUser):
 
-    class Meta:
-        verbose_name = u'Usuário interno'
-        verbose_name_plural = u'Usuários internos'
-        app_label = 'account'
-
-    def __unicode__(self):
-        return self.username
 
 
 class Feature(SlugModel, DatableModel):
@@ -26,7 +18,7 @@ class Feature(SlugModel, DatableModel):
     def __unicode__(self):
         return self.name 
 
-class Plan(SlugModel, DatableModel):
+class Plan(PolymorphicModel, SlugModel, DatableModel):
     description = models.TextField('Descricao', max_length=14, unique=True)
     features = models.ManyToManyField(Feature)
 
@@ -34,7 +26,6 @@ class Plan(SlugModel, DatableModel):
         verbose_name = 'Plano'
         verbose_name_plural = 'Planos'
         app_label = 'account'
-        abstract = True
 
     def __unicode__(self):
         return self.name    
@@ -98,6 +89,16 @@ class Corporation(SlugModel, DatableModel):
     def __unicode__(self):
         return self.name
 
+class User(AbstractUser):
+    
+    
+    class Meta:
+        verbose_name = u'Usuário interno'
+        verbose_name_plural = u'Usuários internos'
+        app_label = 'account'
+
+    def __unicode__(self):
+        return self.username
 
 class AppUser(User):
     corporation = models.ForeignKey(Corporation)

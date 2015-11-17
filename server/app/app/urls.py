@@ -1,7 +1,7 @@
 from django.conf.urls import include, patterns, url
 from django.contrib import admin
 from person.views import PersonList, PersonDetail
-from materalized.views import CarrierList, AreacodeList, CityList, NeighborhoodList, PersonCount
+from materialized.views import CarrierList, AreacodeList, CityList, NeighborhoodList, PersonCount
 from account.views import CorporationDetail
 from django.conf import settings
 

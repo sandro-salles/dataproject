@@ -11,9 +11,14 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterField(
+        migrations.RemoveField(
             model_name='user',
             name='corporation',
-            field=models.ForeignKey(blank=True, to='account.Corporation', null=True),
+        ),
+        migrations.AddField(
+            model_name='appuser',
+            name='corporation',
+            field=models.ForeignKey(default=1, to='account.Corporation'),
+            preserve_default=False,
         ),
     ]

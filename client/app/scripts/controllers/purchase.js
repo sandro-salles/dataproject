@@ -27,6 +27,8 @@ app
             }
         };
         
+        $scope.cart = {}
+        
         $scope.natures = [{
             id: 'P',
             name: 'Pessoa Física'
@@ -46,8 +48,8 @@ app
             
 
             try {
-                if ($scope.filter.person.nature) {
-                    $scope.carriers = Carrier.query({nature:$scope.filter.person.nature});
+                if ($scope.filter.nature) {
+                    $scope.carriers = Carrier.query({nature:$scope.filter.nature});
                     $scope.updateCount();      
                 }                
             } catch(error) {}            
@@ -55,8 +57,8 @@ app
 
         $scope.updateAreacodes = function() {
             try {
-                if ($scope.filter.contact.phone.carrier) {
-                    $scope.areacodes = Areacode.query({carrier:$scope.filter.contact.phone.carrier});
+                if ($scope.filter.carrier) {
+                    $scope.areacodes = Areacode.query({carrier:$scope.filter.carrier});
                     $scope.updateCount();
                 }
             } catch(error) {}
@@ -64,8 +66,8 @@ app
 
         $scope.updateCities = function() {
             try {
-                if ($scope.filter.contact.phone.areacode) {
-                    $scope.cities = City.query({areacode:$scope.filter.contact.phone.areacode});
+                if ($scope.filter.areacode) {
+                    $scope.cities = City.query({areacode:$scope.filter.areacode});
                     $scope.updateCount();
                 }
             } catch(error) {}
@@ -73,8 +75,8 @@ app
 
         $scope.updateNeighborhoods = function() {
             try {
-                if ($scope.filter.contact.phone.address.city) {
-                    $scope.neighborhoods = Neighborhood.query({city:$scope.filter.contact.phone.address.city});
+                if ($scope.filter.city) {
+                    $scope.neighborhoods = Neighborhood.query({city:$scope.filter.city});
                     $scope.updateCount();
                 }
             } catch(error) {}
@@ -87,55 +89,55 @@ app
             var data = {}
 
             try {
-                if ($scope.filter.person.nature) {
-                    data.nature = $scope.filter.person.nature;
+                if ($scope.filter.nature) {
+                    data.nature = $scope.filter.nature;
                 }
             } catch (error) {}
 
             try {
-                if ($scope.filter.contact.phone.carrier) {
-                    data.carrier = $scope.filter.contact.phone.carrier;
+                if ($scope.filter.carrier) {
+                    data.carrier = $scope.filter.carrier;
                 }
             } catch (error) {}
 
             try {
-                if ($scope.filter.contact.phone.areacode) {
-                    data.areacode = $scope.filter.contact.phone.areacode;
+                if ($scope.filter.areacode) {
+                    data.areacode = $scope.filter.areacode;
                 }
             } catch (error) {}
 
             try {
-                if ($scope.filter.contact.phone.address.city) {
-                    data.city = $scope.filter.contact.phone.address.city;
+                if ($scope.filter.city) {
+                    data.city = $scope.filter.city;
                 }
             } catch (error) {}
             
             try {
-                if ($scope.filter.contact.phone.address.neighborhood) {
-                    data.neighborhood = $scope.filter.contact.phone.address.neighborhood;
+                if ($scope.filter.neighborhood) {
+                    data.neighborhood = $scope.filter.neighborhood;
                 }
             } catch (error) {}
 
             var params = jQuery.param(data);
 
             $http
-                .get('http://10.46.80.80:8080/person/count/?' + params)
+                .get('http://10.46.80.80:8080/filter/person/count/?' + params)
                 .then(
                     function(response) {
                         $scope.count = response.data.count;
                         $scope.counting = false;
                     },
                     function(response) {
-
+                        console.log(response);
                     }
                 );
         }
 
-        $scope.$watch('filter.person.nature', $scope.updateCarriers, true);
-        $scope.$watch('filter.contact.phone.carrier', $scope.updateAreacodes);
-        $scope.$watch('filter.contact.phone.areacode', $scope.updateCities);
-        $scope.$watch('filter.contact.phone.address.city', $scope.updateNeighborhoods, true);
-        $scope.$watch('filter.contact.phone.address.neighborhood', $scope.updateCount, true);
+        $scope.$watch('filter.nature', $scope.updateCarriers, true);
+        $scope.$watch('filter.carrier', $scope.updateAreacodes);
+        $scope.$watch('filter.areacode', $scope.updateCities);
+        $scope.$watch('filter.city', $scope.updateNeighborhoods, true);
+        $scope.$watch('filter.neighborhood', $scope.updateCount, true);
 
     }])
     .filter('cpf', function() {
