@@ -35,10 +35,10 @@
                                     <div class="tile-body text-center p-0">
                                         <md-progress-linear class="md-warn md-hue-1" md-mode="indeterminate" ng-show="counting == true"></md-progress-linear>
                                         <div class="p-30">
-                                            <h1 class="m-0" ng-hide="counting == true">{{ count | brl }}</h1>
+                                            <h1 class="m-0" ng-hide="counting == true">{{ count | number }}</h1>
                                             <h1 class="m-0" ng-show="counting == true">0</h1>
-                                            <span class="text-muted" ng-hide="counting == true">Registros selecionados</span>
-                                            <span class="text-muted" ng-show="counting == true">Selecionando os registros, por favor aguarde... </span>
+                                            <span class="text-muted" ng-hide="counting == true">Contato(s) encontrado(s)</span>
+                                            <span class="text-muted" ng-show="counting == true">Selecionando os contatos, por favor aguarde... </span>
                                         </div>
                                         <div>
                                         </div>
@@ -46,35 +46,59 @@
                                     <!-- /tile body -->
                                 </section>
                             </div>
-                            <div class="col-md-8">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <h4>Tipo de Registro</h4>
                                     <div>
-                                        <select ng-disabled="counting == true" multiple chosen="{width: '100%'}" ng-model="filter.person.nature" ng-options="nature.id as nature.name for nature in natures" id="natures">
+                                        <select ng-disabled="counting == true" chosen="{width: '100%'}" ng-model="filter.person.nature" ng-options="nature.id as nature.name for nature in natures" id="natures">
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <h4>Operadora</h4>
                                     <div>
-                                        <select ng-disabled="counting == true" multiple chosen="{width: '100%'}" ng-model="filter.contact.phone.carrier" ng-options="carrier.id as carrier.name for carrier in carriers" id="carriers">
+                                        <select ng-disabled="counting == true" chosen="{width: '100%'}" ng-model="filter.contact.phone.carrier" ng-options="carrier.id as carrier.name for carrier in carriers" id="carriers">
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <h4>DDD</h4>
                                     <div>
-                                        <select ng-disabled="counting == true" multiple chosen="{width: '100%'}" ng-model="filter.contact.phone.areacode" ng-options="areacode.areacode as areacode.areacode for areacode in areacodes" id="areacodes">
+                                        <select ng-disabled="counting == true" chosen="{width: '100%'}" ng-model="filter.contact.phone.areacode" ng-options="areacode.areacode as areacode.areacode for areacode in areacodes" id="areacodes">
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <h4>Cidade</h4>
                                     <div>
-                                        <select ng-disabled="counting == true" multiple chosen="{width: '100%'}" ng-model="filter.contact.phone.address.city" ng-options="city.city as city.city for city in cities" id="cities">
+                                        <select ng-disabled="counting == true" chosen="{width: '100%'}" ng-model="filter.contact.phone.address.city" ng-options="city.city as city.city for city in cities" id="cities">
                                         </select>
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <h4>Bairro</h4>
+                                    <div>
+                                        <select ng-disabled="counting == true" chosen="{width: '100%'}" ng-model="filter.contact.phone.address.neighborhood" ng-options="neighborhood.neighborhood as neighborhood.neighborhood for neighborhood in neighborhoods" id="neighborhoods">
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <section class="tile tile-simple bg-dutch-light">
+                                    <!-- tile widget -->
+                                    <div class="tile-widget bg-lightred text-center p-30"> <i class="fa fa-shopping-cart fa-5x"></i>
+                                    </div>
+                                    <!-- /tile widget -->
+                                    <!-- tile body -->
+                                    <div class="tile-body text-center p-0">
+                                        <md-progress-linear class="md-warn md-hue-1" md-mode="indeterminate" ng-show="counting == true"></md-progress-linear>
+                                        <div class="p-30">
+                                            <h1 class="m-0" ng-hide="counting == true">R$ {{ (count * 0.005) | brl }}</h1>
+                                            <h1 class="m-0" ng-show="counting == true">R$ 0,00</h1>
+                                        </div>
+                                    </div>
+                                    <!-- /tile body -->
+                                </section>
                             </div>
                             <div class="col-md-12">
                                 <button ng-disabled="counting == true" type="submit" ng-disabled="step1.$invalid" class="btn btn-default btn-ef btn-ef-7 btn-ef-7a mb-10" ng-click="steps.step2=true"><i class="fa fa-shopping-cart"></i><span ng-hide="counting == true">Finalizar pedido</span><span ng-show="counting == true">Aguarde...</span></button>
@@ -88,25 +112,6 @@
                         <span class="badge badge-default pull-right wizard-step">2</span>
                     </tab-heading>
                     <form name="step2" role="form" novalidate>
-                        <div class="col-md-4 text-center">
-                            <section class="tile tile-simple bg-dutch-light">
-                                <!-- tile widget -->
-                                <div class="tile-widget bg-lightred text-center p-30"> <i class="fa fa-shopping-cart fa-5x"></i>
-                                </div>
-                                <!-- /tile widget -->
-                                <!-- tile body -->
-                                <div class="tile-body text-center p-0">
-                                    <md-progress-linear class="md-warn md-hue-1" md-mode="indeterminate" ng-show="counting == true"></md-progress-linear>
-                                    <div class="p-30">
-                                        <h1 class="m-0" ng-hide="counting == true">R$ {{ (count * 0.005) | brl }}</h1>
-                                        <h1 class="m-0" ng-show="counting == true">R$ 0,00</h1>
-                                        <input type="number" class="input-lg mb-10 text-darkgray" ng-hide="counting == true" value="{{ count }}">
-                                        <hr />
-                                    </div>
-                                </div>
-                                <!-- /tile body -->
-                            </section>
-                        </div>
                         <div class="col-md-4 text-center">
                             <section class="tile tile-simple bg-dutch-light">
                                 <!-- tile widget -->

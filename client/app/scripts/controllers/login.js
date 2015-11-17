@@ -17,7 +17,7 @@ app
 
             var origin = $location.search().origin;
 
-            if (typeof origin !== 'undefined') {
+            if (typeof origin !== 'undefined' && origin) {
                 $window.location = '#' + decodeURIComponent(origin);
             } else {
                 $window.location = '#/app/dashboard/';

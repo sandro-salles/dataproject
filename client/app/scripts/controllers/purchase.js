@@ -14,14 +14,19 @@ app
             subtitle: 'Place subtitle here...'
         };
 
+        $scope.counting = true;
+
         $scope.filter = {
             person: {
                 nature: ''
+            },
+            contact: {
+                phone: {
+                    carrier: ''
+                }
             }
         };
-
-
-        $scope.counting = true;
+        
         $scope.natures = [{
             id: 'P',
             name: 'Pessoa Física'
@@ -30,12 +35,50 @@ app
             name: 'Pessoa Jurídica'
         }];
 
-        $scope.carriers = Carrier.query();
-        $scope.areacodes = Areacode.query();
-        $scope.cities = City.query();
-
+        $scope.carriers = [];
+        $scope.areacodes = [];
+        $scope.cities = [];
+        $scope.neighborhoods = [];
 
         $scope.count = 0;
+
+        $scope.updateCarriers = function() {
+            
+
+            try {
+                if ($scope.filter.person.nature) {
+                    $scope.carriers = Carrier.query({nature:$scope.filter.person.nature});
+                    $scope.updateCount();      
+                }                
+            } catch(error) {}            
+        }
+
+        $scope.updateAreacodes = function() {
+            try {
+                if ($scope.filter.contact.phone.carrier) {
+                    $scope.areacodes = Areacode.query({carrier:$scope.filter.contact.phone.carrier});
+                    $scope.updateCount();
+                }
+            } catch(error) {}
+        }
+
+        $scope.updateCities = function() {
+            try {
+                if ($scope.filter.contact.phone.areacode) {
+                    $scope.cities = City.query({areacode:$scope.filter.contact.phone.areacode});
+                    $scope.updateCount();
+                }
+            } catch(error) {}
+        }
+
+        $scope.updateNeighborhoods = function() {
+            try {
+                if ($scope.filter.contact.phone.address.city) {
+                    $scope.neighborhoods = Neighborhood.query({city:$scope.filter.contact.phone.address.city});
+                    $scope.updateCount();
+                }
+            } catch(error) {}
+        }
 
         $scope.updateCount = function() {
 
@@ -44,29 +87,32 @@ app
             var data = {}
 
             try {
-                if ($scope.filter.person.nature && $scope.filter.person.nature.length && $scope.filter.person.nature.length < $scope.natures.length) {
-                    data.nature = $scope.filter.person.nature.join('|');
+                if ($scope.filter.person.nature) {
+                    data.nature = $scope.filter.person.nature;
                 }
             } catch (error) {}
 
             try {
-                if ($scope.filter.contact.phone.carrier && $scope.filter.contact.phone.carrier.length && $scope.filter.contact.phone.carrier.length < $scope.carriers.length) {
-
-                    data.carrier = $scope.filter.contact.phone.carrier.join('|');
+                if ($scope.filter.contact.phone.carrier) {
+                    data.carrier = $scope.filter.contact.phone.carrier;
                 }
             } catch (error) {}
 
             try {
-                if ($scope.filter.contact.phone.areacode && $scope.filter.contact.phone.areacode.length && $scope.filter.contact.phone.areacode.length < $scope.areacodes.length) {
-
-                    data.areacode = $scope.filter.contact.phone.areacode.join('|');
+                if ($scope.filter.contact.phone.areacode) {
+                    data.areacode = $scope.filter.contact.phone.areacode;
                 }
             } catch (error) {}
 
             try {
-                if ($scope.filter.contact.phone.address.city && $scope.filter.contact.phone.address.city.length && $scope.filter.contact.phone.address.city.length < $scope.cities.length) {
-
-                    data.city = $scope.filter.contact.phone.address.city.join('|');
+                if ($scope.filter.contact.phone.address.city) {
+                    data.city = $scope.filter.contact.phone.address.city;
+                }
+            } catch (error) {}
+            
+            try {
+                if ($scope.filter.contact.phone.address.neighborhood) {
+                    data.neighborhood = $scope.filter.contact.phone.address.neighborhood;
                 }
             } catch (error) {}
 
@@ -85,7 +131,11 @@ app
                 );
         }
 
-        $scope.$watch('filter', $scope.updateCount, true);
+        $scope.$watch('filter.person.nature', $scope.updateCarriers, true);
+        $scope.$watch('filter.contact.phone.carrier', $scope.updateAreacodes);
+        $scope.$watch('filter.contact.phone.areacode', $scope.updateCities);
+        $scope.$watch('filter.contact.phone.address.city', $scope.updateNeighborhoods, true);
+        $scope.$watch('filter.contact.phone.address.neighborhood', $scope.updateCount, true);
 
     }])
     .filter('cpf', function() {

@@ -49,6 +49,7 @@ INSTALLED_APPS = (
     'localflavor',
     'reversion',
     'polymorphic',
+    'materialized',
     'geo',
     'core',
     'account',
@@ -151,7 +152,7 @@ CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
         'LOCATION': '/var/tmp/django_cache',
-        'TIMEOUT': 1296000, # 15 days
+        'TIMEOUT': 1296000,  # 15 days
         'KEY_PREFIX': 'dev_'
     }
 }
@@ -174,8 +175,25 @@ JWT_AUTH = {
     'JWT_RESPONSE_PAYLOAD_HANDLER': jwt_response_payload_handler
 }
 
+MIN_STANDALONE_CHECKOUT_AMOUNT = 2.000
+
+STANDALONE_UNIT_PRICE_RANGES = [
+    {
+        'price': 0.015,
+        'range':  (MIN_STANDALONE_CHECKOUT_AMOUNT, 99999)
+    },
+    {
+        'price': 0.010,
+        'range': (100000, 599999)
+    },
+    {
+        'price': 0.005,
+        'range': (600000, None)
+    }
+]
 
 
+    
 DEBUG_TOOLBAR_PATCH_SETTINGS = True
 
 DEBUG_TOOLBAR_CONFIG = {

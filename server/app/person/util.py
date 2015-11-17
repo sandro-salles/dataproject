@@ -27,3 +27,6 @@ def validate_cnpj(number):
         return number
     except ValidationError:
         raise CNPJValidationError('Numero de CNPJ invalido - (%s)' % number)
+
+
+

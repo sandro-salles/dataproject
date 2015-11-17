@@ -9,5 +9,3 @@ class PersonSerializer(serializers.ModelSerializer):
         depth = 1
 
 
-class PersonCounterWrapperSerializer(serializers.Serializer):
-    count = serializers.IntegerField()

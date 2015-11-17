@@ -95,7 +95,13 @@ var app = angular
             var loggedIn = $rootScope.globals.currentUser;
             if (restricted && (!loggedIn || jwtHelper.isTokenExpired(loggedIn.token))) {
                 AuthService.ClearCredentials();
-                $location.path('/core/login/').search('origin', encodeURIComponent(current_path));
+
+                if (current_path) {
+                    $location.path('/core/login/').search('origin', encodeURIComponent(current_path));    
+                } else {
+                    $location.path('/core/login/');
+                }
+                
             }
         };
 
