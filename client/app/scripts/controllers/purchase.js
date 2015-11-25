@@ -8,138 +8,172 @@
  * Controller of the CONTACTPRO
  */
 app
-    .controller('PurchaseCtrl', ['$scope', '$http', 'Carrier', 'Areacode', 'City', 'Neighborhood', function($scope, $http, Carrier, Areacode, City, Neighborhood) {
-        $scope.page = {
-            title: 'Comprar coleção de registros',
-            subtitle: 'Place subtitle here...'
-        };
-
-        $scope.counting = true;
-
-        $scope.filter = {
-            person: {
-                nature: ''
-            },
-            contact: {
-                phone: {
-                    carrier: ''
-                }
-            }
-        };
-        
-        $scope.cart = {}
-        
-        $scope.natures = [{
-            id: 'P',
-            name: 'Pessoa Física'
-        }, {
-            id: 'L',
-            name: 'Pessoa Jurídica'
-        }];
-
-        $scope.carriers = [];
-        $scope.areacodes = [];
-        $scope.cities = [];
-        $scope.neighborhoods = [];
-
-        $scope.count = 0;
-
-        $scope.updateCarriers = function() {
-            
-
-            try {
-                if ($scope.filter.nature) {
-                    $scope.carriers = Carrier.query({nature:$scope.filter.nature});
-                    $scope.updateCount();      
-                }                
-            } catch(error) {}            
-        }
-
-        $scope.updateAreacodes = function() {
-            try {
-                if ($scope.filter.carrier) {
-                    $scope.areacodes = Areacode.query({carrier:$scope.filter.carrier});
-                    $scope.updateCount();
-                }
-            } catch(error) {}
-        }
-
-        $scope.updateCities = function() {
-            try {
-                if ($scope.filter.areacode) {
-                    $scope.cities = City.query({areacode:$scope.filter.areacode});
-                    $scope.updateCount();
-                }
-            } catch(error) {}
-        }
-
-        $scope.updateNeighborhoods = function() {
-            try {
-                if ($scope.filter.city) {
-                    $scope.neighborhoods = Neighborhood.query({city:$scope.filter.city});
-                    $scope.updateCount();
-                }
-            } catch(error) {}
-        }
-
-        $scope.updateCount = function() {
+    .controller('PurchaseCtrl', 
+        ['$scope', '$http', 'Cart', 'Criteria', 'Carrier', 'Areacode', 'City', 'Neighborhood', 
+        function($scope, $http, Cart, Criteria, Carrier, Areacode, City, Neighborhood) {
+            $scope.page = {
+                title: 'Comprar coleção de registros',
+                subtitle: 'Place subtitle here...'
+            };
 
             $scope.counting = true;
+            $scope.updating = true;
 
-            var data = {}
+            $scope.filter = {
+                nature: '',
+                carrier: '',
+                areacode: '',
+                city: '',
+                neighborhood: ''
+            };
 
-            try {
+            $scope.cart = Cart.query();
+
+            $scope.natures = [{
+                id: 'P',
+                name: 'Pessoa Física'
+            }, {
+                id: 'L',
+                name: 'Pessoa Jurídica'
+            }];
+
+            $scope.carriers = [];
+            $scope.areacodes = [];
+            $scope.cities = [];
+            $scope.neighborhoods = [];
+
+            $scope.count = 0;
+
+            $scope.addCriteria = function() {
+                $scope.cart = Criteria.save({}, $scope.filter)
+            }
+
+            $scope.deleteCriteria = function() {
+                $scope.cart = Criteria.delete({}, $scope.filter)
+            }
+
+            $scope.updateCarriers = function() {
+
                 if ($scope.filter.nature) {
-                    data.nature = $scope.filter.nature;
-                }
-            } catch (error) {}
 
-            try {
+                    $scope.updating = true;
+
+                    $scope.carriers = Carrier.query({
+                        nature: $scope.filter.nature
+                    });
+
+                    $scope.carriers.$promise.then(function(result) {
+                        $scope.carriers = result;
+
+                        $scope.areacodes = [];
+                        $scope.cities = [];
+                        $scope.neighborhoods = [];
+
+                        $scope.updateCount();
+                    });
+
+                }
+            }
+
+            $scope.updateAreacodes = function() {
+
                 if ($scope.filter.carrier) {
-                    data.carrier = $scope.filter.carrier;
-                }
-            } catch (error) {}
 
-            try {
+                    $scope.updating = true;
+
+                    $scope.areacodes = Areacode.query({
+                        nature: $scope.filter.nature,
+                        carrier: $scope.filter.carrier
+                    });
+
+                    $scope.areacodes.$promise.then(function(result) {
+                        $scope.areacodes = result;
+
+                        $scope.cities = [];
+                        $scope.neighborhoods = [];
+                        $scope.updateCount();
+                    });
+
+                }
+            }
+
+            $scope.updateCities = function() {
+
                 if ($scope.filter.areacode) {
-                    data.areacode = $scope.filter.areacode;
-                }
-            } catch (error) {}
 
-            try {
+                    $scope.updating = true;
+
+                    $scope.cities = City.query({
+                        nature: $scope.filter.nature,
+                        carrier: $scope.filter.carrier,
+                        areacode: $scope.filter.areacode
+                    });
+
+                    $scope.cities.$promise.then(function(result) {
+                        $scope.cities = result;
+
+                        $scope.neighborhoods = [];
+
+                        $scope.updateCount();
+                    });
+
+                }
+
+            }
+
+            $scope.updateNeighborhoods = function() {
+
                 if ($scope.filter.city) {
-                    data.city = $scope.filter.city;
-                }
-            } catch (error) {}
-            
-            try {
-                if ($scope.filter.neighborhood) {
-                    data.neighborhood = $scope.filter.neighborhood;
-                }
-            } catch (error) {}
 
-            var params = jQuery.param(data);
+                    $scope.updating = true;
 
-            $http
-                .get('http://10.46.80.80:8080/filter/person/count/?' + params)
-                .then(
-                    function(response) {
-                        $scope.count = response.data.count;
-                        $scope.counting = false;
-                    },
-                    function(response) {
-                        console.log(response);
-                    }
-                );
+                    $scope.neighborhoods = Neighborhood.query({
+                        nature: $scope.filter.nature,
+                        carrier: $scope.filter.carrier,
+                        areacode: $scope.filter.areacode,
+                        city: $scope.filter.city
+                    });
+
+                    $scope.neighborhoods.$promise.then(function(result) {
+                        $scope.neighborhoods = result;
+                        $scope.updateCount();
+                    });
+                }
+            }
+
+            $scope.updateCount = function() {
+
+                $scope.counting = true;
+                $scope.updating = true;
+
+                var params = jQuery.param($scope.filter);
+
+                $http
+                    .get('http://10.46.80.80:8080/filter/person/count/?' + params)
+                    .then(
+                        function(response) {
+                            $scope.count = response.data.count;
+                        },
+                        function(response) {
+                            console.log(response);
+                        }
+                    )
+                    .finally(
+                        function() {
+                            $scope.counting = false;
+                            $scope.updating = false;
+                        }
+                    );
+            }
+
+            $scope.$watch('filter.nature', $scope.updateCarriers, true);
+            $scope.$watch('filter.carrier', $scope.updateAreacodes);
+            $scope.$watch('filter.areacode', $scope.updateCities);
+            $scope.$watch('filter.city', $scope.updateNeighborhoods, true);
+            $scope.$watch('filter.neighborhood', $scope.updateCount, true);
+
         }
-
-        $scope.$watch('filter.nature', $scope.updateCarriers, true);
-        $scope.$watch('filter.carrier', $scope.updateAreacodes);
-        $scope.$watch('filter.areacode', $scope.updateCities);
-        $scope.$watch('filter.city', $scope.updateNeighborhoods, true);
-        $scope.$watch('filter.neighborhood', $scope.updateCount, true);
-
-    }])
+    ])
     .filter('cpf', function() {
         return function(item) {
             return item.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/g, "\$1.\$2.\$3\-\$4");

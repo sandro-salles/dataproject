@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django.utils.translation import ugettext as _
+from django.utils.functional import cached_property
 from core.models import DatableModel
-from account.models import Account, AppUser
+from account.models import Account, User
 from person.contact.models import Carrier
 from polymorphic import PolymorphicModel
-from person.models import Person
+from materialized.util import PersonCounter
 
 from django.contrib.postgres.fields import IntegerRangeField
 
@@ -18,42 +19,36 @@ PAYMENT_METHOD_CHOICES = (
     PAYMENT_METHOD_CHOICES_DEPOSIT
 )
 
-
-class Purchasable(PolymorphicModel, DatableModel):
-
-    class Meta:
-        verbose_name = _('Produto')
-        verbose_name_plural = _('Produtos')
-
-    def __unicode__(self):
-        return self.id
-
-
-class Checkout(Purchasable):
+class Checkout(PolymorphicModel, DatableModel):
 
     class Meta:
         verbose_name = _('Checkout de Dados')
         verbose_name_plural = _('Checkouts de Dados')
 
     def __unicode__(self):
-        return self.id
+        return str(self.id)
 
 
 class CheckoutCriteria(models.Model):
 
     checkout = models.ForeignKey(Checkout, related_name='criteria')
-    nature = models.CharField(_(u'Person Nature'), max_length=1, db_index=True)
-    carrier = models.ForeignKey(Carrier)
-    areacode = models.CharField(_(u'DDD'), max_length=2, db_index=True)
-    city = models.CharField(_(u'Cidade'), max_length=200, db_index=True)
-    neighborhood = models.CharField(_(u'Bairro'), max_length=200, db_index=True)
+    nature = models.CharField(_(u'Person Nature'), max_length=1, null=True, blank=True, db_index=True)
+    carrier = models.ForeignKey(Carrier, null=True, blank=True)
+    areacode = models.CharField(_(u'DDD'), max_length=2, null=True, blank=True, db_index=True)
+    city = models.CharField(_(u'Cidade'), max_length=200, null=True, blank=True, db_index=True)
+    neighborhood = models.CharField(_(u'Bairro'), max_length=200, null=True, blank=True, db_index=True)
+    count = models.IntegerField(_(u'Total de registros únicos'), editable=False)
 
     class Meta:
         verbose_name = _(u'Criterio de seleção de dados')
         verbose_name_plural = _(u'Criterios de seleção de dados')
 
+    def save(self, *args, **kwargs):
+        self.count = PersonCounter.count((self.nature, self.carrier.id, self.areacode, self.city, self.neighborhood))
+        super(CheckoutCriteria, self).save(*args, **kwargs)
+
     def __unicode__(self):
-        return self.id
+        return str((self.nature, self.carrier.id, self.areacode, self.city, self.neighborhood))
 
 
 class Match(Checkout):
@@ -75,31 +70,29 @@ class Cart(DatableModel):
     account = models.ForeignKey(Account)
     status = models.CharField(_('Status'), max_length=14, db_index=True,
                               choices=STATUS_CHOICES, default=STATUS_CHOICES_CREATED[0])
+    
+    total = models.FloatField(_('Valor total da compra'), null=True, blank=True)
+    price_per_unit = models.FloatField(_(u'Preço por registro'), null=True, blank=True, editable=False)
+    price_per_unit_range = IntegerRangeField(_(u'Faixa de preço por registro'), null=True, blank=True, editable=False)
+
+    items = models.ManyToManyField(Checkout)
+
+    @cached_property
+    def count(self):
+        return sum([criteria.count for criteria in [purchasable.criteria for purchasable in [item.purchasable for item in self.items.all()]]])
 
     class Meta:
         verbose_name = _('Carrinho de compras')
         verbose_name_plural = _('Carrinhos de compras')
 
     def __unicode__(self):
-        return self.account
-
-
-class CartItem(DatableModel):
-    cart = models.ForeignKey(Cart, related_name='items')
-    purchasable = models.ForeignKey(Purchasable)
-
-    class Meta:
-        verbose_name = _('Item de Carrinho de compras')
-        verbose_name_plural = _('Itens de Carrinho de compras')
-
-    def __unicode__(self):
-        return self.cart
+        return self.account.name
 
 
 class Purchase(PolymorphicModel, DatableModel):
 
     cart = models.ForeignKey(Cart)
-    buyer = models.ForeignKey(AppUser)
+    buyer = models.ForeignKey(User)
 
     total = models.FloatField(_('Valor total da compra'))
     price_per_unit = models.FloatField(_(u'Preço por registro'))
@@ -109,24 +102,14 @@ class Purchase(PolymorphicModel, DatableModel):
                               choices=PAYMENT_METHOD_CHOICES, default=PAYMENT_METHOD_CHOICES_BILLET[0])
     num_installments = models.IntegerField(_(u'Número de parcelas'), default=1)
 
+    items = models.ManyToManyField(Checkout)
+
     class Meta:
         verbose_name = _('Compra')
         verbose_name_plural = _('Compra')
 
     def __unicode__(self):
         return self.cart
-
-
-class PurchaseItem(PolymorphicModel, DatableModel):
-    purchase = models.ForeignKey(Purchase, related_name='items')
-    purchasable = models.ForeignKey(Purchasable)
-
-    class Meta:
-        verbose_name = _('Item de Compra')
-        verbose_name_plural = _('Itens de Compra')
-
-    def __unicode__(self):
-        return self.collection
 
 
 class Payment(models.Model):
@@ -144,6 +127,7 @@ class Payment(models.Model):
 
     ref_installment = models.IntegerField(
         _(u'Parcela de referência'), default=1)
+
     settled_at = models.DateTimeField(_('Pago em'))
 
     class Meta:

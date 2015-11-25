@@ -2,14 +2,14 @@
 
 from django.db import models
 from django.utils.translation import ugettext as _
-from core.models import DatableModel, SlugModel
+from core.models import DatableModel, SluggableModel
 from core.util import normalize_text
 from person.models import Person
 from localflavor.br.br_states import STATE_CHOICES
 from db.models.manager import UpsertManager
 
 
-class Carrier(SlugModel, DatableModel):
+class Carrier(SluggableModel, DatableModel):
 
     verbose_name = _("Operadora de Telefonia")
     verbose_name_plural = _("Operadoras de Telefonia")

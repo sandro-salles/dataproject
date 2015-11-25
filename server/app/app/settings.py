@@ -52,6 +52,7 @@ INSTALLED_APPS = (
     'materialized',
     'geo',
     'core',
+    'authentication',
     'account',
     'commerce',
     'person',
@@ -164,6 +165,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 def jwt_response_payload_handler(token, user=None, request=None):
     from account.serializers import UserSerializer
+    
     return {
         'token': token,
         'user': UserSerializer(user).data
@@ -202,4 +204,4 @@ DEBUG_TOOLBAR_CONFIG = {
 
 INTERNAL_IPS = ('10.46.80.1',)
 
-AUTH_USER_MODEL = 'account.User'
+AUTH_USER_MODEL = 'authentication.User'

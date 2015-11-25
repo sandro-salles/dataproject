@@ -21,6 +21,9 @@ class Migration(migrations.Migration):
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True, null=True)),
                 ('status', models.CharField(default=b'created', max_length=14, verbose_name='Status', db_index=True, choices=[(b'created', 'Criado'), (b'finished', 'Finalizado')])),
+                ('total', models.FloatField(null=True, verbose_name='Valor total da compra', blank=True)),
+                ('price_per_unit', models.FloatField(verbose_name='Pre\xe7o por registro', null=True, editable=False, blank=True)),
+                ('price_per_unit_range', django.contrib.postgres.fields.ranges.IntegerRangeField(verbose_name='Faixa de pre\xe7o por registro', null=True, editable=False, blank=True)),
                 ('account', models.ForeignKey(to='account.Account')),
             ],
             options={
@@ -29,27 +32,27 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name='CartItem',
+            name='Checkout',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True, null=True)),
-                ('cart', models.ForeignKey(related_name='items', to='commerce.Cart')),
             ],
             options={
-                'verbose_name': 'Item de Carrinho de compras',
-                'verbose_name_plural': 'Itens de Carrinho de compras',
+                'verbose_name': 'Checkout de Dados',
+                'verbose_name_plural': 'Checkouts de Dados',
             },
         ),
         migrations.CreateModel(
             name='CheckoutCriteria',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('nature', models.CharField(max_length=1, verbose_name='Person Nature', db_index=True)),
-                ('areacode', models.CharField(max_length=2, verbose_name='DDD', db_index=True)),
-                ('city', models.CharField(max_length=200, verbose_name='Cidade', db_index=True)),
-                ('neighborhood', models.CharField(max_length=200, verbose_name='Bairro', db_index=True)),
-                ('carrier', models.ForeignKey(to='contact.Carrier')),
+                ('nature', models.CharField(db_index=True, max_length=1, null=True, verbose_name='Person Nature', blank=True)),
+                ('areacode', models.CharField(db_index=True, max_length=2, null=True, verbose_name='DDD', blank=True)),
+                ('city', models.CharField(db_index=True, max_length=200, null=True, verbose_name='Cidade', blank=True)),
+                ('neighborhood', models.CharField(db_index=True, max_length=200, null=True, verbose_name='Bairro', blank=True)),
+                ('count', models.IntegerField(verbose_name='Total de registros \xfanicos', editable=False)),
+                ('carrier', models.ForeignKey(blank=True, to='contact.Carrier', null=True)),
             ],
             options={
                 'verbose_name': 'Criterio de sele\xe7\xe3o de dados',
@@ -71,18 +74,6 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name='Purchasable',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True, null=True)),
-            ],
-            options={
-                'verbose_name': 'Produto',
-                'verbose_name_plural': 'Produtos',
-            },
-        ),
-        migrations.CreateModel(
             name='Purchase',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
@@ -93,63 +84,13 @@ class Migration(migrations.Migration):
                 ('price_per_unit_range', django.contrib.postgres.fields.ranges.IntegerRangeField(verbose_name='Faixa de pre\xe7o por registro')),
                 ('method', models.CharField(default=b'billet', max_length=14, verbose_name='M\xe9todo de pagamento', db_index=True, choices=[(b'billet', b'Boleto'), (b'deposit', b'Deposito')])),
                 ('num_installments', models.IntegerField(default=1, verbose_name='N\xfamero de parcelas')),
-                ('buyer', models.ForeignKey(to='account.AppUser')),
+                ('buyer', models.ForeignKey(to='account.User')),
                 ('cart', models.ForeignKey(to='commerce.Cart')),
-                ('polymorphic_ctype', models.ForeignKey(related_name='polymorphic_commerce.purchase_set+', editable=False, to='contenttypes.ContentType', null=True)),
             ],
             options={
                 'verbose_name': 'Compra',
                 'verbose_name_plural': 'Compra',
             },
-        ),
-        migrations.CreateModel(
-            name='PurchaseItem',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True, null=True)),
-                ('polymorphic_ctype', models.ForeignKey(related_name='polymorphic_commerce.purchaseitem_set+', editable=False, to='contenttypes.ContentType', null=True)),
-            ],
-            options={
-                'verbose_name': 'Item de Compra',
-                'verbose_name_plural': 'Itens de Compra',
-            },
-        ),
-        migrations.CreateModel(
-            name='Checkout',
-            fields=[
-                ('purchasable_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='commerce.Purchasable')),
-            ],
-            options={
-                'verbose_name': 'Checkout de Dados',
-                'verbose_name_plural': 'Checkouts de Dados',
-            },
-            bases=('commerce.purchasable',),
-        ),
-        migrations.AddField(
-            model_name='purchaseitem',
-            name='purchasable',
-            field=models.ForeignKey(to='commerce.Purchasable'),
-        ),
-        migrations.AddField(
-            model_name='purchaseitem',
-            name='purchase',
-            field=models.ForeignKey(related_name='items', to='commerce.Purchase'),
-        ),
-        migrations.AddField(
-            model_name='purchasable',
-            name='polymorphic_ctype',
-            field=models.ForeignKey(related_name='polymorphic_commerce.purchasable_set+', editable=False, to='contenttypes.ContentType', null=True),
-        ),
-        migrations.AddField(
-            model_name='payment',
-            name='purchase',
-            field=models.ForeignKey(to='commerce.Purchase'),
-        ),
-        migrations.AddField(
-            model_name='cartitem',
-            name='purchasable',
-            field=models.ForeignKey(to='commerce.Purchasable'),
         ),
         migrations.CreateModel(
             name='Match',
@@ -163,8 +104,33 @@ class Migration(migrations.Migration):
             bases=('commerce.checkout',),
         ),
         migrations.AddField(
+            model_name='purchase',
+            name='items',
+            field=models.ManyToManyField(to='commerce.Checkout'),
+        ),
+        migrations.AddField(
+            model_name='purchase',
+            name='polymorphic_ctype',
+            field=models.ForeignKey(related_name='polymorphic_commerce.purchase_set+', editable=False, to='contenttypes.ContentType', null=True),
+        ),
+        migrations.AddField(
+            model_name='payment',
+            name='purchase',
+            field=models.ForeignKey(to='commerce.Purchase'),
+        ),
+        migrations.AddField(
             model_name='checkoutcriteria',
             name='checkout',
             field=models.ForeignKey(related_name='criteria', to='commerce.Checkout'),
+        ),
+        migrations.AddField(
+            model_name='checkout',
+            name='polymorphic_ctype',
+            field=models.ForeignKey(related_name='polymorphic_commerce.checkout_set+', editable=False, to='contenttypes.ContentType', null=True),
+        ),
+        migrations.AddField(
+            model_name='cart',
+            name='items',
+            field=models.ManyToManyField(to='commerce.Checkout'),
         ),
     ]

@@ -2,39 +2,19 @@
 from __future__ import unicode_literals
 
 from django.db import migrations, models
-import django.utils.timezone
 from django.conf import settings
-import django.core.validators
+import authentication.models
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
+        ('authentication', '__first__'),
         ('contenttypes', '0002_remove_content_type_name'),
-        ('auth', '0006_require_contenttypes_0002'),
+        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
-        migrations.CreateModel(
-            name='User',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('password', models.CharField(max_length=128, verbose_name='password')),
-                ('last_login', models.DateTimeField(null=True, verbose_name='last login', blank=True)),
-                ('is_superuser', models.BooleanField(default=False, help_text='Designates that this user has all permissions without explicitly assigning them.', verbose_name='superuser status')),
-                ('username', models.CharField(error_messages={'unique': 'A user with that username already exists.'}, max_length=30, validators=[django.core.validators.RegexValidator('^[\\w.@+-]+$', 'Enter a valid username. This value may contain only letters, numbers and @/./+/-/_ characters.', 'invalid')], help_text='Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only.', unique=True, verbose_name='username')),
-                ('first_name', models.CharField(max_length=30, verbose_name='first name', blank=True)),
-                ('last_name', models.CharField(max_length=30, verbose_name='last name', blank=True)),
-                ('email', models.EmailField(max_length=254, verbose_name='email address', blank=True)),
-                ('is_staff', models.BooleanField(default=False, help_text='Designates whether the user can log into this admin site.', verbose_name='staff status')),
-                ('is_active', models.BooleanField(default=True, help_text='Designates whether this user should be treated as active. Unselect this instead of deleting accounts.', verbose_name='active')),
-                ('date_joined', models.DateTimeField(default=django.utils.timezone.now, verbose_name='date joined')),
-            ],
-            options={
-                'verbose_name': 'Usu\xe1rio interno',
-                'verbose_name_plural': 'Usu\xe1rios internos',
-            },
-        ),
         migrations.CreateModel(
             name='Account',
             fields=[
@@ -45,8 +25,8 @@ class Migration(migrations.Migration):
                 ('updated_at', models.DateTimeField(auto_now=True, null=True)),
             ],
             options={
-                'verbose_name': 'Conta',
-                'verbose_name_plural': 'Contas',
+                'verbose_name': 'Account',
+                'verbose_name_plural': 'Accounts',
             },
         ),
         migrations.CreateModel(
@@ -57,12 +37,12 @@ class Migration(migrations.Migration):
                 ('slug', models.SlugField(null=True, max_length=200, blank=True, unique=True, verbose_name=b'Identificador')),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True, null=True)),
-                ('document', models.CharField(unique=True, max_length=14, verbose_name=b'CNPJ')),
-                ('account', models.ForeignKey(to='account.Account')),
+                ('description', models.TextField(null=True, blank=True)),
+                ('image', models.CharField(max_length=255, null=True, blank=True)),
             ],
             options={
-                'verbose_name': 'Empresa',
-                'verbose_name_plural': 'Empresas',
+                'verbose_name': 'Corporation',
+                'verbose_name_plural': 'Corporations',
             },
         ),
         migrations.CreateModel(
@@ -73,11 +53,23 @@ class Migration(migrations.Migration):
                 ('slug', models.SlugField(null=True, max_length=200, blank=True, unique=True, verbose_name=b'Identificador')),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True, null=True)),
-                ('description', models.TextField(unique=True, max_length=14, verbose_name=b'Descricao')),
+                ('description', models.TextField(unique=True, max_length=14, verbose_name='Descricao')),
             ],
             options={
                 'verbose_name': 'Funcionalidade',
                 'verbose_name_plural': 'Funcionalidades',
+            },
+        ),
+        migrations.CreateModel(
+            name='Ownership',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('updated_at', models.DateTimeField(auto_now=True, null=True)),
+            ],
+            options={
+                'verbose_name': 'Ownership',
+                'verbose_name_plural': 'Ownerships',
             },
         ),
         migrations.CreateModel(
@@ -88,7 +80,7 @@ class Migration(migrations.Migration):
                 ('slug', models.SlugField(null=True, max_length=200, blank=True, unique=True, verbose_name=b'Identificador')),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True, null=True)),
-                ('description', models.TextField(unique=True, max_length=14, verbose_name=b'Descricao')),
+                ('description', models.TextField(unique=True, max_length=14, verbose_name='Descricao')),
             ],
             options={
                 'verbose_name': 'Plano',
@@ -96,48 +88,143 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name='AppUser',
+            name='Subscription',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('updated_at', models.DateTimeField(auto_now=True, null=True)),
+            ],
+            options={
+                'verbose_name': 'Subscription',
+                'verbose_name_plural': 'Subscriptions',
+            },
+        ),
+        migrations.CreateModel(
+            name='User',
             fields=[
                 ('user_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to=settings.AUTH_USER_MODEL)),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('updated_at', models.DateTimeField(auto_now=True, null=True)),
             ],
             options={
                 'verbose_name': 'Usu\xe1rio',
-                'verbose_name_plural': 'Usu\xe1rios',
+                'verbose_name_plural': 'Users',
             },
-            bases=('account.user',),
+            bases=('authentication.user', models.Model),
+            managers=[
+                ('objects', authentication.models.UserManager()),
+            ],
         ),
         migrations.CreateModel(
-            name='ProPlan',
+            name='Brass',
             fields=[
                 ('plan_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='account.Plan')),
             ],
             options={
-                'verbose_name': 'Plano premium',
-                'verbose_name_plural': 'Planos premium',
+                'verbose_name': 'Plano Bronze',
+                'verbose_name_plural': 'Planos Bronze',
             },
             bases=('account.plan',),
         ),
         migrations.CreateModel(
-            name='StandalonePlan',
+            name='CorporateAccount',
+            fields=[
+                ('account_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='account.Account')),
+            ],
+            options={
+                'verbose_name': 'Corporate Account',
+                'verbose_name_plural': 'Corporate Accounts',
+            },
+            bases=('account.account',),
+        ),
+        migrations.CreateModel(
+            name='Diamond',
             fields=[
                 ('plan_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='account.Plan')),
             ],
             options={
-                'verbose_name': 'Plano Avulso',
-                'verbose_name_plural': 'Planos Avulsos',
+                'verbose_name': 'Plano Diamante',
+                'verbose_name_plural': 'Planos Diamante',
             },
             bases=('account.plan',),
         ),
         migrations.CreateModel(
-            name='TrialPlan',
+            name='Gold',
             fields=[
                 ('plan_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='account.Plan')),
             ],
             options={
-                'verbose_name': 'Plano de avalia\xe7\xe3o',
-                'verbose_name_plural': 'Planos de avalia\xe7\xe3o',
+                'verbose_name': 'Plano Ouro',
+                'verbose_name_plural': 'Planos Ouro',
             },
             bases=('account.plan',),
+        ),
+        migrations.CreateModel(
+            name='PersonalAccount',
+            fields=[
+                ('account_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='account.Account')),
+            ],
+            options={
+                'verbose_name': 'Personal Account',
+                'verbose_name_plural': 'Personal Accounts',
+            },
+            bases=('account.account',),
+        ),
+        migrations.CreateModel(
+            name='Silver',
+            fields=[
+                ('plan_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='account.Plan')),
+            ],
+            options={
+                'verbose_name': 'Plano Prata',
+                'verbose_name_plural': 'Planos Prata',
+            },
+            bases=('account.plan',),
+        ),
+        migrations.AddField(
+            model_name='user',
+            name='account',
+            field=models.ForeignKey(related_name='users', to='account.Account'),
+        ),
+        migrations.AddField(
+            model_name='user',
+            name='created_by',
+            field=models.ForeignKey(related_name='created_user', default=1, to=settings.AUTH_USER_MODEL),
+        ),
+        migrations.AddField(
+            model_name='user',
+            name='deleted_by',
+            field=models.ForeignKey(related_name='deleted_user', blank=True, to=settings.AUTH_USER_MODEL, null=True),
+        ),
+        migrations.AddField(
+            model_name='user',
+            name='updated_by',
+            field=models.ForeignKey(related_name='updated_user', default=1, to=settings.AUTH_USER_MODEL),
+        ),
+        migrations.AddField(
+            model_name='subscription',
+            name='account',
+            field=models.OneToOneField(related_name='subscription', to='account.Account'),
+        ),
+        migrations.AddField(
+            model_name='subscription',
+            name='created_by',
+            field=models.ForeignKey(related_name='created_subscription', default=1, to=settings.AUTH_USER_MODEL),
+        ),
+        migrations.AddField(
+            model_name='subscription',
+            name='deleted_by',
+            field=models.ForeignKey(related_name='deleted_subscription', blank=True, to=settings.AUTH_USER_MODEL, null=True),
+        ),
+        migrations.AddField(
+            model_name='subscription',
+            name='plan',
+            field=models.ForeignKey(to='account.Plan'),
+        ),
+        migrations.AddField(
+            model_name='subscription',
+            name='updated_by',
+            field=models.ForeignKey(related_name='updated_subscription', default=1, to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
             model_name='plan',
@@ -150,33 +237,68 @@ class Migration(migrations.Migration):
             field=models.ForeignKey(related_name='polymorphic_account.plan_set+', editable=False, to='contenttypes.ContentType', null=True),
         ),
         migrations.AddField(
+            model_name='ownership',
+            name='account',
+            field=models.OneToOneField(related_name='ownership', to='account.Account'),
+        ),
+        migrations.AddField(
+            model_name='ownership',
+            name='created_by',
+            field=models.ForeignKey(related_name='created_ownership', default=1, to=settings.AUTH_USER_MODEL),
+        ),
+        migrations.AddField(
+            model_name='ownership',
+            name='deleted_by',
+            field=models.ForeignKey(related_name='deleted_ownership', blank=True, to=settings.AUTH_USER_MODEL, null=True),
+        ),
+        migrations.AddField(
+            model_name='ownership',
+            name='updated_by',
+            field=models.ForeignKey(related_name='updated_ownership', default=1, to=settings.AUTH_USER_MODEL),
+        ),
+        migrations.AddField(
+            model_name='ownership',
+            name='user',
+            field=models.ForeignKey(related_name='ownerships', to='account.User'),
+        ),
+        migrations.AddField(
             model_name='corporation',
-            name='owner',
-            field=models.ForeignKey(related_name='owned_corporation', to=settings.AUTH_USER_MODEL),
+            name='created_by',
+            field=models.ForeignKey(related_name='created_corporation', default=1, to=settings.AUTH_USER_MODEL),
+        ),
+        migrations.AddField(
+            model_name='corporation',
+            name='deleted_by',
+            field=models.ForeignKey(related_name='deleted_corporation', blank=True, to=settings.AUTH_USER_MODEL, null=True),
+        ),
+        migrations.AddField(
+            model_name='corporation',
+            name='updated_by',
+            field=models.ForeignKey(related_name='updated_corporation', default=1, to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
             model_name='account',
-            name='plan',
-            field=models.ForeignKey(to='account.Plan'),
+            name='created_by',
+            field=models.ForeignKey(related_name='created_account', default=1, to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
-            model_name='user',
-            name='corporation',
-            field=models.ForeignKey(to='account.Corporation'),
+            model_name='account',
+            name='deleted_by',
+            field=models.ForeignKey(related_name='deleted_account', blank=True, to=settings.AUTH_USER_MODEL, null=True),
         ),
         migrations.AddField(
-            model_name='user',
-            name='groups',
-            field=models.ManyToManyField(related_query_name='user', related_name='user_set', to='auth.Group', blank=True, help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.', verbose_name='groups'),
-        ),
-        migrations.AddField(
-            model_name='user',
+            model_name='account',
             name='polymorphic_ctype',
-            field=models.ForeignKey(related_name='polymorphic_account.user_set+', editable=False, to='contenttypes.ContentType', null=True),
+            field=models.ForeignKey(related_name='polymorphic_account.account_set+', editable=False, to='contenttypes.ContentType', null=True),
         ),
         migrations.AddField(
-            model_name='user',
-            name='user_permissions',
-            field=models.ManyToManyField(related_query_name='user', related_name='user_set', to='auth.Permission', blank=True, help_text='Specific permissions for this user.', verbose_name='user permissions'),
+            model_name='account',
+            name='updated_by',
+            field=models.ForeignKey(related_name='updated_account', default=1, to=settings.AUTH_USER_MODEL),
+        ),
+        migrations.AddField(
+            model_name='corporation',
+            name='account',
+            field=models.OneToOneField(related_name='corporation', to='account.CorporateAccount'),
         ),
     ]
