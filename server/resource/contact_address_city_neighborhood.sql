@@ -101,9 +101,10 @@ order by
 
 
 create index on materialized_filter (nature);
-create index on materialized_filter (areacode);
-create index on materialized_filter (city);
-create index on materialized_filter (neighborhood);
+create index on materialized_filter (nature, state);
+create index on materialized_filter (nature, state, areacode);
+create index on materialized_filter (nature, state, areacode, city);
+create index on materialized_filter (nature, state, areacode, city, neighborhood);
 
 
 

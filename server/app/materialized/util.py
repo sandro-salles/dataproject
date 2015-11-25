@@ -6,7 +6,7 @@ import mmh3
 
 class PersonCounter:
 
-    PARAM_KEYS = ['nature', 'carrier', 'areacode', 'city', 'neighborhood']
+    PARAM_KEYS = ['nature', 'state', 'carrier', 'areacode', 'city', 'neighborhood']
 
     COUNT_BASE_QUERY = """
         SELECT 
@@ -28,15 +28,18 @@ class PersonCounter:
 
     @staticmethod
     def build_key(params):
-        joined = ','.join(['%s=%s' % (PersonCounter.PARAM_KEYS[i], value) for i, value in enumerate(params) if value is not None])
+        print params
+        joined = ','.join(['%s=%s' % (PersonCounter.PARAM_KEYS[i], value) for i, value in enumerate(params) if value])
+        print joined
         return 'person-count__%s' % mmh3.hash128(joined)
 
 
     @staticmethod
-    def count(params):
+    def count(params, return_status = False):
 
         cache_key = PersonCounter.build_key(params)
         count = cache.get(cache_key, settings.CACHE_EXPIRED_IDENTIFIER)
+        status = 'cached'
 
         if str(count) == settings.CACHE_EXPIRED_IDENTIFIER:
 
@@ -69,6 +72,12 @@ class PersonCounter:
 
             count = cursor.fetchone()[0]
 
+            status = 'new'
+
             cache.set(cache_key, count)
 
-        return count
+        print status
+        if return_status:
+            return (count, status)
+        else:
+            return count

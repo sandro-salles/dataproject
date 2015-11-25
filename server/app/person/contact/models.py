@@ -27,19 +27,18 @@ class Contact(DatableModel):
 
 class Address(Contact):
 
-    persons = models.ManyToManyField(
-        Person, through="PersonAddress", related_name='addresses')
-    state = models.CharField(_(u'State'), max_length=2,
-                             db_index=True, choices=STATE_CHOICES)
+    persons = models.ManyToManyField(Person, through="PersonAddress", related_name='addresses')
+    state = models.CharField(_(u'State'), max_length=2, db_index=True, choices=STATE_CHOICES)
     city = models.CharField(_(u'Cidade'), max_length=200, db_index=True)
-    neighborhood = models.CharField(_(u'Bairro'), max_length=200)
+    neighborhood = models.CharField(_(u'Bairro'), max_length=200, db_index=True)
     location = models.TextField(_(u'Endereço'))
-    zipcode = models.CharField(_(u'CEP'), max_length=8)
+    zipcode = models.CharField(_(u'CEP'), max_length=8, db_index=True)
 
     class Meta:
         verbose_name = _(u"Endereço Físico")
         verbose_name_plural = _(u"Endereços Físicos")
-        unique_together = ('zipcode', 'location')
+        unique_together = ('state', 'city', 'neighborhood', 'location', 'zipcode')
+        index_together = (('state', 'city'),('state', 'city', 'neighborhood'))
 
     @property
     def unique_composition(self):
@@ -98,8 +97,7 @@ class Phone(Contact):
                         (93, 93), (94, 94), (95, 95), (96, 96), (97, 97),
                         (98, 98), (99, 99),)
 
-    areacode = models.IntegerField(
-        _(u' Código DDD'), db_index=True, choices=AREACODE_CHOICES)
+    areacode = models.IntegerField(_(u' Código DDD'), db_index=True, choices=AREACODE_CHOICES)
     number = models.CharField(_(u'Número'), max_length=9)
     carrier = models.ForeignKey(Carrier)
     address = models.ForeignKey(Address)
@@ -112,6 +110,7 @@ class Phone(Contact):
         verbose_name = _(u"Telefone")
         verbose_name_plural = _(u"Telefones")
         unique_together = ('type', 'areacode', 'number')
+        index_together = (('areacode', 'carrier'),('areacode', 'carrier', 'address'))
 
     def __unicode__(self):
         return '%s %s (%s)' % (self.areacode, self.number, self.type)

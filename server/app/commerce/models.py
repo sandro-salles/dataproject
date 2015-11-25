@@ -32,7 +32,8 @@ class Checkout(PolymorphicModel, DatableModel):
 class CheckoutCriteria(models.Model):
 
     checkout = models.ForeignKey(Checkout, related_name='criteria')
-    nature = models.CharField(_(u'Person Nature'), max_length=1, null=True, blank=True, db_index=True)
+    nature = models.CharField(_(u'Natureza'), max_length=1, null=True, blank=True, db_index=True)
+    state = models.CharField(_(u'Estado'), max_length=2, null=True, blank=True, db_index=True)
     carrier = models.ForeignKey(Carrier, null=True, blank=True)
     areacode = models.CharField(_(u'DDD'), max_length=2, null=True, blank=True, db_index=True)
     city = models.CharField(_(u'Cidade'), max_length=200, null=True, blank=True, db_index=True)

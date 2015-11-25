@@ -13,7 +13,7 @@ class CartManager(APIView):
 
     def get(self, request, format=None):
 
-        cart, created =  Cart.objects.get_or_create(account=request.user.appuser.corporation.account, status=Cart.STATUS_CHOICES_CREATED[0])
+        cart, created =  Cart.objects.get_or_create(account=request.user.account, status=Cart.STATUS_CHOICES_CREATED[0])
         return Response(CartSerializer(cart).data, status=status.HTTP_200_OK)
 
 
@@ -22,7 +22,7 @@ class CriteriaManager(APIView):
 
     def post(self, request, format=None):
 
-        cart, created =  Cart.objects.get_or_create(account=request.user.appuser.corporation.account, status=Cart.STATUS_CHOICES_CREATED[0])
+        cart, created =  Cart.objects.get_or_create(account=request.user.account, status=Cart.STATUS_CHOICES_CREATED[0])
 
         params = tuple(request.data.values())
         count = PersonCounter.count(params)

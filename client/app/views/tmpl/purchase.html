@@ -28,55 +28,66 @@
                             <div class="col-md-8">
                                 <div class="form-group">
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <h4>Tipo de Registro</h4>
                                             <div>
-                                                <select ng-disabled="(counting || updating)" chosen="{width: '100%'}" ng-model="filter.nature" ng-options="nature.id as nature.name for nature in natures" id="natures">
+                                                <ui-select ng-model="filter.nature" ng-disabled="(counting || updating)" class="w-md mb-10">
+                                                    <ui-select-match allow-clear placeholder="Select or search a number...">{{$select.selected.name}}</ui-select-match>
+                                                    <ui-select-choices repeat="nature.id as nature in (natures | filter: $select.search) track by nature.id">
+                                                        <span ng-bind-html="nature.name | highlight: $select.search"></span>
+                                                    </ui-select-choices>
+                                                </ui-select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <h4>Estado</h4>
+                                            <div>
+                                                <select ng-disabled="(counting || updating)" chosen="{width: '100%'}" ng-model="filter.state" ng-options="state.state as state.state for state in states" id="states" allow-single-deselect="true">
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-md-6 text-center">
-                                            <div class="pt-30">
+                                        <div class="col-md-4">
+                                            <h4>Operadora</h4>
+                                            <div>
+                                                <select ng-disabled="(counting || updating)" chosen="{width: '100%'}" ng-model="filter.carrier" ng-options="carrier.id as carrier.name for carrier in carriers" id="carriers" allow-single-deselect="true">
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <h4>DDD</h4>
+                                            <div>
+                                                <select ng-disabled="(counting || updating)" chosen="{width: '100%'}" ng-model="filter.areacode" ng-options="areacode.areacode as areacode.areacode for areacode in areacodes" id="areacodes" allow-single-deselect="true">
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <h4>Cidade</h4>
+                                            <div>
+                                                <select ng-disabled="(counting || updating)" chosen="{width: '100%'}" ng-model="filter.city" ng-options="city.city as city.city for city in cities" id="cities" allow-single-deselect="true">
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <h4>Bairro</h4>
+                                            <div>
+                                                <select ng-disabled="(counting || updating)" chosen="{width: '100%'}" ng-model="filter.neighborhood" ng-options="neighborhood.neighborhood as neighborhood.neighborhood for neighborhood in neighborhoods" id="neighborhoods" allow-single-deselect="true">
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 text-right">
+                                            <div class="pt-20 text-center">
                                                 <h1 class="m-0" ng-hide="(counting || updating)">{{ count | number }}</h1>
                                                 <h1 class="m-0" ng-show="(counting || updating)">0</h1>
                                                 <span class="text-muted" ng-hide="(counting || updating)">Contato(s) unico(s) encontrado(s)</span>
                                                 <span class="text-muted" ng-show="(counting || updating)">Selecionando os contatos, por favor aguarde... </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <h4>Operadora</h4>
-                                            <div>
-                                                <select ng-disabled="(counting || updating)" chosen="{width: '100%'}" ng-model="filter.carrier" ng-options="carrier.id as carrier.name for carrier in carriers" id="carriers">
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <h4>DDD</h4>
-                                            <div>
-                                                <select ng-disabled="(counting || updating)" chosen="{width: '100%'}" ng-model="filter.areacode" ng-options="areacode.areacode as areacode.areacode for areacode in areacodes" id="areacodes">
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <h4>Cidade</h4>
-                                            <div>
-                                                <select ng-disabled="(counting || updating)" chosen="{width: '100%'}" ng-model="filter.city" ng-options="city.city as city.city for city in cities" id="cities">
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <h4>Bairro</h4>
-                                            <div>
-                                                <select ng-disabled="(counting || updating)" chosen="{width: '100%'}" ng-model="filter.neighborhood" ng-options="neighborhood.neighborhood as neighborhood.neighborhood for neighborhood in neighborhoods" id="neighborhoods">
-                                                </select>
                                             </div>
                                         </div>
                                     </div>

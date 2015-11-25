@@ -56,48 +56,58 @@ app
 
             $scope.updateStates = function() {
 
-                if ($scope.filter.state) {
+                $scope.updating = true;
 
-                    $scope.updating = true;
+                $scope.filter.state, $scope.filter.carrier, $scope.filter.areacode, $scope.filter.city, $scope.filter.neighborhood = '';  
+                    
+                $scope.states = [];
+                $scope.carriers = [];
+                $scope.areacodes = [];
+                $scope.cities = [];
+                $scope.neighborhoods = [];
+
+                if ($scope.filter.nature) {
 
                     $scope.states = State.query({
-                        state: $scope.filter.state
+                        nature: $scope.filter.nature
                     });
 
                     $scope.states.$promise.then(function(result) {
                         $scope.states = result;
 
-                        $scope.carriers = [];
-                        $scope.areacodes = [];
-                        $scope.cities = [];
-                        $scope.neighborhoods = [];
-
                         $scope.updateCount();
                     });
 
+                } else {
+                    $scope.updateCount();
                 }
             }
 
             $scope.updateCarriers = function() {
 
-                if ($scope.filter.nature) {
+                $scope.updating = true;
 
-                    $scope.updating = true;
+                $scope.filter.carrier, $scope.filter.areacode, $scope.filter.city, $scope.filter.neighborhood = '';  
+                
+                $scope.carriers = [];
+                $scope.areacodes = [];
+                $scope.cities = [];
+                $scope.neighborhoods = [];
+
+                if ($scope.filter.state) {
 
                     $scope.carriers = Carrier.query({
-                        nature: $scope.filter.nature
+                        nature: $scope.filter.nature,
+                        state: $scope.filter.state
                     });
 
                     $scope.carriers.$promise.then(function(result) {
                         $scope.carriers = result;
-
-                        $scope.areacodes = [];
-                        $scope.cities = [];
-                        $scope.neighborhoods = [];
-
                         $scope.updateCount();
                     });
 
+                } else {
+                    $scope.updateCount();
                 }
             }
 
@@ -107,16 +117,21 @@ app
 
                     $scope.updating = true;
 
+                    $scope.filter.areacode, $scope.filter.city, $scope.filter.neighborhood = '';  
+                    
+                    $scope.areacodes = [];
+                    $scope.cities = [];
+                    $scope.neighborhoods = [];
+
                     $scope.areacodes = Areacode.query({
                         nature: $scope.filter.nature,
+                        state: $scope.filter.state,
                         carrier: $scope.filter.carrier
                     });
 
                     $scope.areacodes.$promise.then(function(result) {
                         $scope.areacodes = result;
 
-                        $scope.cities = [];
-                        $scope.neighborhoods = [];
                         $scope.updateCount();
                     });
 
@@ -129,17 +144,20 @@ app
 
                     $scope.updating = true;
 
+                    $scope.filter.city, $scope.filter.neighborhood = '';  
+                    
+                    $scope.cities = [];
+                    $scope.neighborhoods = [];
+
                     $scope.cities = City.query({
                         nature: $scope.filter.nature,
+                        state: $scope.filter.state,
                         carrier: $scope.filter.carrier,
                         areacode: $scope.filter.areacode
                     });
 
                     $scope.cities.$promise.then(function(result) {
                         $scope.cities = result;
-
-                        $scope.neighborhoods = [];
-
                         $scope.updateCount();
                     });
 
@@ -153,8 +171,14 @@ app
 
                     $scope.updating = true;
 
+                    $scope.filter.neighborhood = '';  
+                    
+                    $scope.neighborhoods = [];
+
+
                     $scope.neighborhoods = Neighborhood.query({
                         nature: $scope.filter.nature,
+                        state: $scope.filter.state,
                         carrier: $scope.filter.carrier,
                         areacode: $scope.filter.areacode,
                         city: $scope.filter.city

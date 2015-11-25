@@ -148,14 +148,13 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',),
 }
 
-
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': '/var/tmp/django_cache',
+        'BACKEND': 'redis_cache.RedisCache',
+        'LOCATION': 'localhost:6379',
         'TIMEOUT': 1296000,  # 15 days
         'KEY_PREFIX': 'dev_'
-    }
+    },
 }
 
 CACHE_EXPIRED_IDENTIFIER = '$$CACHE_EXPIRED_OR_NONEXISTENT$$'
