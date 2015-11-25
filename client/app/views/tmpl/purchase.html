@@ -25,34 +25,24 @@
                     </tab-heading>
                     <form name="step1" role="form" novalidate class="form-validation">
                         <div class="row">
-                            <div class="col-md-3 text-center">
-                                <section class="tile tile-simple bg-dutch-light">
-                                    <!-- tile widget -->
-                                    <div class="tile-widget bg-dutch text-center p-30"> <i class="fa fa-users fa-5x"></i>
-                                    </div>
-                                    <!-- /tile widget -->
-                                    <!-- tile body -->
-                                    <div class="tile-body text-center p-0">
-                                        <md-progress-linear class="md-warn md-hue-1" md-mode="indeterminate" ng-show="(counting || updating)"></md-progress-linear>
-                                        <div class="p-30">
-                                            <h1 class="m-0" ng-hide="(counting || updating)">{{ count | number }}</h1>
-                                            <h1 class="m-0" ng-show="(counting || updating)">0</h1>
-                                            <span class="text-muted" ng-hide="(counting || updating)">Contato(s) unico(s) encontrado(s)</span>
-                                            <span class="text-muted" ng-show="(counting || updating)">Selecionando os contatos, por favor aguarde... </span>
-                                        </div>
-                                        <div>
-                                            <button ng-disabled="(counting || updating)" ng-disabled="step1.$invalid" class="btn btn-default btn-ef btn-ef-7 btn-ef-7a mb-10" ng-click="addCriteria()"><i class="fa fa-shopping-cart"></i>&nbsp; <span ng-hide="(counting || updating)"> Adicionar ao carrinho</span><span ng-show="(counting || updating)">Aguarde...</span></button>
-                                        </div>
-                                    </div>
-                                    <!-- /tile body -->
-                                </section>
-                            </div>
-                            <div class="col-md-5">
+                            <div class="col-md-8">
                                 <div class="form-group">
-                                    <h4>Tipo de Registro</h4>
-                                    <div>
-                                        <select ng-disabled="(counting || updating)" chosen="{width: '100%'}" ng-model="filter.nature" ng-options="nature.id as nature.name for nature in natures" id="natures">
-                                        </select>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h4>Tipo de Registro</h4>
+                                            <div>
+                                                <select ng-disabled="(counting || updating)" chosen="{width: '100%'}" ng-model="filter.nature" ng-options="nature.id as nature.name for nature in natures" id="natures">
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 text-center">
+                                            <div class="pt-30">
+                                                <h1 class="m-0" ng-hide="(counting || updating)">{{ count | number }}</h1>
+                                                <h1 class="m-0" ng-show="(counting || updating)">0</h1>
+                                                <span class="text-muted" ng-hide="(counting || updating)">Contato(s) unico(s) encontrado(s)</span>
+                                                <span class="text-muted" ng-show="(counting || updating)">Selecionando os contatos, por favor aguarde... </span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -74,17 +64,21 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <h4>Cidade</h4>
-                                    <div>
-                                        <select ng-disabled="(counting || updating)" chosen="{width: '100%'}" ng-model="filter.city" ng-options="city.city as city.city for city in cities" id="cities">
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <h4>Bairro</h4>
-                                    <div>
-                                        <select ng-disabled="(counting || updating)" chosen="{width: '100%'}" ng-model="filter.neighborhood" ng-options="neighborhood.neighborhood as neighborhood.neighborhood for neighborhood in neighborhoods" id="neighborhoods">
-                                        </select>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h4>Cidade</h4>
+                                            <div>
+                                                <select ng-disabled="(counting || updating)" chosen="{width: '100%'}" ng-model="filter.city" ng-options="city.city as city.city for city in cities" id="cities">
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h4>Bairro</h4>
+                                            <div>
+                                                <select ng-disabled="(counting || updating)" chosen="{width: '100%'}" ng-model="filter.neighborhood" ng-options="neighborhood.neighborhood as neighborhood.neighborhood for neighborhood in neighborhoods" id="neighborhoods">
+                                                </select>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -137,6 +131,16 @@
                                     </div>
                                     <!-- /tile body -->
                                 </section>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <md-progress-linear class="md-warn md-hue-1" md-mode="indeterminate" ng-show="(counting || updating)"></md-progress-linear>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8 text-right">
+                                    <button ng-disabled="(counting || updating)" ng-disabled="step1.$invalid" class="btn btn-default btn-ef btn-ef-7 btn-ef-7a mb-10" ng-click="addCriteria()"><i class="fa fa-shopping-cart"></i>&nbsp; <span ng-hide="(counting || updating)"> Adicionar ao carrinho</span><span ng-show="(counting || updating)">Aguarde...</span></button>
+                                </div>
                             </div>
                         </div>
                     </form>

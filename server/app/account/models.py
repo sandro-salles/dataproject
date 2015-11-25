@@ -178,6 +178,7 @@ class Corporation(SluggableModel, AuditableModel):
     account = models.OneToOneField(CorporateAccount, related_name='corporation')
     description = models.TextField(blank=True, null=True)
     image = models.CharField(max_length=255, blank=True, null=True)
+    document = models.CharField(max_length=14)
 
     class Meta:
         verbose_name = _('Empresa')

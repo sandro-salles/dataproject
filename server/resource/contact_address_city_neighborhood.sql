@@ -62,17 +62,19 @@ contact_address_city_contact_address_neighborhood as select distinct on (city, n
 CREATE MATERIALIZED VIEW
 materialized_filter as 
 select 
-	distinct on (person.nature, cp.carrier_id, cp.areacode, ca.city, ca.neighborhood)
+	distinct on (person.nature, ca.state, cp.carrier_id, cp.areacode, ca.city, ca.neighborhood)
 	row_number() 
 		over (		
 			order by 
 				person.nature asc,
+				ca.state asc,
 				cp.carrier_id asc, 
 				cp.areacode asc, 
 				ca.city asc, 
 				ca.neighborhood asc
 		) id,
-	person.nature, 
+	person.nature,
+	ca.state, 
 	cp.carrier_id, 
 	cp.areacode, 
 	ca.city, 
@@ -89,6 +91,7 @@ from person_person as person
 			on (ca.id = cp.address_id)
 order by 
 	person.nature asc, 
+	ca.state asc,
 	cp.carrier_id asc, 
 	cp.areacode asc, 
 	ca.city asc, 

@@ -24,6 +24,14 @@ class CarrierSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'slug')
 
 
+class StateSerializer(serializers.Serializer):
+    state = serializers.CharField()
+
+    class Meta:
+        depth = 1
+        fields = ('state',)
+        
+
 class AreacodeSerializer(serializers.Serializer):
     areacode = serializers.CharField()
 

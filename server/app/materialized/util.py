@@ -40,12 +40,15 @@ class PersonCounter:
 
         if str(count) == settings.CACHE_EXPIRED_IDENTIFIER:
 
-            nature, carrier, areacode, city, neighborhood = params
+            nature, state, carrier, areacode, city, neighborhood = params
 
             query = PersonCounter.COUNT_BASE_QUERY
 
             if nature:
                 query += " and person.nature = '%s'" % nature
+            
+            if state:
+                query += " and ca.state = '%s'" % state
 
             if carrier:
                 query += " and cp.carrier_id = %s" % carrier

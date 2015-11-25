@@ -1,6 +1,11 @@
 'use strict';
 
 app
+    .factory('State', function($resource){
+        return $resource(
+            'http://10.46.80.80:8080/filter/state/'
+        );
+    })
     .factory('Carrier', function($resource){
         return $resource(
             'http://10.46.80.80:8080/filter/carrier/'

@@ -2,7 +2,7 @@ from rest_framework import generics
 from rest_framework import permissions, status
 from rest_framework import filters
 from materialized.models import Filter
-from materialized.serializers import PersonCountSerializer, CarrierSerializer, AreacodeSerializer, CitySerializer, NeighborhoodSerializer
+from materialized.serializers import PersonCountSerializer, StateSerializer, CarrierSerializer, AreacodeSerializer, CitySerializer, NeighborhoodSerializer
 
 from materialized.util import PersonCounter
 from rest_framework.views import APIView
@@ -16,6 +16,7 @@ class PersonCount(APIView):
 
         params = (
             request.GET.get('nature', None),
+            request.GET.get('state', None),
             request.GET.get('carrier', None),
             request.GET.get('areacode', None),
             request.GET.get('city', None),
@@ -27,20 +28,27 @@ class PersonCount(APIView):
         return Response(PersonCountSerializer(wrapper).data, status=status.HTTP_200_OK)
 
 
+class StateList(generics.ListAPIView):
+    queryset=Filter.objects.only('state').distinct('state').order_by('state').all()
+    serializer_class=StateSerializer
+    permission_classes=(permissions.IsAuthenticatedOrReadOnly,)
+    filter_backends=(filters.DjangoFilterBackend, filters.OrderingFilter)
+    filter_fields=('nature',)
+
+
 class CarrierList(generics.ListAPIView):
     queryset=Filter.objects.only('carrier').distinct('carrier__name').order_by('carrier__name').all()
     serializer_class=CarrierSerializer
     permission_classes=(permissions.IsAuthenticatedOrReadOnly,)
     filter_backends=(filters.DjangoFilterBackend, filters.OrderingFilter)
-    filter_fields=('nature',)
-
+    filter_fields=('nature','state',)
 
 class AreacodeList(generics.ListAPIView):
     queryset=Filter.objects.only('areacode').distinct('areacode').order_by('areacode').all()
     serializer_class=AreacodeSerializer
     permission_classes=(permissions.IsAuthenticatedOrReadOnly,)
     filter_backends=(filters.DjangoFilterBackend, filters.OrderingFilter)
-    filter_fields=('nature','carrier',)
+    filter_fields=('nature','state','carrier',)
 
 
 class CityList(generics.ListAPIView):
@@ -48,11 +56,11 @@ class CityList(generics.ListAPIView):
     serializer_class=CitySerializer
     permission_classes=(permissions.IsAuthenticatedOrReadOnly,)
     filter_backends=(filters.DjangoFilterBackend, filters.OrderingFilter)
-    filter_fields=('nature','carrier','areacode',)
+    filter_fields=('nature','state','carrier','areacode',)
 
 class NeighborhoodList(generics.ListAPIView):
     queryset=Filter.objects.only('neighborhood').distinct('neighborhood').order_by('neighborhood').all()
     serializer_class=NeighborhoodSerializer
     permission_classes=(permissions.IsAuthenticatedOrReadOnly,)
     filter_backends=(filters.DjangoFilterBackend, filters.OrderingFilter)
-    filter_fields=('nature','carrier','areacode','city',)
+    filter_fields=('nature','state','carrier','areacode','city',)

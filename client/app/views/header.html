@@ -168,10 +168,10 @@
       </div>
 
     </li>
-    <li class="dropdown nav-account" ui-sref-active="active">
+    <li class="dropdown nav-account" ui-sref-active="active" ng-show="globals.currentUser.account.corporation">
 
       <a ui-sref="app.corporation">
-        <span>{{ globals.currentUser.corporation.name }}</span>
+        <span>{{ globals.currentUser.account.corporation.name }}</span>
       </a>
 
     </li>

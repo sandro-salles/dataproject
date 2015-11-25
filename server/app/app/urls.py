@@ -1,7 +1,7 @@
 from django.conf.urls import include, patterns, url
 from django.contrib import admin
 from person.views import PersonList, PersonDetail
-from materialized.views import CarrierList, AreacodeList, CityList, NeighborhoodList, PersonCount
+from materialized.views import StateList, CarrierList, AreacodeList, CityList, NeighborhoodList, PersonCount
 from account.views import CorporationDetail
 from commerce.views import CartManager, CriteriaManager
 from django.conf import settings
@@ -19,6 +19,7 @@ urlpatterns = [
     url(r'^commerce/cart/$',CartManager.as_view(), name='commerce-cart-manager'),
     url(r'^commerce/cart/checkout/criteria/$',CriteriaManager.as_view(), name='commerce-cart-checkout-criteria-manager'),
 
+    url(r'^filter/state/$', StateList.as_view(), name='filter-state-list'),
     url(r'^filter/carrier/$', CarrierList.as_view(), name='filter-carrier-list'),
     url(r'^filter/areacode/$', AreacodeList.as_view(), name='filter-areacode-list'),
     url(r'^filter/city/$', CityList.as_view(), name='filter-city-list'),

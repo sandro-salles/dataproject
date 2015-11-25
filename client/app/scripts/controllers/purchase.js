@@ -9,8 +9,8 @@
  */
 app
     .controller('PurchaseCtrl', 
-        ['$scope', '$http', 'Cart', 'Criteria', 'Carrier', 'Areacode', 'City', 'Neighborhood', 
-        function($scope, $http, Cart, Criteria, Carrier, Areacode, City, Neighborhood) {
+        ['$scope', '$http', 'Cart', 'Criteria', 'State', 'Carrier', 'Areacode', 'City', 'Neighborhood', 
+        function($scope, $http, Cart, Criteria, State, Carrier, Areacode, City, Neighborhood) {
             $scope.page = {
                 title: 'Comprar coleção de registros',
                 subtitle: 'Place subtitle here...'
@@ -21,6 +21,7 @@ app
 
             $scope.filter = {
                 nature: '',
+                state: '',
                 carrier: '',
                 areacode: '',
                 city: '',
@@ -37,6 +38,7 @@ app
                 name: 'Pessoa Jurídica'
             }];
 
+            $scope.states = [];
             $scope.carriers = [];
             $scope.areacodes = [];
             $scope.cities = [];
@@ -50,6 +52,30 @@ app
 
             $scope.deleteCriteria = function() {
                 $scope.cart = Criteria.delete({}, $scope.filter)
+            }
+
+            $scope.updateStates = function() {
+
+                if ($scope.filter.state) {
+
+                    $scope.updating = true;
+
+                    $scope.states = State.query({
+                        state: $scope.filter.state
+                    });
+
+                    $scope.states.$promise.then(function(result) {
+                        $scope.states = result;
+
+                        $scope.carriers = [];
+                        $scope.areacodes = [];
+                        $scope.cities = [];
+                        $scope.neighborhoods = [];
+
+                        $scope.updateCount();
+                    });
+
+                }
             }
 
             $scope.updateCarriers = function() {
@@ -166,7 +192,8 @@ app
                     );
             }
 
-            $scope.$watch('filter.nature', $scope.updateCarriers, true);
+            $scope.$watch('filter.nature', $scope.updateStates, true);
+            $scope.$watch('filter.state', $scope.updateCarriers);
             $scope.$watch('filter.carrier', $scope.updateAreacodes);
             $scope.$watch('filter.areacode', $scope.updateCities);
             $scope.$watch('filter.city', $scope.updateNeighborhoods, true);
