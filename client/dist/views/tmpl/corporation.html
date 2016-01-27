@@ -1,0 +1,40 @@
+<div class="page"> <div class="pageheader"> <h2>{{page.title}}</h2> <div class="page-bar"> <ul class="page-breadcrumb"> <li> <a ui-sref="app.account"><i class="fa fa-home"></i> {{main.title}}</a> </li> <li> <a ui-sref="app.account">Configurações</a> </li> </ul> </div> </div> <div class="pagecontent"> <!-- row --> <div class="row"> <!-- col --> <!--
+            <div class="col-md-3">
+                <section class="tile tile-simple">
+                    <div class="tile-header dvd dvd-btm text-center">
+                        <h1 class="custom-font"><strong>Responsável</strong> pela empresa</h1>
+                    </div>
+                    <div class="tile-widget p-30 text-center">
+                        <div class="thumb thumb-xl"> <img gravatar-src="globals.currentUser.email" gravatar-size="100" class="img-circle size-100x100"> </div>
+                        <h4 class="mb-0"><strong> {{ corporation.owner.first_name }}</strong> {{ corporation.owner.last_name }}</h4> <span class="text-muted">Project Manager</span>
+                        <div class="mt-10">
+                            <button class="btn btn-rounded-20 btn-sm btn-greensea">Alterar</button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            --> <!-- /col --> <div class="col-md-12"> <section class="tile tile-simple"> <md-content> <md-tabs md-dynamic-height md-border-bottom md-no-pagination> <md-tab> <md-tab-label> Configurações</md-tab-label> <md-tab-body class="md-padding"> <div class="tile-widget p-20"> <form novalidate ng-submit="onSubmit()" name="form"> <md-input-container class="form-group"> <label>Razão Social</label> <input required name="name" disable-validation-message="" ng-model="corporation.name" ng-model-options="{updateOn: 'blur'}"> <div ng-messages="form.name.$error"> <div ng-message="required">Campo obrigatório.</div> </div> </md-input-container> <md-input-container class="form-group"> <label>CNPJ</label> <input required name="document" ng-cnpj disable-validation-message="" ui-mask="99.999.999/9999-99" ng-model="corporation.document"> <div ng-messages="form.document.$error"> <div ng-message="required">Campo obrigatório.</div> <div ng-message="cnpj">Número inválido.</div> </div> </md-input-container> <!--<md-input-container class="form-group">
+                                                <label>Identificador da conta</label>
+                                                <input required name="slug" ng-model="corporation.slug" ng-model-options="{updateOn: 'blur'}">
+                                                <div ng-messages="form.slug.$error">
+                                                    <div ng-message="required">Este campo é obrigatório.</div>
+                                                </div>
+                                            </md-input-container>
+                                            --> <button ng-disabled="form.$invalid" type="submit" class="btn btn-rounded-20 btn-sm btn-greensea">Confirmar <i class="fa fa-arrow-right"></i></button> </form> </div> </md-tab-body> </md-tab> <!--<md-tab>
+                                <md-tab-label>
+                                    Planos e Cobrança</md-tab-label>
+                                <md-tab-body class="md-padding">
+                                    <div class="tile-widget p-20">
+                                        <h1>Tab 2</h1>
+                                    </div>
+                                </md-tab-body>
+                            </md-tab>
+                            <md-tab>
+                                <md-tab-label>
+                                    Usuários</md-tab-label>
+                                <md-tab-body class="md-padding">
+                                    <div class="tile-widget p-20">
+                                        <h2>Tab 3</h2>
+                                    </div>
+                                </md-tab-body>
+                            </md-tab>--> </md-tabs> </md-content> </section> </div> </div> <!-- /row --> </div> </div>
