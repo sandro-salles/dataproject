@@ -15,12 +15,14 @@ class PersonCount(APIView):
     def get(self, request, format=None):
 
         params = (
-            request.GET.get('nature', None),
-            request.GET.get('state', None),
-            request.GET.get('carrier', None),
-            request.GET.get('areacode', None),
-            request.GET.get('city', None),
-            request.GET.get('neighborhood', None)
+            (
+                request.GET.get('nature', None),
+                request.GET.get('state', None),
+                request.GET.get('carrier', None),
+                request.GET.get('areacode', None),
+                request.GET.get('city', None),
+                request.GET.get('neighborhood', None)
+            ),
         )
 
         wrapper = namedtuple('PersonCountWrapper', ('count',))(PersonCounter.count(params))

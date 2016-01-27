@@ -12,7 +12,7 @@ app
 
     $scope.page = {
       title: 'Gallery',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
 
     $scope.images = [

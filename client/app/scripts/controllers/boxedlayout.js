@@ -11,6 +11,6 @@ app
   .controller('BoxedlayoutCtrl', function ($scope) {
     $scope.page = {
       title: 'Boxed Layout',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
   });

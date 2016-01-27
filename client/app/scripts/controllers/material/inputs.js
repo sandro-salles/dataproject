@@ -6,7 +6,7 @@ app
 
     $scope.page = {
       title: 'Inputs',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
 
     $scope.user = {

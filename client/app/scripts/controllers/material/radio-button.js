@@ -6,7 +6,7 @@ app
 
     $scope.page = {
       title: 'Radio Button',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
 
     $scope.data = {

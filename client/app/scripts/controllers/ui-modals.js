@@ -11,7 +11,7 @@ app
   .controller('ModalsCtrl', function ($scope) {
     $scope.page = {
       title: 'Modals',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
   })
 

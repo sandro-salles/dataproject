@@ -11,6 +11,6 @@ app
   .controller('ButtonsIconsCtrl', function ($scope) {
      $scope.page = {
       title: 'Buttons & Icons',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
   });

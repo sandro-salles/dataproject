@@ -11,7 +11,7 @@ app
   .controller('TablesNgTableCtrl', function ($scope) {
     $scope.page = {
       title: 'ngTable',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
   })
 

@@ -6,7 +6,7 @@ app
 
     $scope.page = {
       title: 'Tabs',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
 
     var tabs = [

@@ -6,7 +6,7 @@ app
 
     $scope.page = {
       title: 'Sidenav',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
 
     $scope.toggleLeft = buildToggler('left');

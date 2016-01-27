@@ -18,6 +18,7 @@ class Migration(migrations.Migration):
             name='Cart',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('deleted_at', models.DateTimeField(null=True, blank=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True, null=True)),
                 ('status', models.CharField(default=b'created', max_length=14, verbose_name='Status', db_index=True, choices=[(b'created', 'Criado'), (b'finished', 'Finalizado')])),
@@ -35,6 +36,7 @@ class Migration(migrations.Migration):
             name='Checkout',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('deleted_at', models.DateTimeField(null=True, blank=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True, null=True)),
             ],
@@ -47,7 +49,8 @@ class Migration(migrations.Migration):
             name='CheckoutCriteria',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('nature', models.CharField(db_index=True, max_length=1, null=True, verbose_name='Person Nature', blank=True)),
+                ('nature', models.CharField(db_index=True, max_length=1, null=True, verbose_name='Natureza', blank=True)),
+                ('state', models.CharField(db_index=True, max_length=2, null=True, verbose_name='Estado', blank=True)),
                 ('areacode', models.CharField(db_index=True, max_length=2, null=True, verbose_name='DDD', blank=True)),
                 ('city', models.CharField(db_index=True, max_length=200, null=True, verbose_name='Cidade', blank=True)),
                 ('neighborhood', models.CharField(db_index=True, max_length=200, null=True, verbose_name='Bairro', blank=True)),
@@ -77,6 +80,7 @@ class Migration(migrations.Migration):
             name='Purchase',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('deleted_at', models.DateTimeField(null=True, blank=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True, null=True)),
                 ('total', models.FloatField(verbose_name='Valor total da compra')),

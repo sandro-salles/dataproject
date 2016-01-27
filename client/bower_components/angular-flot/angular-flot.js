@@ -2,7 +2,7 @@
 /* global angular */
 /* global jQuery */
 
-angular.module('angular-flot', []).directive('flot', function () {
+angular.module('angular-flot', []).directive('flot', ['$timeout', function ($timeout) {
   return {
     restrict: 'EA',
     template: '<div></div>',
@@ -22,7 +22,7 @@ angular.module('angular-flot', []).directive('flot', function () {
       // Bug: Passing a jQuery object causes an infinite loop within Angular. Fail hard telling
       // users that they should pass us a jQuery expression as string instead.
       if ((((scope.options || {}).legend || {}).container) instanceof jQuery) {
-        throw new Error('Please use a jQuery expression string with the "legend.container" option.')
+        throw new Error('Please use a jQuery expression string with the "legend.container" option.');
       }
 
       if (!scope.dataset) {
@@ -59,7 +59,7 @@ angular.module('angular-flot', []).directive('flot', function () {
       //
 
       plotArea.on('plotclick', function onPlotClick (event, pos, item) {
-        scope.$apply(function onApplyPlotClick () {
+        $timeout(function onApplyPlotClick () {
           scope.onPlotClick({
             event: event,
             pos: pos,
@@ -69,7 +69,7 @@ angular.module('angular-flot', []).directive('flot', function () {
       });
 
       plotArea.on('plotselected', function onPlotSelected (event, ranges) {
-        scope.$apply(function onApplyPlotSelected () {
+        $timeout(function onApplyPlotSelected () {
           scope.onPlotSelected({
             event: event,
             ranges: ranges
@@ -78,7 +78,7 @@ angular.module('angular-flot', []).directive('flot', function () {
       });
 
       plotArea.on('plothover', function onPlotHover (event, pos, item) {
-        scope.$apply(function onApplyPlotHover () {
+        $timeout(function onApplyPlotHover () {
           scope.onPlotHover({
             event: event,
             pos: pos,
@@ -110,13 +110,13 @@ angular.module('angular-flot', []).directive('flot', function () {
 
       var unwatchDataset = scope.$watch('dataset', onDatasetChanged, true);
 
-      attributes.$observe('width', function(value) {
+      attributes.$observe('width', function (value) {
         if (!value) return;
         width = value;
         plotArea.css('width', value);
       });
 
-      attributes.$observe('height', function(value) {
+      attributes.$observe('height', function (value) {
         if (!value) return;
         height = value;
         plotArea.css('height', value);
@@ -137,4 +137,4 @@ angular.module('angular-flot', []).directive('flot', function () {
       });
     }
   };
-});
+}]);

@@ -1,0 +1,27 @@
+SELECT 
+	person.name as "NOME",
+	person.document as "CPF",
+	(select name from contact_carrier as cc where cc.id = cp.carrier_id) as "OPERADORA",
+	cp.areacode as "DDD",
+	cp.number as "TELEFONE",
+	ca.state as "UF",
+	ca.city as "CIDADE",
+	ca.neighborhood as "BAIRRO",
+	ca.location as "ENDEREÇO",
+	ca.zipcode AS "CEP"
+    FROM
+        person_person as person
+        INNER JOIN
+            contact_personphone cpp
+            ON (cpp.person_id = person.id)
+        INNER JOIN
+            contact_phone as cp
+            ON (cp.id = cpp.phone_id)
+        INNER JOIN
+            contact_address as ca
+            ON (ca.id = cp.address_id)
+    where
+    	cp.carrier_id = 1
+    	AND person.nature = 'P'
+    	AND ca.zipcode IN ('06000000','06010000','06010004','06010007','06010010','06010020','06010030','06010040','06010050','06010060','06010065','06010070','06010080','06010090','06010100','06010110','06010120','06010130','06010140','06013000','06013003')
+    limit 100

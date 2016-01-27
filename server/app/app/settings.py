@@ -121,7 +121,7 @@ LANGUAGES = (
 
 LOCALE_PATHS = (PROJECT_DIR.child('locale'),)
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Sao_Paulo'
 
 USE_I18N = True
 
@@ -171,27 +171,53 @@ def jwt_response_payload_handler(token, user=None, request=None):
     }
 
 JWT_AUTH = {
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(minutes=10),
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(minutes=60),
     'JWT_ALLOW_REFRESH': True,
     'JWT_RESPONSE_PAYLOAD_HANDLER': jwt_response_payload_handler
 }
 
-MIN_STANDALONE_CHECKOUT_AMOUNT = 2000
+MIN_STANDALONE_CHECKOUT_AMOUNT = 10000
 
-STANDALONE_UNIT_PRICE_RANGES = [
-    {
-        'price': 0.015,
-        'range':  (MIN_STANDALONE_CHECKOUT_AMOUNT, 99999)
-    },
-    {
-        'price': 0.010,
-        'range': (100000, 599999)
-    },
-    {
-        'price': 0.005,
-        'range': (600000, None)
-    }
-]
+STANDALONE_UNIT_PRICE_RANGES = {
+        
+    'match': [
+        {
+            'price': 0.15,
+            'range':  (0, 9999)
+        },
+        {
+            'price': 0.10,
+            'range':  (10000, 24999)
+        },
+        {
+            'price': 0.07,
+            'range':  (25000, 49999)
+        },
+        {
+            'price': 0.04,
+            'range':  (50000, 99999)
+        }
+    ],
+    'checkout': [
+        {
+            'price': 0.12,
+            'range':  (1, 9999)
+        },
+        {
+            'price': 0.08,
+            'range':  (10000, 24999)
+        },
+        {
+            'price': 0.05,
+            'range':  (25000, 49999)
+        },
+        {
+            'price': 0.03,
+            'range':  (50000, 99999)
+        }        
+    ]
+}
+
 
 
     

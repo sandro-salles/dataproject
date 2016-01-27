@@ -14,60 +14,60 @@ class Command(BaseCommand):
 
             if not nature:
                 combinations_count += 1
-                params = (None, None, None, None, None, None)
-                print '%s - %s - %s' % (combinations_count, params, PersonCounter.count(params, True))
+                params = ((None, None, None, None, None, None),)
+                print '%s - %s - %s' % (combinations_count, params, PersonCounter.count(params),)
                 continue
 
-            states = list(Filter.objects.filter(nature=nature).values_list('state', flat=True).distinct('state').order_by('state').all())
+            states = list(Filter.objects.filter(nature=nature).values_list('state', flat=True).distinct('state').order_by('state').all(),)
             states.append(None)
             
             for state in states:
 
                 if not state:
                         combinations_count += 1
-                        params = (nature, None, None, None, None, None)
-                        print '%s - %s - %s' % (combinations_count, params, PersonCounter.count(params, True))
+                        params = ((nature, None, None, None, None, None),)
+                        print '%s - %s - %s' % (combinations_count, params, PersonCounter.count(params),)
                         continue
 
-                carriers = list(Filter.objects.filter(nature=nature, state=state).values_list('carrier_id', flat=True).distinct('carrier__name').order_by('carrier__name').all())
+                carriers = list(Filter.objects.filter(nature=nature, state=state).values_list('carrier_id', flat=True).distinct('carrier__name').order_by('carrier__name').all(),)
                 carriers.append(None)
 
                 for carrier in carriers:
 
                     if not carrier:
                         combinations_count += 1
-                        params = (nature, state, None, None, None, None)
-                        print '%s - %s - %s' % (combinations_count, params, PersonCounter.count(params, True))
+                        params = ((nature, state, None, None, None, None),)
+                        print '%s - %s - %s' % (combinations_count, params, PersonCounter.count(params),)
                         continue
 
-                    areacodes = list(Filter.objects.filter(nature=nature, carrier=carrier).values_list('areacode', flat=True).distinct('areacode').order_by('areacode').all())
+                    areacodes = list(Filter.objects.filter(nature=nature, carrier=carrier).values_list('areacode', flat=True).distinct('areacode').order_by('areacode').all(),)
                     areacodes.append(None)
 
                     for areacode in areacodes:
 
                         if not areacode:
                             combinations_count += 1
-                            params = (nature, state, carrier, None, None, None)
-                            print '%s - %s - %s' % (combinations_count, params, PersonCounter.count(params, True))
+                            params = ((nature, state, carrier, None, None, None),)
+                            print '%s - %s - %s' % (combinations_count, params, PersonCounter.count(params),)
                             continue
 
-                        cities = list(Filter.objects.filter(nature=nature, carrier=carrier, areacode=areacode).values_list('city', flat=True).distinct('city').order_by('city').all())
+                        cities = list(Filter.objects.filter(nature=nature, carrier=carrier, areacode=areacode).values_list('city', flat=True).distinct('city').order_by('city').all(),)
                         cities.append(None)
 
                         for city in cities:
 
                             if not city:
                                 combinations_count += 1
-                                params = (nature, state, carrier, areacode, None, None)
-                                print '%s - %s - %s' % (combinations_count, params, PersonCounter.count(params, True))
+                                params = ((nature, state, carrier, areacode, None, None),)
+                                print '%s - %s - %s' % (combinations_count, params, PersonCounter.count(params),)
                                 continue
 
                             neighborhoods = list(Filter.objects.filter(nature=nature, carrier=carrier, areacode=areacode, city=city).values_list(
-                                'neighborhood', flat=True).distinct('neighborhood').order_by('neighborhood').all())
+                                'neighborhood', flat=True).distinct('neighborhood').order_by('neighborhood').all(),)
                             neighborhoods.append(None)
 
                             for neighborhood in neighborhoods:
 
                                 combinations_count += 1
-                                params = (nature, state, carrier, areacode, city, neighborhood)
-                                print '%s - %s - %s' % (combinations_count, params, PersonCounter.count(params, True))
+                                params = ((nature, state, carrier, areacode, city, neighborhood),)
+                                print '%s - %s - %s' % (combinations_count, params, PersonCounter.count(params),)

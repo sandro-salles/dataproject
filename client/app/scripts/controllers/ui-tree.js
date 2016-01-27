@@ -166,6 +166,6 @@ app
   .controller('TreeCtrl', function ($scope) {
     $scope.page = {
       title: 'Tree',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
   });

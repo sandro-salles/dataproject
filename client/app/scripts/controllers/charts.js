@@ -12,7 +12,7 @@ app
 
     $scope.page = {
       title: 'Charts & Graphs',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
 
     $scope.basicData = [

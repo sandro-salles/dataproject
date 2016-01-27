@@ -13,7 +13,7 @@ app
 
     $scope.page = {
       title: 'DataTables',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
 
   })

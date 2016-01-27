@@ -5,7 +5,7 @@ app
   .controller('mtAutocompleteCtrl', function ($scope) {
     $scope.page = {
       title: 'Autocomplete',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
   })
 

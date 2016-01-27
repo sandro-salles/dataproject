@@ -11,7 +11,7 @@ app
   .controller('GeneralCtrl', function ($scope) {
     $scope.page = {
       title: 'General Elements',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
   })
 

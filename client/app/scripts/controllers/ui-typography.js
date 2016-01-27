@@ -11,6 +11,6 @@ app
   .controller('TypographyCtrl', function ($scope) {
     $scope.page = {
       title: 'Typography',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
   });

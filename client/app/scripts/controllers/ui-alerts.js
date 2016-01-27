@@ -11,7 +11,7 @@ app
   .controller('AlertsCtrl', function ($scope) {
      $scope.page = {
       title: 'Alerts & Notifications',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
   })
 

@@ -6,7 +6,7 @@ app
 
     $scope.page = {
       title: 'Select',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
 
     $scope.userState = '';

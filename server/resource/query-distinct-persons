@@ -236,38 +236,56 @@ where
 		in ('person_person', 'contact_phone', 'contact_personphone','contact_address', 'contact_personaddress');
 
 
-DROP INDEX contact_phone_type_16a2e0dd3c091155_uniq;	
-DROP INDEX contact_phone_areacode_2de97c4d7750c72f_uniq;	
-DROP INDEX contact_phone_ed09056b;	
-DROP INDEX contact_personphone_83a29540;	
-DROP INDEX contact_personphone_a8452ca7;	
-DROP INDEX person_person_document_fa6bb7e2d33bf0a_like;	
-DROP INDEX person_person_nature_428c821d3ba2a9ba_like;	
-DROP INDEX person_person_name_3cad37e55e9604a0_like;	
-DROP INDEX person_person_405aaff6;	
-DROP INDEX person_person_b068931c;	
-DROP INDEX contact_address_city_30a75e7b98ceb87e_uniq;	
-DROP INDEX contact_address_state_6582266833b19157_like;	
-DROP INDEX contact_address_9ed39e2e;	
-DROP INDEX contact_personaddress_a8452ca7;	
-DROP INDEX contact_personaddress_ea8e5d12;	
+DROP INDEX contact_personphone_83a29540;
+DROP INDEX contact_personphone_a8452ca7;
+DROP INDEX contact_phone_areacode_7b81df9188394f49_idx;
+DROP INDEX contact_phone_areacode_3b4bbc3bbcc72c46_idx;
+DROP INDEX contact_phone_type_16a2e0dd3c091155_like;
+DROP INDEX contact_phone_ed09056b;
+DROP INDEX contact_phone_ea8e5d12;
+DROP INDEX contact_phone_4cd86865;
+DROP INDEX contact_phone_599dcce2;
+DROP INDEX person_person_document_fa6bb7e2d33bf0a_like;
+DROP INDEX person_person_nature_428c821d3ba2a9ba_like;
+DROP INDEX person_person_name_3cad37e55e9604a0_like;
+DROP INDEX person_person_405aaff6;
+DROP INDEX person_person_b068931c;
+DROP INDEX contact_address_state_19bccaf5c7d0567d_idx;
+DROP INDEX contact_address_state_41a222c520aaad0_idx;
+DROP INDEX contact_address_zipcode_5355b0513aa2755e_uniq;
+DROP INDEX contact_address_neighborhood_32edf4ade86b218d_uniq;
+DROP INDEX contact_address_city_30a75e7b98ceb87e_like;
+DROP INDEX contact_address_state_6582266833b19157_like;
+DROP INDEX contact_address_4ed5d2ea;
+DROP INDEX contact_address_9ed39e2e;
+DROP INDEX contact_personaddress_a8452ca7;
+DROP INDEX contact_personaddress_ea8e5d12;
 
 
-CREATE INDEX contact_phone_type_16a2e0dd3c091155_uniq ON contact_phone USING btree (type);
-CREATE INDEX contact_phone_areacode_2de97c4d7750c72f_uniq ON contact_phone USING btree (areacode);
-CREATE INDEX contact_phone_ed09056b ON contact_phone USING btree (carrier_id);
-CREATE INDEX contact_personphone_83a29540 ON contact_personphone USING btree (phone_id);
-CREATE INDEX contact_personphone_a8452ca7 ON contact_personphone USING btree (person_id);
-CREATE INDEX person_person_document_fa6bb7e2d33bf0a_like ON person_person USING btree (document varchar_pattern_ops);
-CREATE INDEX person_person_nature_428c821d3ba2a9ba_like ON person_person USING btree (nature varchar_pattern_ops);
-CREATE INDEX person_person_name_3cad37e55e9604a0_like ON person_person USING btree (name varchar_pattern_ops);
-CREATE INDEX person_person_405aaff6 ON person_person USING btree (nature);
-CREATE INDEX person_person_b068931c ON person_person USING btree (name);
-CREATE INDEX contact_address_city_30a75e7b98ceb87e_uniq ON contact_address USING btree (city);
-CREATE INDEX contact_address_state_6582266833b19157_like ON contact_address USING btree (state varchar_pattern_ops);
-CREATE INDEX contact_address_9ed39e2e ON contact_address USING btree (state);
-CREATE INDEX contact_personaddress_a8452ca7 ON contact_personaddress USING btree (person_id);
-CREATE INDEX contact_personaddress_ea8e5d12 ON contact_personaddress USING btree (address_id);
+CREATE INDEX contact_personphone_83a29540 ON contact_personphone USING btree (phone_id)
+CREATE INDEX contact_personphone_a8452ca7 ON contact_personphone USING btree (person_id)
+CREATE INDEX contact_phone_areacode_7b81df9188394f49_idx ON contact_phone USING btree (areacode, carrier_id, address_id)
+CREATE INDEX contact_phone_areacode_3b4bbc3bbcc72c46_idx ON contact_phone USING btree (areacode, carrier_id)
+CREATE INDEX contact_phone_type_16a2e0dd3c091155_like ON contact_phone USING btree (type varchar_pattern_ops)
+CREATE INDEX contact_phone_ed09056b ON contact_phone USING btree (carrier_id)
+CREATE INDEX contact_phone_ea8e5d12 ON contact_phone USING btree (address_id)
+CREATE INDEX contact_phone_4cd86865 ON contact_phone USING btree (areacode)
+CREATE INDEX contact_phone_599dcce2 ON contact_phone USING btree (type)
+CREATE INDEX person_person_document_fa6bb7e2d33bf0a_like ON person_person USING btree (document varchar_pattern_ops)
+CREATE INDEX person_person_nature_428c821d3ba2a9ba_like ON person_person USING btree (nature varchar_pattern_ops)
+CREATE INDEX person_person_name_3cad37e55e9604a0_like ON person_person USING btree (name varchar_pattern_ops)
+CREATE INDEX person_person_405aaff6 ON person_person USING btree (nature)
+CREATE INDEX person_person_b068931c ON person_person USING btree (name)
+CREATE INDEX contact_address_state_19bccaf5c7d0567d_idx ON contact_address USING btree (state, city)
+CREATE INDEX contact_address_state_41a222c520aaad0_idx ON contact_address USING btree (state, city, neighborhood)
+CREATE INDEX contact_address_zipcode_5355b0513aa2755e_uniq ON contact_address USING btree (zipcode)
+CREATE INDEX contact_address_neighborhood_32edf4ade86b218d_uniq ON contact_address USING btree (neighborhood)
+CREATE INDEX contact_address_city_30a75e7b98ceb87e_like ON contact_address USING btree (city varchar_pattern_ops)
+CREATE INDEX contact_address_state_6582266833b19157_like ON contact_address USING btree (state varchar_pattern_ops)
+CREATE INDEX contact_address_4ed5d2ea ON contact_address USING btree (city)
+CREATE INDEX contact_address_9ed39e2e ON contact_address USING btree (state)
+CREATE INDEX contact_personaddress_a8452ca7 ON contact_personaddress USING btree (person_id)
+CREATE INDEX contact_personaddress_ea8e5d12 ON contact_personaddress USING btree (address_id)
 
 
 SELECT distinct on (person_person.id) person_person.id, person_person.created_at, person_person.updated_at, person_person.is_dirty, person_person.name, person_person.nature, person_person.document FROM person_person INNER JOIN contact_personphone ON ( person_person.id = contact_personphone.person_id ) INNER JOIN contact_phone ON ( contact_personphone.phone_id = contact_phone.id ) INNER JOIN contact_carrier ON ( contact_phone.carrier_id = contact_carrier.id ) WHERE (person_person.nature = 'L' AND contact_carrier.slug = 'vivo-fixo')

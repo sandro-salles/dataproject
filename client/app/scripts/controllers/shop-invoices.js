@@ -11,7 +11,7 @@ app
   .controller('InvoicesCtrl', function ($scope) {
     $scope.page = {
       title: 'Invoices',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
   })
 

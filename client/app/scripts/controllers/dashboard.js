@@ -11,7 +11,7 @@ app
   .controller('DashboardCtrl', function($scope,$http){
     $scope.page = {
       title: 'Dashboard',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
 
     $scope.getUsers = function(){

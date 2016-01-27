@@ -11,7 +11,7 @@ app
   .controller('TablesBootstrapCtrl', function ($scope) {
      $scope.page = {
       title: 'Bootstrap Tables',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
 
     $scope.users = [

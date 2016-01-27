@@ -11,7 +11,7 @@ app
   .controller('WidgetsCtrl', function ($scope) {
     $scope.page = {
       title: 'Widgets',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
   })
 

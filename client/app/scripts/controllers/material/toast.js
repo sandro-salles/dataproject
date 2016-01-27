@@ -6,7 +6,7 @@ app
 
     $scope.page = {
       title: 'Toast',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
 
     $scope.toastPosition = {

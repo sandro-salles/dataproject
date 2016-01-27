@@ -11,7 +11,7 @@ app
   .controller('TablesFootableCtrl', function ($scope) {
     $scope.page = {
       title: 'FooTable',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
 
     $scope.users = [

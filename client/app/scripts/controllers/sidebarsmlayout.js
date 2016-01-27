@@ -11,6 +11,6 @@ app
   .controller('SidebarsmlayoutCtrl', function ($scope) {
     $scope.page = {
       title: 'Small Sidebar Layout',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
   });

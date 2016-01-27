@@ -6,7 +6,7 @@ app
 
     $scope.page = {
       title: 'Dragula',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
 
     $scope.tasks = {

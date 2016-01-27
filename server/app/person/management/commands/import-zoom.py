@@ -88,7 +88,7 @@ class Command(BaseCommand):
 
         parser.add_argument('-b', '--batchsize',
                             dest='batchsize',
-                            default=20000,
+                            default=50000,
                             type=int,
                             help=' -- HELP HERE')
 
@@ -131,14 +131,14 @@ class Command(BaseCommand):
         print ' | Persisting %s batch ...' % (batchsize + 1)
 
         Person.objects.bulk_upsert(self.people.values(),
-                                   unique_constraint='document', update_fields=['name', 'updated_at'])
+                                   unique_constraint='document', update_fields=['updated_at'])
 
         for person in self.people.values():
             if (self.last_inserted_person != None) and person.id <= self.last_inserted_person.id:
                 self.counter['updated_people'] += 1
 
         Address.objects.bulk_upsert(self.addresses.values(),
-                                    unique_constraint=('zipcode', 'location'), update_fields=['neighborhood', 'city', 'state', 'updated_at'])
+                                    unique_constraint=('state', 'city', 'neighborhood', 'location', 'zipcode'), update_fields=['updated_at'])
 
         for address in self.addresses.values():
             if (self.last_inserted_address != None) and address.id <= self.last_inserted_address.id:
@@ -306,10 +306,6 @@ class Command(BaseCommand):
 
                 sys.stdout.write('\r%s' % (self.counter['record'] + 1))
                 sys.stdout.flush()
-
-                if self.counter['record'] < 200000:
-                    self.counter['record'] += 1
-                    continue
 
                 try:
                     record = ZoomRecord.parse(row, carrier, areacode, phone_type)

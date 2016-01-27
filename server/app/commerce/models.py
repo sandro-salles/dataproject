@@ -7,7 +7,6 @@ from account.models import Account, User
 from person.contact.models import Carrier
 from polymorphic import PolymorphicModel
 from materialized.util import PersonCounter
-
 from django.contrib.postgres.fields import IntegerRangeField
 
 
@@ -45,11 +44,10 @@ class CheckoutCriteria(models.Model):
         verbose_name_plural = _(u'Criterios de seleção de dados')
 
     def save(self, *args, **kwargs):
-        self.count = PersonCounter.count((self.nature, self.carrier.id, self.areacode, self.city, self.neighborhood))
         super(CheckoutCriteria, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return str((self.nature, self.carrier.id, self.areacode, self.city, self.neighborhood))
+        return str((self.nature, self.carrier, self.areacode, self.city, self.neighborhood))
 
 
 class Match(Checkout):
@@ -79,8 +77,37 @@ class Cart(DatableModel):
     items = models.ManyToManyField(Checkout)
 
     @cached_property
+    def subtotal(self):
+        from commerce.util import Calculator
+        return Calculator.subtotal(self)
+
+    @cached_property
     def count(self):
-        return sum([criteria.count for criteria in [purchasable.criteria for purchasable in [item.purchasable for item in self.items.all()]]])
+
+        params = []
+        count = 0
+
+        for item in self.items.all():
+            for criteria in item.criteria.all():
+
+                carrier_id = None
+
+                if criteria.carrier:
+                    carrier_id = criteria.carrier.id
+
+                params.append(
+                    (
+                        criteria.nature,
+                        criteria.state,
+                        carrier_id,
+                        criteria.areacode,
+                        criteria.city,
+                        criteria.neighborhood
+                    ),
+                )
+
+        return PersonCounter.count(params)
+
 
     class Meta:
         verbose_name = _('Carrinho de compras')

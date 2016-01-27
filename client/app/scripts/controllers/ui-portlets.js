@@ -11,6 +11,6 @@ app
   .controller('PortletsCtrl', function ($scope) {
     $scope.page = {
       title: 'Portlets',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
   });

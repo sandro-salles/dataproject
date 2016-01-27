@@ -6,7 +6,7 @@ app
 
     $scope.page = {
       title: 'Swipe',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
 
     $scope.onSwipeLeft = function(ev) {

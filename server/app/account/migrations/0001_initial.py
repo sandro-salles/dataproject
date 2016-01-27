@@ -21,12 +21,13 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=200, verbose_name=b'Nome', db_index=True)),
                 ('slug', models.SlugField(null=True, max_length=200, blank=True, unique=True, verbose_name=b'Identificador')),
+                ('deleted_at', models.DateTimeField(null=True, blank=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True, null=True)),
             ],
             options={
-                'verbose_name': 'Account',
-                'verbose_name_plural': 'Accounts',
+                'verbose_name': 'Conta',
+                'verbose_name_plural': 'Contas',
             },
         ),
         migrations.CreateModel(
@@ -35,14 +36,16 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=200, verbose_name=b'Nome', db_index=True)),
                 ('slug', models.SlugField(null=True, max_length=200, blank=True, unique=True, verbose_name=b'Identificador')),
+                ('deleted_at', models.DateTimeField(null=True, blank=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True, null=True)),
                 ('description', models.TextField(null=True, blank=True)),
                 ('image', models.CharField(max_length=255, null=True, blank=True)),
+                ('document', models.CharField(max_length=14)),
             ],
             options={
-                'verbose_name': 'Corporation',
-                'verbose_name_plural': 'Corporations',
+                'verbose_name': 'Empresa',
+                'verbose_name_plural': 'Empresas',
             },
         ),
         migrations.CreateModel(
@@ -51,6 +54,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=200, verbose_name=b'Nome', db_index=True)),
                 ('slug', models.SlugField(null=True, max_length=200, blank=True, unique=True, verbose_name=b'Identificador')),
+                ('deleted_at', models.DateTimeField(null=True, blank=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True, null=True)),
                 ('description', models.TextField(unique=True, max_length=14, verbose_name='Descricao')),
@@ -64,12 +68,13 @@ class Migration(migrations.Migration):
             name='Ownership',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('deleted_at', models.DateTimeField(null=True, blank=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True, null=True)),
             ],
             options={
-                'verbose_name': 'Ownership',
-                'verbose_name_plural': 'Ownerships',
+                'verbose_name': 'Propriedade de conta',
+                'verbose_name_plural': 'Propriedades de contas',
             },
         ),
         migrations.CreateModel(
@@ -78,6 +83,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=200, verbose_name=b'Nome', db_index=True)),
                 ('slug', models.SlugField(null=True, max_length=200, blank=True, unique=True, verbose_name=b'Identificador')),
+                ('deleted_at', models.DateTimeField(null=True, blank=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True, null=True)),
                 ('description', models.TextField(unique=True, max_length=14, verbose_name='Descricao')),
@@ -91,24 +97,26 @@ class Migration(migrations.Migration):
             name='Subscription',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('deleted_at', models.DateTimeField(null=True, blank=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True, null=True)),
             ],
             options={
-                'verbose_name': 'Subscription',
-                'verbose_name_plural': 'Subscriptions',
+                'verbose_name': 'Inscri\xe7\xe3o',
+                'verbose_name_plural': 'Inscri\xe7\xf5es',
             },
         ),
         migrations.CreateModel(
             name='User',
             fields=[
                 ('user_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to=settings.AUTH_USER_MODEL)),
+                ('deleted_at', models.DateTimeField(null=True, blank=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True, null=True)),
             ],
             options={
                 'verbose_name': 'Usu\xe1rio',
-                'verbose_name_plural': 'Users',
+                'verbose_name_plural': 'Usu\xe1rios',
             },
             bases=('authentication.user', models.Model),
             managers=[
@@ -132,8 +140,8 @@ class Migration(migrations.Migration):
                 ('account_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='account.Account')),
             ],
             options={
-                'verbose_name': 'Corporate Account',
-                'verbose_name_plural': 'Corporate Accounts',
+                'verbose_name': 'Conta Empresarial',
+                'verbose_name_plural': 'Contas Empresariais',
             },
             bases=('account.account',),
         ),
@@ -165,8 +173,8 @@ class Migration(migrations.Migration):
                 ('account_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='account.Account')),
             ],
             options={
-                'verbose_name': 'Personal Account',
-                'verbose_name_plural': 'Personal Accounts',
+                'verbose_name': 'Conta Pessoal',
+                'verbose_name_plural': 'Contas Pessoais',
             },
             bases=('account.account',),
         ),

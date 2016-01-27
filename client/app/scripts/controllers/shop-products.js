@@ -11,7 +11,7 @@ app
   .controller('ProductsCtrl', function ($scope) {
     $scope.page = {
       title: 'Products',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
   })
 

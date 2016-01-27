@@ -6,7 +6,7 @@ app
 
     $scope.page = {
       title: 'Dialog',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
 
     $scope.status = '  ';

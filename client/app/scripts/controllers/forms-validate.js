@@ -11,7 +11,7 @@ app
   .controller('FormsValidateCtrl', function ($scope) {
     $scope.page = {
       title: 'Validation Elements',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
 
     // function to submit the form after all validation has occurred

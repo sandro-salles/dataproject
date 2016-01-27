@@ -18,6 +18,9 @@
 .bg-dutch-light {
   background-color: #EEF6FA !important; }
 
+.purchase-checkout-counter {
+  min-height: 332px; }
+
 .page-tree {
   height: 100%;
   padding: 0; }
@@ -3330,7 +3333,7 @@ label {
 .form-validation .form-control.ng-dirty.ng-invalid, .form-validation .form-control.ng-dirty.ng-invalid[type="checkbox"] + i {
   border-color: #ff7b76; }
   .form-validation .form-control.ng-dirty.ng-invalid + .help-block, .form-validation .form-control.ng-dirty.ng-invalid[type="checkbox"] + i + .help-block {
-    color: #ff635c; }
+    color: #ff635d; }
 .form-validation .form-control.ng-dirty.ng-valid {
   border-color: #b2e600; }
   .form-validation .form-control.ng-dirty.ng-valid + .help-block {
@@ -3349,7 +3352,7 @@ label {
     border-color: #ff7b76; }
 .has-error .control-label,
 .has-error .help-block {
-  color: #ff635c; }
+  color: #ff635d; }
 .has-error .radio,
 .has-error .checkbox,
 .has-error .radio-inline,
@@ -4059,7 +4062,7 @@ accordion .panel .panel-heading {
     background-color: #ffc71a;
     color: white; }
   .panel.panel-filled.panel-red .panel-body {
-    background-color: #ff635c;
+    background-color: #ff635d;
     color: white; }
   .panel.panel-filled.panel-greensea .panel-body {
     background-color: #19b698;
@@ -4697,7 +4700,7 @@ check-toggler,
       background-color: #daf6fa; }
     .btn-ef.btn-ef-2.btn-ef-2-hotpink {
       color: #FF0066;
-      background-color: #ffe5f0; }
+      background-color: #ffe6f0; }
     .btn-ef.btn-ef-2.btn-ef-2-drank {
       color: #A40778;
       background-color: #fdc7ee; }
@@ -7483,7 +7486,7 @@ blockquote p {
       color: #137f8f; }
   .alert.alert-hotpink {
     color: #FF0066;
-    background-color: #ffe5f0; }
+    background-color: #ffe6f0; }
     .alert.alert-hotpink .alert-link {
       color: #e6005c; }
   .alert.alert-drank {
@@ -8383,7 +8386,7 @@ blockquote p {
   .splash.splash-green.splash-2 .modal-footer {
     background-color: #a2d200; }
   .splash.splash-green.splash-2 .modal-header {
-    background-color: #8eb800;
+    background-color: #8eb900;
     border-color: #7b9f00; }
   .splash.splash-orange.modal-backdrop {
     background-color: #ffc100; }
@@ -8399,7 +8402,7 @@ blockquote p {
   .splash.splash-red.splash-2 .modal-footer {
     background-color: #ff4a43; }
   .splash.splash-red.splash-2 .modal-header {
-    background-color: #ff3129;
+    background-color: #ff312a;
     border-color: #ff1910; }
   .splash.splash-greensea.modal-backdrop {
     background-color: #16a085; }
@@ -9204,23 +9207,20 @@ input[type="text"].ui-grid-filter-input {
   animation: halfspin 1s ease infinite;
   border-radius: 100%; }
 @-webkit-keyframes halfspin {
-  .st-table {
-    to {
-      -webkit-transform: rotate(180deg);
-      -moz-transform: rotate(180deg);
-      transform: rotate(180deg); } } }
+  to {
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    transform: rotate(180deg); } }
 @-moz-keyframes halfspin {
-  .st-table {
-    to {
-      -webkit-transform: rotate(180deg);
-      -moz-transform: rotate(180deg);
-      transform: rotate(180deg); } } }
+  to {
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    transform: rotate(180deg); } }
 @keyframes halfspin {
-  .st-table {
-    to {
-      -webkit-transform: rotate(180deg);
-      -moz-transform: rotate(180deg);
-      transform: rotate(180deg); } } }
+  to {
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    transform: rotate(180deg); } }
 @media screen and (max-width: 1360px) {
   .table-responsive-wide {
     width: 100%;
@@ -10205,7 +10205,7 @@ body {
   .bg-red.dker {
     background-color: #e60900 !important; }
   .bg-red.lt {
-    background-color: #ff635c !important; }
+    background-color: #ff635d !important; }
   .bg-red.lter {
     background-color: #ff7b76 !important; }
 

@@ -6,7 +6,7 @@ app
 
     $scope.page = {
       title: 'Fab Speed Dial',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
 
   })

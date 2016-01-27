@@ -4,7 +4,7 @@ app
   .controller('IntroPageCtrl', function ($scope) {
     $scope.page = {
       title: 'Intro page',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
 
     $scope.IntroOptions = {

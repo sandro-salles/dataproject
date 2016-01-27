@@ -128,14 +128,14 @@ class Command(BaseCommand):
         print ' | Persisting %s batch ...' % (batchsize + 1)
 
         Person.objects.bulk_upsert(self.people.values(),
-                                   unique_constraint='document', update_fields=['name', 'updated_at'])
+                                   unique_constraint='document', update_fields=['updated_at'])
 
         for person in self.people.values():
             if (self.last_inserted_person != None) and person.id <= self.last_inserted_person.id:
                 self.counter['updated_people'] += 1
 
         Address.objects.bulk_upsert(self.addresses.values(),
-                                    unique_constraint=('zipcode', 'location'), update_fields=['neighborhood', 'city', 'state', 'updated_at'])
+                                    unique_constraint=('state', 'city', 'neighborhood', 'location', 'zipcode'), update_fields=['updated_at'])
 
         for address in self.addresses.values():
             if (self.last_inserted_address != None) and address.id <= self.last_inserted_address.id:
@@ -159,6 +159,8 @@ class Command(BaseCommand):
         self.people_addresses = dict()
         self.phones = dict()
         self.people_phones = dict()
+
+        # os.system("sudo sync && echo 3 | sudo tee /proc/sys/vm/drop_caches |&")
 
     def handle_document_error(self, record):
         self.counter['errors'] += 1

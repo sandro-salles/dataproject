@@ -15,13 +15,14 @@ class Migration(migrations.Migration):
             name='Address',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('deleted_at', models.DateTimeField(null=True, blank=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True, null=True)),
                 ('state', models.CharField(db_index=True, max_length=2, verbose_name='State', choices=[('AC', 'Acre'), ('AL', 'Alagoas'), ('AP', 'Amap\xe1'), ('AM', 'Amazonas'), ('BA', 'Bahia'), ('CE', 'Cear\xe1'), ('DF', 'Distrito Federal'), ('ES', 'Esp\xedrito Santo'), ('GO', 'Goi\xe1s'), ('MA', 'Maranh\xe3o'), ('MT', 'Mato Grosso'), ('MS', 'Mato Grosso do Sul'), ('MG', 'Minas Gerais'), ('PA', 'Par\xe1'), ('PB', 'Para\xedba'), ('PR', 'Paran\xe1'), ('PE', 'Pernambuco'), ('PI', 'Piau\xed'), ('RJ', 'Rio de Janeiro'), ('RN', 'Rio Grande do Norte'), ('RS', 'Rio Grande do Sul'), ('RO', 'Rond\xf4nia'), ('RR', 'Roraima'), ('SC', 'Santa Catarina'), ('SP', 'S\xe3o Paulo'), ('SE', 'Sergipe'), ('TO', 'Tocantins')])),
                 ('city', models.CharField(max_length=200, verbose_name='Cidade', db_index=True)),
-                ('neighborhood', models.CharField(max_length=200, verbose_name='Bairro')),
+                ('neighborhood', models.CharField(max_length=200, verbose_name='Bairro', db_index=True)),
                 ('location', models.TextField(verbose_name='Endere\xe7o')),
-                ('zipcode', models.CharField(max_length=8, verbose_name='CEP')),
+                ('zipcode', models.CharField(max_length=8, verbose_name='CEP', db_index=True)),
             ],
             options={
                 'verbose_name': 'Endere\xe7o F\xedsico',
@@ -34,6 +35,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=200, verbose_name=b'Nome', db_index=True)),
                 ('slug', models.SlugField(null=True, max_length=200, blank=True, unique=True, verbose_name=b'Identificador')),
+                ('deleted_at', models.DateTimeField(null=True, blank=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True, null=True)),
             ],
@@ -45,6 +47,7 @@ class Migration(migrations.Migration):
             name='Email',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('deleted_at', models.DateTimeField(null=True, blank=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True, null=True)),
                 ('address', models.EmailField(unique=True, max_length=254, verbose_name='E-mail')),
@@ -58,6 +61,7 @@ class Migration(migrations.Migration):
             name='PersonAddress',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('deleted_at', models.DateTimeField(null=True, blank=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True, null=True)),
                 ('address', models.ForeignKey(to='contact.Address')),
@@ -68,6 +72,7 @@ class Migration(migrations.Migration):
             name='PersonEmail',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('deleted_at', models.DateTimeField(null=True, blank=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True, null=True)),
                 ('email', models.ForeignKey(to='contact.Email')),
@@ -85,6 +90,7 @@ class Migration(migrations.Migration):
             name='Phone',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('deleted_at', models.DateTimeField(null=True, blank=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True, null=True)),
                 ('type', models.CharField(db_index=True, max_length=3, verbose_name='Tipo do Aparelho', choices=[(b'cel', 'Celular'), (b'tel', 'Telefone Fixo')])),
@@ -118,6 +124,10 @@ class Migration(migrations.Migration):
             name='phone',
             unique_together=set([('type', 'areacode', 'number')]),
         ),
+        migrations.AlterIndexTogether(
+            name='phone',
+            index_together=set([('areacode', 'carrier'), ('areacode', 'carrier', 'address')]),
+        ),
         migrations.AlterUniqueTogether(
             name='personphone',
             unique_together=set([('person', 'phone')]),
@@ -132,6 +142,10 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterUniqueTogether(
             name='address',
-            unique_together=set([('zipcode', 'location')]),
+            unique_together=set([('state', 'city', 'neighborhood', 'location', 'zipcode')]),
+        ),
+        migrations.AlterIndexTogether(
+            name='address',
+            index_together=set([('state', 'city', 'neighborhood'), ('state', 'city')]),
         ),
     ]

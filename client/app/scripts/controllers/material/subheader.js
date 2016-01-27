@@ -6,7 +6,7 @@ app
 
     $scope.page = {
       title: 'Subheader',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
 
     var imagePath = 'http://placekitten.com/g/600/600';

@@ -12,7 +12,7 @@ app
 
     $scope.page = {
       title: 'Lists',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
 
     $scope.list = [

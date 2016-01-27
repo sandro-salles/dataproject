@@ -2,6 +2,7 @@ function ValidatorFn() {
   var elementStateModifiers = {},
     enableValidElementStyling = true,
     enableInvalidElementStyling = true,
+    enableFirstInvalidElementScrollingOnSubmit = false,
     validationEnabled = true,
 
     toBoolean = function (value) {
@@ -236,6 +237,25 @@ function ValidatorFn() {
     enableInvalidElementStyling = enabled;
   };
 
+  /**
+   * @ngdoc function
+   * @name validator#setFirstInvalidElementScrollingOnSubmit
+   * @methodOf validator
+   *
+   * @description
+   * Globally enables first invalid element scrolling on form submit. This is disabled by default.
+   *
+   * @param enabled {Boolean} enabled True to enable scrolling otherwise false.
+   */
+  this.setFirstInvalidElementScrollingOnSubmit = function (enabled) {
+    enableFirstInvalidElementScrollingOnSubmit = enabled;
+  };
+
+  this.firstInvalidElementScrollingOnSubmitEnabled = function () {
+    return enableFirstInvalidElementScrollingOnSubmit;
+  };
+
+
   this.getDomModifier = function (el) {
     var modifierKey = (el !== undefined ? el.attr('element-modifier') : this.defaultElementModifier) ||
       (el !== undefined ? el.attr('data-element-modifier') : this.defaultElementModifier) ||
@@ -277,12 +297,22 @@ function ValidatorFn() {
     }
   };
 
+  this.waitForAsyncValidators = function (el) {
+    if (autoValidateEnabledOnControl(el)) {
+      var dm = this.getDomModifier(el);
+      if (dm.waitForAsyncValidators) {
+        dm.waitForAsyncValidators(el);
+      }
+    }
+  };
+
   this.defaultFormValidationOptions = {
     forceValidation: false,
     disabled: false,
     validateNonVisibleControls: false,
     removeExternalValidationErrorsOnSubmit: true,
-    validateOnFormSubmit: false
+    validateOnFormSubmit: false,
+    waitForAsyncValidators: true
   };
 
   this.$get = [

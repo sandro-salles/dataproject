@@ -6,7 +6,7 @@ app
 
     $scope.page = {
       title: 'Progress Linear',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
 
     $scope.mode = 'query';

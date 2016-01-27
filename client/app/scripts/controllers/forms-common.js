@@ -11,7 +11,7 @@ app
   .controller('FormsCommonCtrl', function ($scope) {
     $scope.page = {
       title: 'Common Elements',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
 
     $scope.val = 36;

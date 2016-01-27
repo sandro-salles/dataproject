@@ -6,7 +6,7 @@ app
 
     $scope.page = {
       title: 'Tooltip',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
 
     $scope.demo = {};

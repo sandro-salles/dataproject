@@ -6,7 +6,7 @@ app
 
     $scope.page = {
       title: 'Bottom Sheet',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
 
     $scope.alert = '';

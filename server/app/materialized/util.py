@@ -23,61 +23,84 @@ class PersonCounter:
                 contact_address as ca
                 ON (ca.id = cp.address_id)
         where
-            0 = 0
         """
 
     @staticmethod
     def build_key(params):
-        print params
+
         joined = ','.join(['%s=%s' % (PersonCounter.PARAM_KEYS[i], value) for i, value in enumerate(params) if value])
-        print joined
         return 'person-count__%s' % mmh3.hash128(joined)
 
+    @staticmethod
+    def build_query(params):
+            
+        nature, state, carrier, areacode, city, neighborhood = params
+
+        query = " 0 = 0 "
+
+        if nature:
+            query += " and person.nature = '%s'" % nature
+        
+        if state:
+            query += " and ca.state = '%s'" % state
+
+        if carrier:
+            query += " and cp.carrier_id = %s" % carrier
+
+        if areacode:
+            query += " and cp.areacode = %s" % areacode
+
+        if city:
+            query += " and ca.city = '%s'" % city
+
+        if neighborhood:
+            query += " and ca.neighborhood = '%s'" % neighborhood
+
+        return '(%s)' % query
 
     @staticmethod
-    def count(params, return_status = False):
-
-        cache_key = PersonCounter.build_key(params)
-        count = cache.get(cache_key, settings.CACHE_EXPIRED_IDENTIFIER)
-        status = 'cached'
-
-        if str(count) == settings.CACHE_EXPIRED_IDENTIFIER:
-
-            nature, state, carrier, areacode, city, neighborhood = params
-
-            query = PersonCounter.COUNT_BASE_QUERY
-
-            if nature:
-                query += " and person.nature = '%s'" % nature
-            
-            if state:
-                query += " and ca.state = '%s'" % state
-
-            if carrier:
-                query += " and cp.carrier_id = %s" % carrier
-
-            if areacode:
-                query += " and cp.areacode = %s" % areacode
-
-            if city:
-                query += " and ca.city = '%s'" % city
-
-            if neighborhood:
-                query += " and ca.neighborhood = '%s'" % neighborhood
+    def count(params):
 
 
-            cursor = connection.cursor()
+        if params:
+            if len(params) > 1:
+                
+                #import pdb; pdb.set_trace()
 
-            cursor.execute(query)
+                queries = []
 
-            count = cursor.fetchone()[0]
+                for param in params:
 
-            status = 'new'
+                    queries.append(PersonCounter.build_query(param))
+                
+                query = ' OR '.join(queries)
+                
+                query = '%s %s' % (PersonCounter.COUNT_BASE_QUERY, query)
 
-            cache.set(cache_key, count)
+                cursor = connection.cursor()
 
-        print status
-        if return_status:
-            return (count, status)
-        else:
+                cursor.execute(query)
+
+                count = cursor.fetchone()[0]
+
+            else:
+
+                cache_key = PersonCounter.build_key(params[0])
+                count = cache.get(cache_key, settings.CACHE_EXPIRED_IDENTIFIER)
+
+                if str(count) == settings.CACHE_EXPIRED_IDENTIFIER:
+
+                    cursor = connection.cursor()
+                    
+                    query = PersonCounter.build_query(params[0])
+                    query = '%s %s' % (PersonCounter.COUNT_BASE_QUERY, query)
+
+                    cursor.execute(query)
+
+                    count = cursor.fetchone()[0]
+
+                    cache.set(cache_key, count)
+
             return count
+        
+        return 0

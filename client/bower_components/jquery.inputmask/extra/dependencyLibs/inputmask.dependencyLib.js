@@ -1,3 +1,9 @@
+/*
+Input Mask plugin dependencyLib
+http://github.com/RobinHerbots/jquery.inputmask
+Copyright (c) 2010 -  Robin Herbots
+Licensed under the MIT license (http://www.opensource.org/licenses/mit-license.php)
+*/
 (function(factory) {
 		if (typeof define === "function" && define.amd) {
 			define(factory);
@@ -75,7 +81,7 @@
 		}();
 
 		function isValidElement(elem) {
-			return elem !== undefined && elem !== null && document.getElementById(elem.id);
+			return elem instanceof Element;
 		}
 
 		function Event(elem) {
@@ -212,11 +218,19 @@
 							namespace = nsEvent[1] || "global";
 						if (document !== undefined && namespace === "global") {
 							//trigger domevent
-							var evnt, i; // The custom event that will be created
+							var evnt, i, params = {
+								bubbles: false,
+								cancelable: true,
+								detail: Array.prototype.slice.call(arguments, 1)
+							};
+							// The custom event that will be created
 							if (document.createEvent) {
-								evnt = new CustomEvent(ev, {
-									detail: Array.prototype.slice.call(arguments, 1)
-								});
+								try {
+									evnt = new CustomEvent(ev, params);
+								} catch (e) {
+									evnt = document.createEvent('CustomEvent');
+									evnt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
+								}
 								if (events.type) DependencyLib.extend(evnt, events);
 								elem.dispatchEvent(evnt);
 							} else {
@@ -266,9 +280,6 @@
 			return type(obj) === "function";
 		};
 		DependencyLib.noop = function() {};
-		DependencyLib.parseJSON = function(data) {
-			return JSON.parse(data + "");
-		};
 		DependencyLib.isArray = Array.isArray;
 		DependencyLib.inArray = function(elem, arr, i) {
 			return arr == null ? -1 : indexOf(arr, elem, i);
@@ -433,7 +444,7 @@
 				type: type,
 				which: 0
 			};
-		}
+		};
 		DependencyLib.data = function(owner, key, value) {
 			if (value === undefined) {
 				return owner.__data ? owner.__data[key] : null;

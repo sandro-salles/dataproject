@@ -6,7 +6,7 @@ app
 
     $scope.page = {
       title: 'Fab Toolbar',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
 
     $scope.isOpen = false;

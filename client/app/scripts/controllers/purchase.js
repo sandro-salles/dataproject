@@ -1,5 +1,18 @@
 'use strict';
 
+if (!Object.keys) {
+    Object.keys = function (obj) {
+        var keys = [],
+            k;
+        for (k in obj) {
+            if (Object.prototype.hasOwnProperty.call(obj, k)) {
+                keys.push(k);
+            }
+        }
+        return keys;
+    };
+}
+
 /**
  * @ngdoc function
  * @name CONTACTPRO.controller:ExplorerCtrl
@@ -13,11 +26,14 @@ app
         function($scope, $http, Cart, Criteria, State, Carrier, Areacode, City, Neighborhood) {
             $scope.page = {
                 title: 'Comprar coleção de registros',
-                subtitle: 'Place subtitle here...'
+                subtitle: ''
             };
 
-            $scope.counting = true;
-            $scope.updating = true;
+            $scope.counting = false;
+            $scope.updating = false;
+            $scope.CHECKOUT = 'checkout';
+            $scope.MATCH = 'match';
+            $scope.PACK = 'pack';
 
             $scope.filter = {
                 nature: '',
@@ -25,7 +41,8 @@ app
                 carrier: '',
                 areacode: '',
                 city: '',
-                neighborhood: ''
+                neighborhood: '',
+                zipcode: ''
             };
 
             $scope.cart = Cart.query();
@@ -43,20 +60,25 @@ app
             $scope.areacodes = [];
             $scope.cities = [];
             $scope.neighborhoods = [];
+            $scope.zipcodes = [];
 
             $scope.count = 0;
+
+            $scope.modality = null;
 
             $scope.addCriteria = function() {
                 $scope.cart = Criteria.save({}, $scope.filter)
             }
 
-            $scope.deleteCriteria = function() {
-                $scope.cart = Criteria.delete({}, $scope.filter)
+            $scope.deleteCriteria = function(criteria_id) {
+                $scope.cart = Criteria.delete({}, {id: criteria_id})
+
+                if (!$scope.cart.count) {
+                    steps.step2 = true;
+                }
             }
 
             $scope.updateStates = function() {
-
-                $scope.updating = true;
 
                 $scope.filter.state, $scope.filter.carrier, $scope.filter.areacode, $scope.filter.city, $scope.filter.neighborhood = '';  
                     
@@ -84,8 +106,6 @@ app
             }
 
             $scope.updateCarriers = function() {
-
-                $scope.updating = true;
 
                 $scope.filter.carrier, $scope.filter.areacode, $scope.filter.city, $scope.filter.neighborhood = '';  
                 
@@ -115,8 +135,6 @@ app
 
                 if ($scope.filter.carrier) {
 
-                    $scope.updating = true;
-
                     $scope.filter.areacode, $scope.filter.city, $scope.filter.neighborhood = '';  
                     
                     $scope.areacodes = [];
@@ -141,8 +159,6 @@ app
             $scope.updateCities = function() {
 
                 if ($scope.filter.areacode) {
-
-                    $scope.updating = true;
 
                     $scope.filter.city, $scope.filter.neighborhood = '';  
                     
@@ -169,8 +185,6 @@ app
 
                 if ($scope.filter.city) {
 
-                    $scope.updating = true;
-
                     $scope.filter.neighborhood = '';  
                     
                     $scope.neighborhoods = [];
@@ -193,6 +207,16 @@ app
 
             $scope.updateCount = function() {
 
+                var p_count = 0;
+
+                for(var p in $scope.filter) {
+                    if ($scope.filter[p]) {
+                        p_count ++;
+                    }
+                }
+
+                if (p_count <= 0) return;
+                
                 $scope.counting = true;
                 $scope.updating = true;
 
@@ -225,6 +249,19 @@ app
 
         }
     ])
+    .filter('nature', function() {
+        return function(code) {
+            var nature = 'Todos';
+            if (code == 'L') {
+                nature = 'Jurídica';
+            }
+            else if (code == 'P') {
+                nature = 'Física';
+            }
+
+            return nature;
+        }
+    })
     .filter('cpf', function() {
         return function(item) {
             return item.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/g, "\$1.\$2.\$3\-\$4");

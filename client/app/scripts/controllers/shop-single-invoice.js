@@ -11,6 +11,6 @@ app
   .controller('SingleInvoiceCtrl', function ($scope) {
     $scope.page = {
       title: 'Single Invoice',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
   });

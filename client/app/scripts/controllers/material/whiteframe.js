@@ -6,7 +6,7 @@ app
 
     $scope.page = {
       title: 'Whiteframe',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
 
   });

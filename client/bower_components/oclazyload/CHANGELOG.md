@@ -1,3 +1,46 @@
+<a name="1.0.9"></a>
+# 1.0.9 (2015-11-24)
+
+
+## Bug Fixes
+
+- success callback for requirejs wrapper
+ ([fd9df8d1](https://github.com/ocombe/ocLazyLoad/commit/fd9df8d1507bb4f0c690ef3781b04a15f3b8eb6b),
+ [#260](https://github.com/ocombe/ocLazyLoad/issues/260))
+ 
+ 
+## Features
+
+- adding `_unregister` internal function
+ ([5aba0dc7](https://github.com/ocombe/ocLazyLoad/commit/5aba0dc77b1fa4f1a1a27419cbc8a54d614a728c),
+ [#265](https://github.com/ocombe/ocLazyLoad/issues/265))
+
+
+<a name="1.0.8"></a>
+# 1.0.8 (2015-11-02)
+
+
+## Bug Fixes
+
+- better fix for $compile problems in IE
+ ([ed4d425b](https://github.com/ocombe/ocLazyLoad/commit/ed4d425bfcf746901e2b956172c6a0b71e237bae),
+ [#261](https://github.com/ocombe/ocLazyLoad/issues/261))
+
+
+<a name="1.0.7"></a>
+# 1.0.7 (2015-11-02)
+
+
+## Bug Fixes
+
+- requirejs error callback
+ ([11130942](https://github.com/ocombe/ocLazyLoad/commit/11130942ab3dbed497a64ab7eac5175e9b3597c4))
+- infinite loop in inject
+ ([70859980](https://github.com/ocombe/ocLazyLoad/commit/70859980d0537780c46e5a096d8c3c9cff86de83))
+- IE "Invalid calling object" error (attach to DOM and then compile)
+ ([d99ab925](https://github.com/ocombe/ocLazyLoad/commit/d99ab92533ef4bdfa334926307af9f32097592a3))
+
+
 <a name="1.0.6"></a>
 # 1.0.6 (2015-10-01)
 

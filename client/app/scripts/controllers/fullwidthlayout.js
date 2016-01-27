@@ -11,6 +11,6 @@ app
   .controller('FullwidthlayoutCtrl', function ($scope) {
     $scope.page = {
       title: 'Full-width Layout',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
   });

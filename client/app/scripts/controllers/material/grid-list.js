@@ -6,7 +6,7 @@ app
 
     $scope.page = {
       title: 'Grid List',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
 
   })

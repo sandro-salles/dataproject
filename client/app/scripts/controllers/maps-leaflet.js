@@ -5,7 +5,7 @@ app
 
     $scope.page = {
       title: 'Leaflet Maps',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
 
   })

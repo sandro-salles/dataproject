@@ -17,7 +17,8 @@ urlpatterns = [
         CorporationDetail.as_view(), name='corporation-detail'),
 
     url(r'^commerce/cart/$',CartManager.as_view(), name='commerce-cart-manager'),
-    url(r'^commerce/cart/checkout/criteria/$',CriteriaManager.as_view(), name='commerce-cart-checkout-criteria-manager'),
+    url(r'^commerce/cart/checkout/criteria/(?P<pk>[0-9]+)/$',CriteriaManager.as_view(), name='commerce-cart-checkout-criteria-delete'),
+    url(r'^commerce/cart/checkout/criteria/$',CriteriaManager.as_view(), name='commerce-cart-checkout-criteria-add'),
 
     url(r'^filter/state/$', StateList.as_view(), name='filter-state-list'),
     url(r'^filter/carrier/$', CarrierList.as_view(), name='filter-carrier-list'),

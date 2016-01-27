@@ -6,7 +6,7 @@ app
 
     $scope.page = {
       title: 'Slider',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
 
     $scope.color = {

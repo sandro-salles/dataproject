@@ -14,7 +14,7 @@ app
 
     $scope.page = {
       title: 'Masonry',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
 
     function genBrick() {

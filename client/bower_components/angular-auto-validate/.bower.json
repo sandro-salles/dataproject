@@ -1,6 +1,6 @@
 {
   "name": "angular-auto-validate",
-  "version": "1.19.0",
+  "version": "1.19.3",
   "description": "An automatic validation module for AngularJS which gets rid of excess html in favour of dynamic element modification to notify the user of validation errors",
   "main": "dist/jcs-auto-validate.js",
   "keywords": [
@@ -40,11 +40,11 @@
   "dependencies": {
     "angular": ">=1.2.12"
   },
-  "_release": "1.19.0",
+  "_release": "1.19.3",
   "_resolution": {
     "type": "version",
-    "tag": "v1.19.0",
-    "commit": "8bdba1e158f78f9753945cb484dfb8c2f8d7ee5a"
+    "tag": "v1.19.3",
+    "commit": "90d0c06ec342ea8bba2158c5cd3fabb7c0a465e7"
   },
   "_source": "git://github.com/jonsamwell/angular-auto-validate.git",
   "_target": "*",

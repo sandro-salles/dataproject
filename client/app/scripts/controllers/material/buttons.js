@@ -6,7 +6,7 @@ app
 
     $scope.page = {
       title: 'Buttons',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
 
     $scope.title1 = 'Button';

@@ -11,6 +11,6 @@ app
   .controller('TimelineCtrl', function ($scope) {
     $scope.page = {
       title: 'Timeline',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
   });

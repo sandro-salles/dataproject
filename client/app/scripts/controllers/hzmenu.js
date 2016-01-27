@@ -11,6 +11,6 @@ app
   .controller('HzmenuCtrl', function ($scope) {
      $scope.page = {
       title: 'Horizontal menu Layout',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
   });

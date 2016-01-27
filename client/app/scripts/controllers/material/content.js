@@ -6,7 +6,7 @@ app
 
     $scope.page = {
       title: 'Content',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
 
   });

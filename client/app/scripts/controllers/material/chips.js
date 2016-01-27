@@ -6,7 +6,7 @@ app
 
     $scope.page = {
       title: 'Chips',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
 
   })

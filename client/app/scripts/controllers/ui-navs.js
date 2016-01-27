@@ -11,7 +11,7 @@ app
   .controller('NavsCtrl', function ($scope) {
     $scope.page = {
       title: 'Navigation & Accordions',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
   })
   .controller('AccordionDemoCtrl', function ($scope) {

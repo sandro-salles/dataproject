@@ -11,7 +11,7 @@ app
   .controller('TablesSmartTableCtrl', function ($scope) {
     $scope.page = {
       title: 'Smart Table',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
   })
 

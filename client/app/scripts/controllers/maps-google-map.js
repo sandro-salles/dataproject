@@ -11,7 +11,7 @@ app
   .controller('GoogleMapCtrl', function ($scope, $ocLazyLoad) {
     $scope.page = {
       title: 'Google Maps',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
   })
 

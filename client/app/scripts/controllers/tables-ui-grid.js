@@ -11,7 +11,7 @@ app
   .controller('TablesUiGridCtrl', function ($scope) {
      $scope.page = {
       title: 'UI Grid',
-      subtitle: 'Place subtitle here...'
+      subtitle: ''
     };
   })
 
