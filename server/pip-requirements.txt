@@ -54,7 +54,7 @@ pyOpenSSL==0.13
 pyserial==2.6
 python-apt==0.9.3.5
 python-dateutil==2.2
-PyYAML==3.10
+PyYAML==5.4
 redis==2.10.1
 requests==1.1.0
 SecretStorage==2.0.0
