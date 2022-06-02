@@ -23,7 +23,7 @@ gevent==0.13.6
 gevent-socketio==0.2.1
 gevent-websocket==0.2.3
 greenlet==0.4.2
-html5lib==0.999
+html5lib==0.99999999
 httplib2==0.8
 jsonpatch==1.3
 jsonpointer==1.0
